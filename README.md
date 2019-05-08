@@ -1,6 +1,6 @@
 <h1>
     <img src="admin/schoolfree.png" width="64"/>
-    ioBroker.schoofree
+    ioBroker.schoolfree
 </h1>
 
 [![NPM version](http://img.shields.io/npm/v/iobroker.schoolfree.svg)](https://www.npmjs.com/package/iobroker.schoolfree)
