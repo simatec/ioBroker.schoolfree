@@ -102,9 +102,6 @@ function checkState(){
                     ferienTomorow = true
                     adapter.log.warn(testStr)
                 }
-    
-                //adapter.log.warn('start: ' + test3[0])
-                //adapter.log.warn('Ende: ' + test3[1])
                 //result.push(Object.keys(i).map(key => i[key]))
                 //adapter.log.warn("key is: " + Object.keys(i));
                 //adapter.log.warn("value is: " + Object.keys(i).map(key => i[key])) // Object.values can be used as well in newer versions.
