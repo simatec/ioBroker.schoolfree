@@ -77,7 +77,7 @@ function checkState(){
         },
         function (error, response, content) {
     
-            const arr1 = content.data.filter(d => d.federal_state_id === 14);
+            const arr1 = content.data.filter(d => d.federal_state_id == adapter.config.federalState);
             const arrStart = arr1.filter(d => d.starts_on >= today);
             const arr2 = arrStart.filter(d => d.ends_on >= today);
     
