@@ -19,6 +19,9 @@ Automatic control for schoolfree
 
 ## Changelog
 
+### 0.1.0
+* (simatec) First Beta
+
 ### 0.0.1
 * (simatec) initial release
 

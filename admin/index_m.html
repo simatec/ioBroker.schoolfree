@@ -1,8 +1,9 @@
+<!--
 <html>
 
 <head>
 
-    <!-- Load ioBroker scripts and styles-->
+    
     <link rel="stylesheet" type="text/css" href="../../css/adapter.css" />
     <link rel="stylesheet" type="text/css" href="../../lib/css/materialize.css">
 
@@ -13,7 +14,7 @@
     <script type="text/javascript" src="../../lib/js/materialize.js"></script>
     <script type="text/javascript" src="../../js/adapter-settings.js"></script>
 
-    <!-- Load our own files -->
+    
     <link rel="stylesheet" type="text/css" href="style.css" />
     <script type="text/javascript" src="words.js"></script>
 
@@ -117,6 +118,45 @@
 </head>
 
 <body>
+    <div class="m adapter-container">
+        <div class="row">
+            <div class="row">
+                <div class="input-field col s6">
+                    <img src="schoolfree.png" class="logo">
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12 m4">
+                    <select class="value" id="federalState">
+                        <option value="1" class="translate">Baden-Wuerttemberg</option>
+                        <option value="2" class="translate">Bayern</option>
+                        <option value="3" class="translate">Berlin</option>
+                        <option value="4" class="translate">Brandenburg</option>
+                        <option value="5" class="translate">Bremen</option>
+                        <option value="6" class="translate">Hamburg</option>
+                        <option value="7" class="translate">Hessen</option>
+                        <option value="8" class="translate">Mecklenburg-Vorpommern</option>
+                        <option value="9" class="translate">Niedersachsen</option>
+                        <option value="10" class="translate">Nordrhein-Westfalen</option>
+                        <option value="11" class="translate">Rheinland-Pfalz</option>
+                        <option value="12" class="translate">Saarland</option>
+                        <option value="13" class="translate">Sachsen</option>
+                        <option value="14" class="translate">Sachsen-Anhalt</option>
+                        <option value="15" class="translate">Schleswig-Holstein</option>
+                        <option value="16" class="translate">Thueringen</option>
+                    </select>
+                    <label for="federalState" class="translate">federal state</label>
+                </div>
+                <div class="input-field col s12 m4">
+                    <select class="value" id="sensorType">
+                        <option value="remote" class="translate">Remote</option>
+                        <option value="local" class="translate">Local</option>
+                    </select>
+                    <label for="sensorType" class="translate">Sensor Type</label>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="m adapter-container">
         <div class="row">
@@ -125,13 +165,12 @@
                     <div class="col s12 m4 l2">
                         <img src="schoolfree.png" class="logo">
                     </div>
-                    
                 </div>
-                <!-- main settings -->
+                
                 <div class="row">
-                        <div class="input-field col s11 m2">
-                            <select class="value" id="federalState">
-                            <option value="1" >Baden-Württemberg</option>
+                    <div class="input-field col s11 m2">
+                        <select class="value" id="federalState">
+                            <option value="1" >Baden-Wuerttemberg</option>
                             <option value="2" >Bayern</option>
                             <option value="3" >Berlin</option>
                             <option value="4" >Brandenburg</option>
@@ -146,11 +185,113 @@
                             <option value="13" >Sachsen</option>
                             <option value="14" >Sachsen-Anhalt</option>
                             <option value="15" >Schleswig-Holstein</option>
-                            <option value="16" >Thüringen</option>
-                            </select>
-                            <label for="federalState" class="translate">federal state</label>
-                        </div>
+                            <option value="16" >Thueringen</option>
+                        </select>
+                        <label for="federalState" class="translate">federal state</label>
+                    </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    
+</body>
+
+</html>
+-->
+<html>
+
+<head>
+
+    <!-- Load ioBroker scripts and styles-->
+    <link rel="stylesheet" type="text/css" href="../../css/adapter.css" />
+    <link rel="stylesheet" type="text/css" href="../../lib/css/materialize.css">
+
+    <script type="text/javascript" src="../../lib/js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="../../socket.io/socket.io.js"></script>
+
+    <script type="text/javascript" src="../../js/translate.js"></script>
+    <script type="text/javascript" src="../../lib/js/materialize.js"></script>
+    <script type="text/javascript" src="../../js/adapter-settings.js"></script>
+
+    <!-- Load our own files -->
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <script type="text/javascript" src="words.js"></script>
+
+    <script type="text/javascript">
+        // This will be called by the admin adapter when the settings page loads
+        function load(settings, onChange) {
+            // example: select elements with id=key and class=value and insert value
+            if (!settings) return;
+            $('.value').each(function () {
+                var $key = $(this);
+                var id = $key.attr('id');
+                if ($key.attr('type') === 'checkbox') {
+                    // do not call onChange direct, because onChange could expect some arguments
+                    $key.prop('checked', settings[id])
+                        .on('change', () => onChange())
+                        ;
+                } else {
+                    // do not call onChange direct, because onChange could expect some arguments
+                    $key.val(settings[id])
+                        .on('change', () => onChange())
+                        .on('keyup', () => onChange())
+                        ;
+                }
+            });
+            onChange(false);
+            // reinitialize all the Materialize labels on the page if you are dynamically adding inputs:
+            if (M) M.updateTextFields();
+        }
+
+        // This will be called by the admin adapter when the user presses the save button
+        function save(callback) {
+            // example: select elements with class=value and build settings object
+            var obj = {};
+            $('.value').each(function () {
+                var $this = $(this);
+                if ($this.attr('type') === 'checkbox') {
+                    obj[$this.attr('id')] = $this.prop('checked');
+                } else {
+                    obj[$this.attr('id')] = $this.val();
+                }
+            });
+            callback(obj);
+        }
+    </script>
+
+</head>
+
+<body>
+
+    <div class="m adapter-container">
+
+        <div class="row">
+            <div class="col s12 m4 l2">
+                <img src="schoolfree.png" class="logo">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-field col s12 m4">
+                <select class="value" id="federalState">
+                    <option value="1" class="translate">Baden-Wuerttemberg</option>
+                    <option value="2" class="translate">Bayern</option>
+                    <option value="3" class="translate">Berlin</option>
+                    <option value="4" class="translate">Brandenburg</option>
+                    <option value="5" class="translate">Bremen</option>
+                    <option value="6" class="translate">Hamburg</option>
+                    <option value="7" class="translate">Hessen</option>
+                    <option value="8" class="translate">Mecklenburg-Vorpommern</option>
+                    <option value="9" class="translate">Niedersachsen</option>
+                    <option value="10" class="translate">Nordrhein-Westfalen</option>
+                    <option value="11" class="translate">Rheinland-Pfalz</option>
+                    <option value="12" class="translate">Saarland</option>
+                    <option value="13" class="translate">Sachsen</option>
+                    <option value="14" class="translate">Sachsen-Anhalt</option>
+                    <option value="15" class="translate">Schleswig-Holstein</option>
+                    <option value="16" class="translate">Thueringen</option>
+                </select>
+                <label for="federalState" class="translate">federal state</label>
             </div>
         </div>
 
