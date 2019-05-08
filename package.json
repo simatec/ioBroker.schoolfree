@@ -1,29 +1,28 @@
 {
-  "name": "iobroker.shutter",
-  "version": "0.1.0",
-  "description": "Automatic control for shutters",
+  "name": "iobroker.schoolfree",
+  "version": "0.0.1",
+  "description": "Automatic control for schoolfree",
   "author": {
     "name": "simatec",
     "email": "nais@gmx.net"
   },
-  "homepage": "https://github.com/simatec/ioBroker.shutter",
+  "homepage": "https://github.com/simatec/ioBroker.schoolfree",
   "license": "MIT",
   "keywords": [
     "ioBroker",
     "Smart Home",
     "home automation",
-    "Rollladen",
-    "Jalousie",
-    "Rollladensteuerung"
+    "Ferien",
+    "School free",
+    "School holidays"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/simatec/ioBroker.shutter"
+    "url": "https://github.com/simatec/ioBroker.schoolfree"
   },
   "dependencies": {
     "@iobroker/adapter-core": "^1.0.3",
-    "node-schedule": "^1.3.0",
-    "suncalc2": "^1.8.1"
+    "request": "^2.72.0"
   },
   "devDependencies": {
     "@types/chai": "^4.1.7",
@@ -54,7 +53,7 @@
     "test:integration": "mocha test/integration --exit"
   },
   "bugs": {
-    "url": "https://github.com/simatec/ioBroker.shutter/issues"
+    "url": "https://github.com/simatec/ioBroker.schoolfree/issues"
   },
   "readmeFilename": "README.md"
 }

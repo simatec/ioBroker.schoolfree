@@ -1,26 +1,23 @@
 <h1>
-    <img src="admin/shutter.png" width="64"/>
-    ioBroker.shutter
+    <img src="admin/schoolfree.png" width="64"/>
+    ioBroker.schoofree
 </h1>
 
-[![NPM version](http://img.shields.io/npm/v/iobroker.shutter.svg)](https://www.npmjs.com/package/iobroker.shutter)
-[![Downloads](https://img.shields.io/npm/dm/iobroker.shutter.svg)](https://www.npmjs.com/package/iobroker.shutter)
-[![Dependency Status](https://img.shields.io/david/simatec/iobroker.shutter.svg)](https://david-dm.org/simatec/iobroker.shutter)
-[![Known Vulnerabilities](https://snyk.io/test/github/simatec/ioBroker.shutter/badge.svg)](https://snyk.io/test/github/simatec/ioBroker.shutter)
+[![NPM version](http://img.shields.io/npm/v/iobroker.schoolfree.svg)](https://www.npmjs.com/package/iobroker.schoolfree)
+[![Downloads](https://img.shields.io/npm/dm/iobroker.schoolfree.svg)](https://www.npmjs.com/package/iobroker.schoolfree)
+[![Dependency Status](https://img.shields.io/david/simatec/iobroker.schoolfree.svg)](https://david-dm.org/simatec/iobroker.schoolfree)
+[![Known Vulnerabilities](https://snyk.io/test/github/simatec/ioBroker.schoolfree/badge.svg)](https://snyk.io/test/github/simatec/ioBroker.schoolfree)
 
-[![NPM](https://nodei.co/npm/iobroker.shutter.png?downloads=true)](https://nodei.co/npm/iobroker.shutter/)
+[![NPM](https://nodei.co/npm/iobroker.schoolfree.png?downloads=true)](https://nodei.co/npm/iobroker.schoolfree/)
 
-**Tests:** Linux/Mac: [![Travis-CI](http://img.shields.io/travis/simatec/ioBroker.shutter/master.svg)](https://travis-ci.org/simatec/ioBroker.shutter)
-Windows: [![AppVeyor](https://ci.appveyor.com/api/projects/status/github/simatec/ioBroker.shutter?branch=master&svg=true)](https://ci.appveyor.com/project/simatec/ioBroker-shutter/)
+**Tests:** Linux/Mac: [![Travis-CI](http://img.shields.io/travis/simatec/ioBroker.schoolfree/master.svg)](https://travis-ci.org/simatec/ioBroker.schoolfree)
+Windows: [![AppVeyor](https://ci.appveyor.com/api/projects/status/github/simatec/ioBroker.schoolfree?branch=master&svg=true)](https://ci.appveyor.com/project/simatec/ioBroker-schoolfree/)
 
-## shutter adapter for ioBroker
+## schoolfree adapter for ioBroker
 
-Automatic control for shutters
+Automatic control for schoolfree
 
 ## Changelog
-
-### 0.1.0
-* (simatec) First Beta
 
 ### 0.0.1
 * (simatec) initial release

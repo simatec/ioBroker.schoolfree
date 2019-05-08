@@ -1,20 +1,8 @@
 {
     "common": {
-        "name": "shutter",
-        "version": "0.1.0",
+        "name": "schoolfree",
+        "version": "0.0.1",
         "news": {
-            "0.1.0": {
-                "en": "First Beta",
-                "de": "Erste Beta Version",
-                "ru": "Первая бета",
-                "pt": "Primeiro beta",
-                "nl": "Eerste bèta",
-                "fr": "Première bêta",
-                "it": "Prima beta",
-                "es": "Primera beta",
-                "pl": "Pierwsza beta",
-                "zh-cn": "第一个Beta"
-            },
             "0.0.1": {
                 "en": "initial release",
                 "de": "Erstveröffentlichung",
@@ -28,10 +16,10 @@
                 "zh-cn": "首次出版"
             }
         },
-        "title": "shutter",
+        "title": "schoolfree",
         "titleLang": {
-            "en": "shutter",
-            "de": "Rollladen",
+            "en": "schoolfree",
+            "de": "Schulferien",
             "ru": "затвор",
             "pt": "obturador",
             "nl": "Luik",
@@ -42,16 +30,16 @@
             "zh-cn": "快门"
         },
         "desc": {
-            "en": "Automatic control for shutters",
-            "de": "Automatische Steuerung für Rollläden",
-            "ru": "Автоматическое управление жалюзи",
-            "pt": "Controle automático para persianas",
-            "nl": "Automatische controle voor luiken",
-            "fr": "Contrôle automatique des volets",
-            "it": "Controllo automatico per tapparelle",
-            "es": "Control automático de persianas.",
-            "pl": "Automatyczne sterowanie żaluzjami",
-            "zh-cn": "百叶窗的自动控制"
+            "en": "Automatic control for school free",
+            "de": "Automatische Steuerung für die Schulferien",
+            "ru": "Автоматическое управление для школы бесплатно",
+            "pt": "Controle automático para a escola livre",
+            "nl": "Automatische besturing voor school gratis",
+            "fr": "Contrôle automatique pour l'école libre",
+            "it": "Controllo automatico per la scuola gratis",
+            "es": "Control automático para la escuela libre.",
+            "pl": "Automatyczna kontrola za darmo w szkole",
+            "zh-cn": "免费学校自动控制"
         },
         "authors": [
             "simatec <nais@gmx.net>"
@@ -60,19 +48,20 @@
             "ioBroker",
             "Smart Home",
             "home automation",
-            "Rollladen",
-            "Jalousie",
-            "Rollladensteuerung"
+            "Ferien",
+            "School free",
+            "School holidays"
         ],
         "license": "MIT",
         "platform": "Javascript/Node.js",
         "main": "main.js",
-        "icon": "shutter.png",
+        "icon": "schoolfree.png",
         "enabled": true,
-        "extIcon": "https://raw.githubusercontent.com/simatec/ioBroker.shutter/master/admin/shutter.png",
-        "readme": "https://github.com/simatec/ioBroker.shutter/blob/master/README.md",
+        "extIcon": "https://raw.githubusercontent.com/simatec/ioBroker.schoolfree/master/admin/schoolfree.png",
+        "readme": "https://github.com/simatec/ioBroker.schoolfree/blob/master/README.md",
         "loglevel": "info",
-        "mode": "daemon",
+        "mode": "schedule",
+        "schedule": "1 0 * * *",
         "type": "climate-control",
         "compact": true,
         "materialize": true,
@@ -80,71 +69,28 @@
         "adminTab": {
             "singleton": true,
             "name": {
-                "en": "shutter",
-                "de": "Rollladen",
-                "ru": "затвор",
-                "pt": "obturador",
-                "nl": "Luik",
-                "fr": "obturateur",
-                "it": "otturatore",
-                "es": "obturador",
-                "pl": "migawka",
-                "zh-cn": "快门"
+                "en": "school free",
+                "de": "Schulferien",
+                "ru": "бесплатная школа",
+                "pt": "escola livre",
+                "nl": "school gratis",
+                "fr": "école gratuite",
+                "it": "scuola gratis",
+                "es": "escuela libre",
+                "pl": "szkoła wolna",
+                "zh-cn": "学校免费"
             },
             "link": "",
             "fa-icon": "info"
         },
         "dependencies": [
             {
-                "admin": ">=3.0.0",
-                "feiertage": ">=1.0.11"
+                "admin": ">=3.0.0"
             }
         ]
     },
     "native": {
-        "UseAstro": true,
-        "publicHolidays": false,
-        "publicHolInstance": "",
-        "UseSunMode": true,
-        
-        "W_shutterDownLiving": "22:00",
-        "W_shutterUpLivingMin": "05:00",
-        "W_shutterUpLivingMax": "06:00",
-        "WE_shutterDownLiving": "22:00",
-        "WE_shutterUpLiving": "08:00",
-        "driveDelayUpLiving": 10,
-        "driveHeightUpLiving": 100,
-        "driveHeightDownLiving": 0,
-        
-
-        "W_shutterUpSleepMax": "06:30",
-        "W_shutterUpSleepMin": "06:00",
-        "W_shutterDownSleep": "20:00",
-        "WE_shutterUpSleep": "10:30",
-        "WE_shutterDownSleep": "21:00",
-        "driveDelayUpSleep": 10,
-        "driveHeightUpSleep": 100,
-        "driveHeightDownSleep": 0,
-
-        "astroDelayUp": 30,
-        "longitude": "13.404954",
-        "latitude": "52.520007",
-        "astroDelayDown": 30,
-
-        "sleepEnum": "",
-        "livingEnum": "",
-        "livingEnumAuto": "",
-        "sleepEnumAuto": "",
-
-        "sunMonthStart": 5,
-        "sunMonthEnd": 9,
-        "sun_shutterUp": "19:00",
-        "sun_shutterDown": "10:00",
-        "actualValueTemp": "hm-rpc.0.MEQ1234567.2.ACTUAL_TEMPERATURE",
-        "setpointValue": 23,
-        "sunProtecEnum": "",
-        "driveHeightSun": 30
-        
+        "federalState": ""
     },
     "objects": [],
     "instanceObjects": [
@@ -157,19 +103,11 @@
             "native": {}
         },
         {
-            "_id":  "control",
-            "type": "channel",
-            "common": {
-                "name": "Control Buttons"
-            },
-            "native": {}
-        },
-        {
-            "_id":  "control.Holiday",
+            "_id":  "info.schoolfreeToday",
             "type": "state",
             "common": {
                 "role":  "switch",
-                "name":  "Holiday",
+                "name":  "School free today",
                 "type":  "boolean",
                 "read":  true,
                 "write": true,
@@ -178,11 +116,11 @@
             "native": {}
         },
         {
-            "_id":  "control.autoLiving",
+            "_id":  "info.schoolfreeTomorow",
             "type": "state",
             "common": {
                 "role":  "switch",
-                "name":  "Auto / Manu Living Area",
+                "name":  "School free Tomorow",
                 "type":  "boolean",
                 "read":  true,
                 "write": true,
@@ -191,24 +129,11 @@
             "native": {}
         },
         {
-            "_id":  "control.autoSleep",
-            "type": "state",
-            "common": {
-                "role":  "switch",
-                "name":  "Auto / Manu Sleep Area",
-                "type":  "boolean",
-                "read":  true,
-                "write": true,
-                "def":   false
-            },
-            "native": {}
-        },
-        {
-            "_id":  "info.upTimeSleep",
+            "_id":  "info.schoolfreeStart",
             "type": "state",
             "common": {
                 "role":  "indicator",
-                "name":  "Up Time Sleep Area",
+                "name":  "Start for current schoolfree",
                 "type":  "string",
                 "read":  true,
                 "write": false,
@@ -217,63 +142,11 @@
             "native": {}
         },
         {
-            "_id":  "info.upTimeLiving",
+            "_id":  "info.schoolfreeEnd",
             "type": "state",
             "common": {
                 "role":  "indicator",
-                "name":  "Up Time Living Area",
-                "type":  "string",
-                "read":  true,
-                "write": false,
-                "def":   ""
-            },
-            "native": {}
-        },
-        {
-            "_id":  "info.downTimeSleep",
-            "type": "state",
-            "common": {
-                "role":  "indicator",
-                "name":  "down Time Sleep Area",
-                "type":  "string",
-                "read":  true,
-                "write": false,
-                "def":   ""
-            },
-            "native": {}
-        },
-        {
-            "_id":  "info.downTimeLiving",
-            "type": "state",
-            "common": {
-                "role":  "indicator",
-                "name":  "down Time Living Area",
-                "type":  "string",
-                "read":  true,
-                "write": false,
-                "def":   ""
-            },
-            "native": {}
-        },
-        {
-            "_id":  "info.Sunrise",
-            "type": "state",
-            "common": {
-                "role":  "indicator",
-                "name":  "Sunrise Time",
-                "type":  "string",
-                "read":  true,
-                "write": false,
-                "def":   ""
-            },
-            "native": {}
-        },
-        {
-            "_id":  "info.Sunset",
-            "type": "state",
-            "common": {
-                "role":  "indicator",
-                "name":  "Sunset Time",
+                "name":  "End for current schoolfree",
                 "type":  "string",
                 "read":  true,
                 "write": false,

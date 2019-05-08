@@ -96,46 +96,6 @@
             onChange(false);
             // reinitialize all the Materialize labels on the page if you are dynamically adding inputs:
             if (M) M.updateTextFields();
-            getAdapterInstances('feiertage', function (instances) {
-                fillInstances('publicHolInstance', instances, settings['publicHolInstance']);
-            });
-            getEnums('livingEnum', settings['livingEnum']);
-            getEnums('sleepEnum', settings['sleepEnum']);
-            getEnums('livingEnumAuto', settings['livingEnumAuto']);
-            getEnums('sleepEnumAuto', settings['sleepEnumAuto']);
-            getEnums('sunProtecEnum', settings['sunProtecEnum']);
-        }
-        function fillInstances(id, arr, val) {
-            var $sel = $('#' + id);
-            $sel.html('<option value="">' + _('none') + '</option>');
-            for (var i = 0; i < arr.length; i++) {
-                var _id = arr[i]._id.replace('system.adapter.', '');
-                $sel.append('<option value="' + _id + '"' + (_id === val ? ' selected' : '') + '>' + _id + '</option>');
-            }
-            $sel.select();
-        }
-        function getEnums(id, val) {  
-            const socket = io.connect();  
-            socket.emit('getObjectView', 'system', 'enum', {startkey: 'enum.functions.', endkey: 'enum.functions.\u9999'}, function (err, res) {
-                if (err) {
-                    callback(err);
-                    return;
-                }
-                const enums = {};
-                for (var i = 0; i < res.rows.length; i++) {
-                    enums[res.rows[i].id] = res.rows[i].value;           
-                }
-                fillEnums(id, val, enums);        
-            });            
-        }
-        function fillEnums(id, val, enums){
-            var $sel = $('#' + id);
-            $sel.html('<option value="">' + _('none') + '</option>');
-            Object.keys(enums).forEach(function (key) {
-                key = key.replace('enum.functions.', '');
-                $sel.append('<option value="' + key + '"' + (key === val ? ' selected' : '') + '>' + key + '</option>');
-            });
-            $sel.select();
         }
         
         // This will be called by the admin adapter when the user presses the save button
@@ -152,23 +112,6 @@
             });
             callback(obj);
         }
-        function showHideSettings() {
-            if ($('#UseAstro').prop('checked')) {
-                $('.tab-astro').removeClass('disabled');
-            } else {
-                $('.tab-astro').addClass('disabled');
-            }
-            if ($('#UseSunMode').prop('checked')) {
-                $('.tab-sun').removeClass('disabled');
-            } else {
-                $('.tab-sun').addClass('disabled');
-            }
-            if ($('#publicHolidays').prop('checked')) {
-                $('.publicHol').show();
-            } else {
-                $('.publicHol').hide();
-            }
-        }
     </script>
 
 </head>
@@ -177,235 +120,17 @@
 
     <div class="m adapter-container">
         <div class="row">
-            <div class="col s12">
-                <ul class="tabs">
-                    <li class="tab col s6 l2"><a href="#tab-settings" class="translate active">main settings</a></li>
-                    <li class="tab col s6 l2 tab-living"><a href="#tab-living" class="translate">Living Area</a></li>
-                    <li class="tab col s6 l2 tab-sleep"><a href="#tab-sleep" class="translate">Sleep Area</a></li>
-                    <li class="tab col s6 l2 tab-astro"><a href="#tab-astro" class="translate">Astro settings</a></li>
-                    <li class="tab col s6 l2 tab-sun"><a href="#tab-sun" class="translate">sun protection settings</a></li>
-                    <li class="tab col s6 l2 tab-message"><a href="#tab-message" class="translate">Messages</a></li>
-                </ul>
-            </div>
             <div class="row">
+                <div class="row">
+                    <div class="col s12 m4 l2">
+                        <img src="schoolfree.png" class="logo">
+                    </div>
+                </div>
                 <!-- main settings -->
-                <div id="tab-settings" class="col s12 page">
-                    <div class="row">
-                        <div class="col s12 m4 l2">
-                            <img src="shutter.png" class="logo">
-                        </div>
-                    </div>
-        
-                    <!-- main settings -->
-                    <div class="row">
-                        <div class="col s6 l4 input-field">
-                            <input type="checkbox" class="value" id="UseAstro" />
-                            <span for="UseAstro" class="translate">Use astronomical time</span>
-                        </div>
-                        <div class="col s6 l4 input-field">
-                            <input type="checkbox" class="value" id="UseSunMode" />
-                            <span for="UseSunMode" class="translate">Use sun protection</span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col s6 l4 input-field">
-                            <input type="checkbox" class="value" id="publicHolidays" />
-                            <span for="publicHolidays" class="translate">Use public holidays</span>
-                        </div>
-                        <div class="input-field col s12 m6 l4 publicHol">
-                            <select id="publicHolInstance" class="value"></select>
-                            <label for="publicHolInstance" class="translate">public holidays Instance</label>
-                        </div>
-                    </div>
-                </div>
-                <!-- living settings -->
-                <div id="tab-living" class="col s12 page">
-                    <div class="row"></div>
-                    <div class="row">
-                        <div class="input-field col s12 m6 l4">
-                            <select id="livingEnum" class="value"></select>
-                            <label for="livingEnum" class="translate">Enum Living</label>
-                        </div>
-                        <div class="input-field col s12 m6 l4">
-                            <select id="livingEnumAuto" class="value"></select>
-                            <label for="livingEnumAuto" class="translate">Enum Living Auto / Manu</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col s6 l4 input-field">
-                            <input type="text" class="value" id="WE_shutterDownLiving" />
-                            <label for="WE_shutterDownLiving" class="translate">Shut down on the weekend</label>
-                        </div>
-                        <div class="col s6 l4 input-field">
-                            <input type="text" class="value" id="WE_shutterUpLiving" />
-                            <label for="WE_shutterUpLiving" class="translate">Driving up on the weekend</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col s6 l4 input-field">
-                            <input type="text" class="value" id="W_shutterDownLiving" />
-                            <label for="W_shutterDownLiving" class="translate">Shut down on the week</label>
-                        </div>
-                        <div class="col s6 l4 input-field">
-                            <input type="text" class="value" id="W_shutterUpLivingMax" />
-                            <label for="W_shutterUpLivingMax" class="translate">Max Time for Driving up on the week</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col s6 l4 input-field">
-                            <input type="text" class="value" id="W_shutterUpLivingMin" />
-                            <label for="W_shutterUpLivingMin" class="translate">Min Time for Driving up on the week</label>
-                        </div>
-                        <div class="col s6 l4 input-field">
-                            <input type="number" class="value" id="driveDelayUpLiving" />
-                            <label for="driveDelayUpLiving" class="translate">Time delay for driving the shutters (seconds)</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col s6 l4 input-field">
-                            <input type="number" class="value" id="driveHeightUpLiving" min="0" max="100" />
-                            <label for="driveHeightUpLiving" class="translate">shutter height for drive up (percent)</label>
-                        </div>
-                        <div class="col s6 l4 input-field">
-                            <input type="number" class="value" id="driveHeightDownLiving" min="0" max="100" />
-                            <label for="driveHeightDownLiving" class="translate">shutter height for drive down (percent)</label>
-                        </div>
-                    </div>
-                </div>
-                <!-- sleep settings -->
-                <div id="tab-sleep" class="col s12 page">
-                    <div class="row"></div>
-                    <div class="row">
-                        <div class="input-field col s12 m6 l4">
-                            <select id="sleepEnum" class="value"></select>
-                            <label for="sleepEnum" class="translate">Enum Sleep</label>
-                        </div>
-                        <div class="input-field col s12 m6 l4">
-                            <select id="sleepEnumAuto" class="value"></select>
-                            <label for="sleepEnumAuto" class="translate">Enum Sleep Auto / Manu</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col s6 l4 input-field">
-                            <input type="text" class="value" id="WE_shutterUpSleep" />
-                            <label for="WE_shutterUpSleep" class="translate">Driving up on the weekend</label>
-                        </div>
-                        <div class="col s6 l4 input-field">
-                            <input type="text" class="value" id="WE_shutterDownSleep" />
-                            <label for="WE_shutterDownSleep" class="translate">Shut down on the weekend</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col s6 l4 input-field">
-                            <input type="text" class="value" id="W_shutterDownSleep" />
-                            <label for="W_shutterDownSleep" class="translate">Shut down on the week</label>
-                        </div>
-                        <div class="col s6 l4 input-field">
-                            <input type="text" class="value" id="W_shutterUpSleepMax" />
-                            <label for="W_shutterUpSleepMax" class="translate">Max Time for Driving up on the week</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col s6 l4 input-field">
-                            <input type="text" class="value" id="W_shutterUpSleepMin" />
-                            <label for="W_shutterUpSleepMin" class="translate">Min Time for Driving up on the week</label>
-                        </div>
-                        <div class="col s6 l4 input-field">
-                            <input type="number" class="value" id="driveDelayUpSleep" />
-                            <label for="driveDelayUpSleep" class="translate">Time delay for driving the shutters (seconds)</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col s6 l4 input-field">
-                            <input type="number" class="value" id="driveHeightUpSleep" min="0" max="100" />
-                            <label for="driveHeightUpSleep" class="translate">shutter height for drive up (percent)</label>
-                        </div>
-                        <div class="col s6 l4 input-field">
-                            <input type="number" class="value" id="driveHeightDownSleep" min="0" max="100" />
-                            <label for="driveHeightDownSleep" class="translate">shutter height for drive down (percent)</label>
-                        </div>
-                    </div>
-                </div>
-                <!-- astro settings -->
-                <div id="tab-astro" class="col s12 page">
-                    <div class="row">
-                    </div>
-                    <div class="row">
-                        <div class="col s6 l4 input-field">
-                            <input type="text" class="value" id="latitude" />
-                            <label for="latitude" class="translate">latitude</label>
-                        </div>
-                        <div class="col s6 l4 input-field">
-                            <input type="text" class="value" id="longitude" />
-                            <label for="longitude" class="translate">longitude</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col s6 l4 input-field">
-                            <input type="number" class="value" id="astroDelayUp" />
-                            <label for="astroDelayUp" class="translate">Time delay for Driving up (minutes)</label>
-                        </div>
-                        <div class="col s6 l4 input-field">
-                            <input type="number" class="value" id="astroDelayDown" />
-                            <label for="astroDelayDown" class="translate">Time delay for Driving down (minutes)</label>
-                        </div>
-                    </div>
-                </div>
-                <!-- sun settings -->
-                <div id="tab-sun" class="col s12 page">
-                    <div class="row">
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s12 m6 l4">
-                            <select id="sunProtecEnum" class="value"></select>
-                            <label for="sunProtecEnum" class="translate">Enum Sun Protect</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col s6 l4 input-field">
-                            <input type="number" class="value" id="sunMonthStart" min="1" max="12" />
-                            <label for="sunWeekStart" class="translate">First month for sun protection</label>
-                        </div>
-                        <div class="col s6 l4 input-field">
-                            <input type="number" class="value" id="sunMonthEnd" min="1" max="12" />
-                            <label for="sunWeekEnd" class="translate">Last month for sun protection</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col s6 l4 input-field">
-                            <input type="text" class="value" id="sun_shutterDown" />
-                            <label for="sun_shutterDown" class="translate">Start time for sun protection</label>
-                        </div>
-                        <div class="col s6 l4 input-field">
-                            <input type="text" class="value" id="sun_shutterUp" />
-                            <label for="sun_shutterUp" class="translate">End time for sun protection</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col s6 l4 input-field">
-                            <input type="text" class="value" id="actualValueTemp" />
-                            <label for="actualValueTemp" class="translate">Object ID Actual value of the sun protection temperature</label>
-                        </div>
-                        <div class="col s6 l4 input-field">
-                            <input type="number" class="value" id="setpointValue" min=1 max=40 />
-                            <label for="setpointValue" class="translate">setpoint of the sun protection temperature</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col s6 l4 input-field">
-                            <input type="number" class="value" id="driveHeightSun" min=0 max=100/>
-                            <label for="driveHeightSun" class="translate">shutter height for sun protection (percent)</label>
-                        </div>
-                    </div>
-                </div>
-                <!-- Tab Messages -->
-                <div id="tab-message" class="col s12 page">
-                    <div class="row">
-                    </div>
-                    <div class="row">
-                        <div class="col s12">
-                            <p class="translate">comming son</p>
-                        </div>
+                <div class="row">
+                    <div class="col s6 l4 input-field">
+                        <input type="checkbox" class="value" id="federalState" />
+                        <span for="federalState" class="translate">federal state</span>
                     </div>
                 </div>
             </div>
