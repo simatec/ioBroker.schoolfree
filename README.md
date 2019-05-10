@@ -1,6 +1,6 @@
 <h1>
     <img src="admin/schoolfree.png" width="64"/>
-    ioBroker.schoolfree
+    # ioBroker.schoolfree
 </h1>
 
 [![NPM version](http://img.shields.io/npm/v/iobroker.schoolfree.svg)](https://www.npmjs.com/package/iobroker.schoolfree)
@@ -15,7 +15,47 @@ Windows: [![AppVeyor](https://ci.appveyor.com/api/projects/status/github/simatec
 
 ## schoolfree adapter for ioBroker
 
-Automatic control for schoolfree
+*************************************************************************************************************************************
+
+### Deutsche Beschreibung:
+
+Schoolfree ist ein Adapter für iobroker Installationen.
+Mit dem Adapter lassen sich die Schulferien auswerten und in Datenpunkte übergeben.
+Die Datenpunkte können somit für weitere Funktionen wie Heizungssteuerungen, Rolladen- und Anwesenheitssteuerungen ausgewertet und verarbeitet werden.
+
+Der aktuelle Bezug von Terminen für die Schulferien erfolgt über die API von https://www.mehr-schulferien.de
+
+Aktuell werden die Schulferien und freien Tage für Deutschland unterstützt.
+
+Folgende Datenpunkte stehen mit Schoolfree für die weitere Verarbeitung zur Verfügung:
+
+* schoolfreeEnd: Datum für das Ende der aktuellen Ferien
+* schoolfreeName: Bezeichnung der aktuellen Schulferien
+* schoolfreeStart: Startdatum der aktuellen Ferien
+* schoolfreeToday: Switch für den aktuellen Status heute (true/false)
+* schoolfreeTomorow: Switch für den aktuellen Status morgen (true/false)
+
+*************************************************************************************************************************************
+
+### English description:
+
+Schoolfree is an adapter for iobroker installations.
+With the adapter, the school holidays can be evaluated and transferred to data points.
+The data points can thus be evaluated and processed for other functions such as heating controls, shutter and presence controls.
+
+The current subscription for school holidays is via the API of https://www.mehr-schulferien.de
+
+Currently, the school holidays and days off for Germany are supported.
+
+The following data points are available for further processing with Schoolfree:
+
+* schoolfreeEnd: Date for the end of the current holidays
+* schoolfreeName: name of the current school holidays
+* schoolfreeStart: Start date of the current holiday
+* schoolfreeToday: Switch for the current status today (true / false)
+* schoolfreeTomorow: switch for the current status tomorrow (true / false)
+
+*************************************************************************************************************************************
 
 ## Changelog
 
@@ -24,6 +64,8 @@ Automatic control for schoolfree
 
 ### 0.0.1
 * (simatec) initial release
+
+*************************************************************************************************************************************
 
 
 ## License
