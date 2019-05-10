@@ -59,10 +59,10 @@ The following data points are available for further processing with Schoolfree:
 
 ## Changelog
 
-### 0.1.0
+### 0.1.0 (10.05.2019)
 * (simatec) First Beta
 
-### 0.0.1
+### 0.0.1 (08.05.2019)
 * (simatec) initial release
 
 *************************************************************************************************************************************
