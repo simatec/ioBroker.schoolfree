@@ -77,24 +77,7 @@
         "type": "climate-control",
         "compact": true,
         "materialize": true,
-        "materializeTab": true,
-        "adminTab": {
-            "singleton": true,
-            "name": {
-                "en": "school free",
-                "de": "Schulferien",
-                "ru": "бесплатная школа",
-                "pt": "escola livre",
-                "nl": "school gratis",
-                "fr": "école gratuite",
-                "it": "scuola gratis",
-                "es": "escuela libre",
-                "pl": "szkoła wolna",
-                "zh-cn": "学校免费"
-            },
-            "link": "",
-            "fa-icon": "info"
-        },
+
         "dependencies": [
             {
                 "admin": ">=3.0.0"
