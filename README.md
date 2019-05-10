@@ -1,6 +1,6 @@
 <h1>
     <img src="admin/schoolfree.png" width="64"/>
-    # ioBroker.schoolfree
+    ioBroker.schoolfree
 </h1>
 
 [![NPM version](http://img.shields.io/npm/v/iobroker.schoolfree.svg)](https://www.npmjs.com/package/iobroker.schoolfree)
@@ -15,7 +15,7 @@ Windows: [![AppVeyor](https://ci.appveyor.com/api/projects/status/github/simatec
 
 ## schoolfree adapter for ioBroker
 
-*************************************************************************************************************************************
+
 
 ### Deutsche Beschreibung:
 
