@@ -88,42 +88,43 @@ function checkState() {
                 const res = arr3.map(({ starts_on, ends_on, name }) => ({ starts_on, ends_on, name }));
                 // sort for start holiday
                 const res2 = res.sort((a, b) => (a.starts_on > b.starts_on) ? 1 : -1);
-
-                if (res2[0].starts_on <= today && res2[0].ends_on >= today) {
-                    adapter.log.debug('school free name: ' + res2[0].name);
-                    adapter.log.debug('school free today');
-                    adapter.setState('info.schoolfreeToday', { val: true, ack: true });
-                    adapter.setState('info.schoolfreeStart', { val: res2[0].starts_on, ack: true });
-                    adapter.setState('info.schoolfreeEnd', { val: res2[0].ends_on, ack: true });
-                    adapter.setState('info.schoolfreeName', { val: res2[0].name, ack: true });
-                    adapter.log.debug('string: ' + JSON.stringify(res2[0]));
-                } else {
-                    adapter.setState('info.schoolfreeToday', { val: false, ack: true });
-                }
-                if (res2[0].starts_on <= tomorow && res2[0].ends_on >= tomorow) {
-                    adapter.log.debug('school free name: ' + res2[0].name)
-                    adapter.log.debug('school free tomorow')
-                    adapter.setState('info.schoolfreeTomorow', { val: true, ack: true });
-                    adapter.setState('info.schoolfreeStart', { val: res2[0].starts_on, ack: true });
-                    adapter.setState('info.schoolfreeEnd', { val: res2[0].ends_on, ack: true });
-                    adapter.setState('info.schoolfreeName', { val: res2[0].name, ack: true });
-                    adapter.log.debug('string: ' + JSON.stringify(res2[0]));
-                } else {
-                    adapter.setState('info.schoolfreeTomorow', { val: false, ack: true });
-                }
-                if (res2[0].starts_on > today && res2[0].starts_on > tomorow) {
-                    adapter.setState('info.schoolfreeStart', { val: 'none', ack: true });
-                    adapter.setState('info.schoolfreeEnd', { val: 'none', ack: true });
-                    adapter.setState('info.schoolfreeName', { val: 'none', ack: true });
-                }
-                if (res2[0].starts_on > today) {
-                    adapter.setState('info.schoolfreeNextStart', { val: res2[0].starts_on, ack: true });
-                    adapter.setState('info.schoolfreeNextEnd', { val: res2[0].ends_on, ack: true });
-                    adapter.setState('info.schoolfreeNextName', { val: res2[0].name, ack: true });
-                } else if (res2[0].starts_on <= today && res2[0].ends_on >= today) {
-                    adapter.setState('info.schoolfreeNextStart', { val: res2[1].starts_on, ack: true });
-                    adapter.setState('info.schoolfreeNextEnd', { val: res2[1].ends_on, ack: true });
-                    adapter.setState('info.schoolfreeNextName', { val: res2[1].name, ack: true });
+                if (res2[0].starts_on && res2[0].ends_on && res2[0].name) {
+                    if (res2[0].starts_on <= today && res2[0].ends_on >= today) {
+                        adapter.log.debug('school free name: ' + res2[0].name);
+                        adapter.log.debug('school free today');
+                        adapter.setState('info.schoolfreeToday', { val: true, ack: true });
+                        adapter.setState('info.schoolfreeStart', { val: res2[0].starts_on, ack: true });
+                        adapter.setState('info.schoolfreeEnd', { val: res2[0].ends_on, ack: true });
+                        adapter.setState('info.schoolfreeName', { val: res2[0].name, ack: true });
+                        adapter.log.debug('string: ' + JSON.stringify(res2[0]));
+                    } else {
+                        adapter.setState('info.schoolfreeToday', { val: false, ack: true });
+                    }
+                    if (res2[0].starts_on <= tomorow && res2[0].ends_on >= tomorow) {
+                        adapter.log.debug('school free name: ' + res2[0].name)
+                        adapter.log.debug('school free tomorow')
+                        adapter.setState('info.schoolfreeTomorow', { val: true, ack: true });
+                        adapter.setState('info.schoolfreeStart', { val: res2[0].starts_on, ack: true });
+                        adapter.setState('info.schoolfreeEnd', { val: res2[0].ends_on, ack: true });
+                        adapter.setState('info.schoolfreeName', { val: res2[0].name, ack: true });
+                        adapter.log.debug('string: ' + JSON.stringify(res2[0]));
+                    } else {
+                        adapter.setState('info.schoolfreeTomorow', { val: false, ack: true });
+                    }
+                    if (res2[0].starts_on > today && res2[0].starts_on > tomorow) {
+                        adapter.setState('info.schoolfreeStart', { val: 'none', ack: true });
+                        adapter.setState('info.schoolfreeEnd', { val: 'none', ack: true });
+                        adapter.setState('info.schoolfreeName', { val: 'none', ack: true });
+                    }
+                    if (res2[0].starts_on > today) {
+                        adapter.setState('info.schoolfreeNextStart', { val: res2[0].starts_on, ack: true });
+                        adapter.setState('info.schoolfreeNextEnd', { val: res2[0].ends_on, ack: true });
+                        adapter.setState('info.schoolfreeNextName', { val: res2[0].name, ack: true });
+                    } else if (res2[0].starts_on <= today && res2[0].ends_on >= today) {
+                        adapter.setState('info.schoolfreeNextStart', { val: res2[1].starts_on, ack: true });
+                        adapter.setState('info.schoolfreeNextEnd', { val: res2[1].ends_on, ack: true });
+                        adapter.setState('info.schoolfreeNextName', { val: res2[1].name, ack: true });
+                    }
                 }
                 adapter.log.debug('Request done');
             } else if (error) {
