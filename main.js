@@ -88,7 +88,7 @@ function checkState() {
                 const res = arr3.map(({ starts_on, ends_on, name }) => ({ starts_on, ends_on, name }));
                 // sort for start holiday
                 const res2 = res.sort((a, b) => (a.starts_on > b.starts_on) ? 1 : -1);
-                if (res2[0].starts_on != undefined && res2[0].ends_on != undefined && res2[0].name != undefined) {
+                if (res2[0].starts_on !== 'undefined' && res2[0].ends_on !== 'undefined' && res2[0].name !== 'undefined') {
                     if (res2[0].starts_on <= today && res2[0].ends_on >= today) {
                         adapter.log.debug('school free name: ' + res2[0].name);
                         adapter.log.debug('school free today');
