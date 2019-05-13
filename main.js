@@ -77,47 +77,53 @@ function checkState() {
         },
         function (error, response, content) {
             if (content) {
-                const federalStateStr = adapter.config.federalState
+                const federalStateStr = adapter.config.federalState;
+                // Filter current federal State
                 const arr1 = content.data.filter(d => d.federal_state_id == federalStateStr);
-                const arrStart = arr1.filter(d => d.starts_on >= today);
-                const arr2 = arrStart.filter(d => d.ends_on >= today);
-        
-                const res = arr2.map(({ starts_on, ends_on, name }) => ({ starts_on, ends_on, name }));
-                
-                adapter.setState('info.schoolfreeToday', { val: false, ack: true });
-                adapter.setState('info.schoolfreeTomorow', { val: false, ack: true });
-                adapter.setState('info.schoolfreeStart', { val: 'none', ack: true });
-                adapter.setState('info.schoolfreeEnd', { val: 'none', ack: true });
-                adapter.setState('info.schoolfreeName', { val: 'none', ack: true });
+                // Filter old holidays
+                const arr2 = arr1.filter(d => d.ends_on >= today);
+                // Filter Long weekends
+                const arr3 = arr2.filter(d => d.starts_on != d.ends_on);
+                // Filter Data
+                const res = arr3.map(({ starts_on, ends_on, name }) => ({ starts_on, ends_on, name }));
+                // sort for start holiday
+                const res2 = res.sort((a, b) => (a.starts_on > b.starts_on) ? 1 : -1);
 
-                //today = '2019-05-31';
-                //tomorow = '2019-06-01'
-        
-                for (let i of res) {
-                    let result = Object.keys(i).map(key => i[key])
-                    let result2 = ('' + result)
-                    let result3 = result2.split(',')
-                    if (result3[0] <= today && result3[1] >= today) {
-                        adapter.log.debug('school free name: ' + result3[2])
-                        adapter.log.debug('school free today')
-                        adapter.setState('info.schoolfreeToday', { val: true, ack: true });
-                        adapter.setState('info.schoolfreeStart', { val: result3[0], ack: true });
-                        adapter.setState('info.schoolfreeEnd', { val: result3[1], ack: true });
-                        adapter.setState('info.schoolfreeName', { val: result3[2], ack: true });
-                        adapter.log.debug('string: ' + result)
-                    }
-                    if (result3[0] <= tomorow && result3[1] >= tomorow) {
-                        adapter.log.debug('school free name: ' + result3[2])
-                        adapter.log.debug('school free tomorow')
-                        adapter.setState('info.schoolfreeTomorow', { val: true, ack: true });
-                        adapter.setState('info.schoolfreeStart', { val: result3[0], ack: true });
-                        adapter.setState('info.schoolfreeEnd', { val: result3[1], ack: true });
-                        adapter.setState('info.schoolfreeName', { val: result3[2], ack: true });
-                        adapter.log.debug('string: ' + result)
-                    }
-                    //result.push(Object.keys(i).map(key => i[key]))
-                    //adapter.log.warn("key is: " + Object.keys(i));
-                    //adapter.log.warn("value is: " + Object.keys(i).map(key => i[key])) // Object.values can be used as well in newer versions.
+                if (res2[0].starts_on <= today && res2[0].ends_on >= today) {
+                    adapter.log.debug('school free name: ' + res2[0].name);
+                    adapter.log.debug('school free today');
+                    adapter.setState('info.schoolfreeToday', { val: true, ack: true });
+                    adapter.setState('info.schoolfreeStart', { val: res2[0].starts_on, ack: true });
+                    adapter.setState('info.schoolfreeEnd', { val: res2[0].ends_on, ack: true });
+                    adapter.setState('info.schoolfreeName', { val: res2[0].name, ack: true });
+                    adapter.log.debug('string: ' + JSON.stringify(res2[0]));
+                } else {
+                    adapter.setState('info.schoolfreeToday', { val: false, ack: true });
+                }
+                if (res2[0].starts_on <= tomorow && res2[0].ends_on >= tomorow) {
+                    adapter.log.debug('school free name: ' + res2[0].name)
+                    adapter.log.debug('school free tomorow')
+                    adapter.setState('info.schoolfreeTomorow', { val: true, ack: true });
+                    adapter.setState('info.schoolfreeStart', { val: res2[0].starts_on, ack: true });
+                    adapter.setState('info.schoolfreeEnd', { val: res2[0].ends_on, ack: true });
+                    adapter.setState('info.schoolfreeName', { val: res2[0].name, ack: true });
+                    adapter.log.debug('string: ' + JSON.stringify(res2[0]));
+                } else {
+                    adapter.setState('info.schoolfreeTomorow', { val: false, ack: true });
+                }
+                if (res2[0].starts_on > today && res2[0].starts_on > tomorow) {
+                    adapter.setState('info.schoolfreeStart', { val: 'none', ack: true });
+                    adapter.setState('info.schoolfreeEnd', { val: 'none', ack: true });
+                    adapter.setState('info.schoolfreeName', { val: 'none', ack: true });
+                }
+                if (res2[0].starts_on > today) {
+                    adapter.setState('info.schoolfreeNextStart', { val: res2[0].starts_on, ack: true });
+                    adapter.setState('info.schoolfreeNextEnd', { val: res2[0].ends_on, ack: true });
+                    adapter.setState('info.schoolfreeNextName', { val: res2[0].name, ack: true });
+                } else if (res2[0].starts_on <= today && res2[0].ends_on >= today) {
+                    adapter.setState('info.schoolfreeNextStart', { val: res2[1].starts_on, ack: true });
+                    adapter.setState('info.schoolfreeNextEnd', { val: res2[1].ends_on, ack: true });
+                    adapter.setState('info.schoolfreeNextName', { val: res2[1].name, ack: true });
                 }
                 adapter.log.debug('Request done');
             } else if (error) {
@@ -129,8 +135,6 @@ function main() {
 
     checkState();
 
-    // in this template all states changes inside are subscribed
-    adapter.subscribeStates('*');
     setTimeout(function () {
         adapter.stop();
     }, 10000);

@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "schoolfree",
-        "version": "0.1.0",
+        "version": "0.2.0",
         "news": {
+            "0.2.0": {
+                "en": "Add Objects for next school holiday; cleaned code",
+                "de": "Objekte für die nächsten Schulferien hinzugefügt; Code bereinigt",
+                "ru": "Добавить объекты на следующий школьный праздник; очищенный код",
+                "pt": "Adicione objetos para as próximas férias escolares; código limpo",
+                "nl": "Objecten toevoegen voor de volgende schoolvakantie; gereinigde code",
+                "fr": "Ajouter des objets pour les prochaines vacances scolaires; code nettoyé",
+                "it": "Aggiungi oggetti per le prossime vacanze scolastiche; codice pulito",
+                "es": "Añadir objetos para las próximas vacaciones escolares; código limpio",
+                "pl": "Dodaj obiekty na następne wakacje szkolne; wyczyszczony kod",
+                "zh-cn": "为下一个学校假期添加对象;清理代码"
+            },
             "0.1.0": {
                 "en": "First Beta",
                 "de": "Erste Beta",
@@ -155,6 +167,45 @@
             "common": {
                 "role":  "indicator",
                 "name":  "Name of current schoolfree",
+                "type":  "string",
+                "read":  true,
+                "write": false,
+                "def":   ""
+            },
+            "native": {}
+        },
+        {
+            "_id":  "info.schoolfreeNextStart",
+            "type": "state",
+            "common": {
+                "role":  "indicator",
+                "name":  "Start for next schoolfree",
+                "type":  "string",
+                "read":  true,
+                "write": false,
+                "def":   ""
+            },
+            "native": {}
+        },
+        {
+            "_id":  "info.schoolfreeNextEnd",
+            "type": "state",
+            "common": {
+                "role":  "indicator",
+                "name":  "End for next schoolfree",
+                "type":  "string",
+                "read":  true,
+                "write": false,
+                "def":   ""
+            },
+            "native": {}
+        },
+        {
+            "_id":  "info.schoolfreeNextName",
+            "type": "state",
+            "common": {
+                "role":  "indicator",
+                "name":  "Name of next schoolfree",
                 "type":  "string",
                 "read":  true,
                 "write": false,

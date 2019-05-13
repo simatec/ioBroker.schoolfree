@@ -31,6 +31,9 @@ Folgende Datenpunkte stehen mit Schoolfree für die weitere Verarbeitung zur Ver
 * schoolfreeEnd: Datum für das Ende der aktuellen Ferien
 * schoolfreeName: Bezeichnung der aktuellen Schulferien
 * schoolfreeStart: Startdatum der aktuellen Ferien
+* schoolfreeEndNext: Datum für das Ende der nächsten Ferien
+* schoolfreeNameNext: Bezeichnung der nächsten Schulferien
+* schoolfreeStartNext: Startdatum der nächsten Ferien
 * schoolfreeToday: Switch für den aktuellen Status heute (true/false)
 * schoolfreeTomorow: Switch für den aktuellen Status morgen (true/false)
 
@@ -51,12 +54,19 @@ The following data points are available for further processing with Schoolfree:
 * schoolfreeEnd: Date for the end of the current holidays
 * schoolfreeName: name of the current school holidays
 * schoolfreeStart: Start date of the current holiday
+* schoolfreeEndNext: Date for the end of the next holidays
+* schoolfreeNameNext: name of the next school holidays
+* schoolfreeStartNext: Start date of the next holiday
 * schoolfreeToday: Switch for the current status today (true / false)
 * schoolfreeTomorow: switch for the current status tomorrow (true / false)
 
 *************************************************************************************************************************************
 
 ## Changelog
+
+### 0.2.0 (13.05.2019)
+* (simatec) Add Objects for next school holiday
+* (simatec) cleaned code
 
 ### 0.1.0 (10.05.2019)
 * (simatec) First Beta
