@@ -1,6 +1,6 @@
-![Logo](src="admin/schoolfree.png" width="64")
+![Logo]("admin/schoolfree.png")
 # ioBroker.schoolfree
-=================
+
 
 [![NPM version](http://img.shields.io/npm/v/iobroker.schoolfree.svg)](https://www.npmjs.com/package/iobroker.schoolfree)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.schoolfree.svg)](https://www.npmjs.com/package/iobroker.schoolfree)
