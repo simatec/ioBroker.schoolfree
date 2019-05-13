@@ -1,4 +1,4 @@
-![Logo]("admin/schoolfree.png")
+![Logo](admin/schoolfree.png)
 # ioBroker.schoolfree
 
 
