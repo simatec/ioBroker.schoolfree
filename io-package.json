@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "schoolfree",
-        "version": "0.2.0",
+        "version": "0.2.1",
         "news": {
+            "0.2.1": {
+                "en": "fix travis and appveyor",
+                "de": "Fix Travis und Appveyor",
+                "ru": "исправить Трэвис и Аппейвер",
+                "pt": "consertar travis e appveyor",
+                "nl": "repareer travis en appveyor",
+                "fr": "réparer travis et appveyor",
+                "it": "sistemare travis e l'app",
+                "es": "arreglar travis y appveyor",
+                "pl": "napraw travis i appveyor",
+                "zh-cn": "修理travis和appveyor"
+            },
             "0.2.0": {
                 "en": "Add Objects for next school holiday; cleaned code",
                 "de": "Objekte für die nächsten Schulferien hinzugefügt; Code bereinigt",

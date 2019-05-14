@@ -64,6 +64,9 @@ The following data points are available for further processing with Schoolfree:
 
 ## Changelog
 
+### 0.2.1 (14.05.2019)
+* (simatec) fix travis and appveyor
+
 ### 0.2.0 (13.05.2019)
 * (simatec) Add Objects for next school holiday
 * (simatec) cleaned code
