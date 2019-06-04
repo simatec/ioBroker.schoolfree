@@ -28,14 +28,14 @@ Aktuell werden die Schulferien und freien Tage für Deutschland unterstützt.
 
 Folgende Datenpunkte stehen mit Schoolfree für die weitere Verarbeitung zur Verfügung:
 
-* schoolfreeEnd: Datum für das Ende der aktuellen Ferien
-* schoolfreeName: Bezeichnung der aktuellen Schulferien
-* schoolfreeStart: Startdatum der aktuellen Ferien
-* schoolfreeEndNext: Datum für das Ende der nächsten Ferien
-* schoolfreeNameNext: Bezeichnung der nächsten Schulferien
-* schoolfreeStartNext: Startdatum der nächsten Ferien
-* schoolfreeToday: Switch für den aktuellen Status heute (true/false)
-* schoolfreeTomorow: Switch für den aktuellen Status morgen (true/false)
+* info.current.end: Datum für das Ende der aktuellen Ferien
+* info.current.name: Bezeichnung der aktuellen Schulferien
+* info.current.start: Startdatum der aktuellen Ferien
+* info.next.end: Datum für das Ende der nächsten Ferien
+* info.next.name: Bezeichnung der nächsten Schulferien
+* info.next.start: Startdatum der nächsten Ferien
+* info.today: Switch für den aktuellen Status heute (true/false)
+* info.tomorrow: Switch für den aktuellen Status morgen (true/false)
 
 *************************************************************************************************************************************
 
@@ -51,18 +51,21 @@ Currently, the school holidays and days off for Germany are supported.
 
 The following data points are available for further processing with Schoolfree:
 
-* schoolfreeEnd: Date for the end of the current holidays
-* schoolfreeName: name of the current school holidays
-* schoolfreeStart: Start date of the current holiday
-* schoolfreeEndNext: Date for the end of the next holidays
-* schoolfreeNameNext: name of the next school holidays
-* schoolfreeStartNext: Start date of the next holiday
-* schoolfreeToday: Switch for the current status today (true / false)
-* schoolfreeTomorow: switch for the current status tomorrow (true / false)
+* info.current.end: Date for the end of the current holidays
+* info.current.name: name of the current school holidays
+* info.current.start: Start date of the current holiday
+* info.next.end: Date for the end of the next holidays
+* info.next.name: name of the next school holidays
+* info.next.start: Start date of the next holiday
+* info.today: Switch for the current status today (true / false)
+* info.tomorrow: switch for the current status tomorrow (true / false)
 
 *************************************************************************************************************************************
 
 ## Changelog
+
+### 0.2.2 (04.06.2019)
+* (simatec)new object structure
 
 ### 0.2.1 (14.05.2019)
 * (simatec) fix travis and appveyor

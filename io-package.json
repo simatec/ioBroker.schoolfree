@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "schoolfree",
-        "version": "0.2.1",
+        "version": "0.2.2",
         "news": {
+            "0.2.2": {
+                "en": "new object structure",
+                "de": "neue Objektstruktur",
+                "pt": "nova estrutura de objeto",
+                "nl": "nieuwe objectstructuur",
+                "ru": "новая структура объекта",
+                "fr": "nouvelle structure d'objet",
+                "it": "nuova struttura di oggetti",
+                "es": "nueva estructura de objetos",
+                "pl": "nowa struktura obiektu",
+                "zh-cn": "新的对象结构"
+            },
             "0.2.1": {
                 "en": "fix travis and appveyor",
                 "de": "Fix Travis und Appveyor",
@@ -98,7 +110,7 @@
         "loglevel": "info",
         "mode": "schedule",
         "schedule": "1 0 * * *",
-        "type": "climate-control",
+        "type": "date-and-time",
         "compact": true,
         "materialize": true,
 
@@ -122,11 +134,27 @@
             "native": {}
         },
         {
-            "_id":  "info.schoolfreeToday",
+            "_id":  "info.current",
+            "type": "channel",
+            "common": {
+                "name": "current Info"
+            },
+            "native": {}
+        },
+        {
+            "_id":  "info.next",
+            "type": "channel",
+            "common": {
+                "name": "next Info"
+            },
+            "native": {}
+        },
+        {
+            "_id":  "info.today",
             "type": "state",
             "common": {
                 "role":  "switch",
-                "name":  "School free today",
+                "name":  "school free today",
                 "type":  "boolean",
                 "read":  true,
                 "write": true,
@@ -135,11 +163,11 @@
             "native": {}
         },
         {
-            "_id":  "info.schoolfreeTomorow",
+            "_id":  "info.tomorrow",
             "type": "state",
             "common": {
                 "role":  "switch",
-                "name":  "School free Tomorow",
+                "name":  "school free tomorrow",
                 "type":  "boolean",
                 "read":  true,
                 "write": true,
@@ -148,11 +176,11 @@
             "native": {}
         },
         {
-            "_id":  "info.schoolfreeStart",
+            "_id":  "info.current.start",
             "type": "state",
             "common": {
                 "role":  "indicator",
-                "name":  "Start for current schoolfree",
+                "name":  "start for current schoolfree",
                 "type":  "string",
                 "read":  true,
                 "write": false,
@@ -161,11 +189,11 @@
             "native": {}
         },
         {
-            "_id":  "info.schoolfreeEnd",
+            "_id":  "info.current.end",
             "type": "state",
             "common": {
                 "role":  "indicator",
-                "name":  "End for current schoolfree",
+                "name":  "end for current schoolfree",
                 "type":  "string",
                 "read":  true,
                 "write": false,
@@ -174,11 +202,11 @@
             "native": {}
         },
         {
-            "_id":  "info.schoolfreeName",
+            "_id":  "info.current.name",
             "type": "state",
             "common": {
                 "role":  "indicator",
-                "name":  "Name of current schoolfree",
+                "name":  "name of current schoolfree",
                 "type":  "string",
                 "read":  true,
                 "write": false,
@@ -187,11 +215,11 @@
             "native": {}
         },
         {
-            "_id":  "info.schoolfreeNextStart",
+            "_id":  "info.next.start",
             "type": "state",
             "common": {
                 "role":  "indicator",
-                "name":  "Start for next schoolfree",
+                "name":  "start for next schoolfree",
                 "type":  "string",
                 "read":  true,
                 "write": false,
@@ -200,11 +228,11 @@
             "native": {}
         },
         {
-            "_id":  "info.schoolfreeNextEnd",
+            "_id":  "info.next.end",
             "type": "state",
             "common": {
                 "role":  "indicator",
-                "name":  "End for next schoolfree",
+                "name":  "end for next schoolfree",
                 "type":  "string",
                 "read":  true,
                 "write": false,
@@ -213,11 +241,11 @@
             "native": {}
         },
         {
-            "_id":  "info.schoolfreeNextName",
+            "_id":  "info.next.name",
             "type": "state",
             "common": {
                 "role":  "indicator",
-                "name":  "Name of next schoolfree",
+                "name":  "name of next schoolfree",
                 "type":  "string",
                 "read":  true,
                 "write": false,
