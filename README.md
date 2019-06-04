@@ -1,16 +1,14 @@
 ![Logo](admin/schoolfree.png)
 # ioBroker.schoolfree
 
-
+![Number of Installations](http://iobroker.live/badges/schoolfree-installed.svg) ![Number of Installations](http://iobroker.live/badges/schoolfree-stable.svg)
 [![NPM version](http://img.shields.io/npm/v/iobroker.schoolfree.svg)](https://www.npmjs.com/package/iobroker.schoolfree)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.schoolfree.svg)](https://www.npmjs.com/package/iobroker.schoolfree)
 [![Dependency Status](https://img.shields.io/david/simatec/iobroker.schoolfree.svg)](https://david-dm.org/simatec/iobroker.schoolfree)
 [![Known Vulnerabilities](https://snyk.io/test/github/simatec/ioBroker.schoolfree/badge.svg)](https://snyk.io/test/github/simatec/ioBroker.schoolfree)
-
 [![NPM](https://nodei.co/npm/iobroker.schoolfree.png?downloads=true)](https://nodei.co/npm/iobroker.schoolfree/)
-
-**Tests:** Linux/Mac: [![Travis-CI](http://img.shields.io/travis/simatec/ioBroker.schoolfree/master.svg)](https://travis-ci.org/simatec/ioBroker.schoolfree)
-Windows: [![AppVeyor](https://ci.appveyor.com/api/projects/status/github/simatec/ioBroker.schoolfree?branch=master&svg=true)](https://ci.appveyor.com/project/simatec/ioBroker-schoolfree/)
+[![Travis-CI](http://img.shields.io/travis/simatec/ioBroker.schoolfree/master.svg)](https://travis-ci.org/simatec/ioBroker.schoolfree)
+[![AppVeyor](https://ci.appveyor.com/api/projects/status/github/simatec/ioBroker.schoolfree?branch=master&svg=true)](https://ci.appveyor.com/project/simatec/ioBroker-schoolfree/)
 
 ## schoolfree adapter for ioBroker
 
