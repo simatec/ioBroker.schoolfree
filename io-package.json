@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "schoolfree",
-        "version": "0.2.2",
+        "version": "0.3.0",
         "news": {
+            "0.3.0": {
+                "en": "end of node 6 support; changed dateformat",
+                "de": "Ende der Unterstützung von node 6; Datumsformat geändert",
+                "ru": "поддержка конца узла 6; изменил формат даты",
+                "pt": "suporte ao final do nó 6; formato da data alterado",
+                "nl": "einde van knooppunt 6 ondersteuning; gegevensformaat gewijzigd",
+                "fr": "fin du support du noeud 6; dateformat changé",
+                "it": "fine del nodo 6 supporto; formato data modificato",
+                "es": "fin del soporte del nodo 6; formato de fecha cambiado",
+                "pl": "obsługa końca węzła 6; zmieniony format daty",
+                "zh-cn": "节点6的支持结束；更改日期格式"
+            },
             "0.2.2": {
                 "en": "new object structure",
                 "de": "neue Objektstruktur",

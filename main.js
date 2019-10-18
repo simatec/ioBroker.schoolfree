@@ -33,18 +33,6 @@ function startAdapter(options) {
             callback();
         }
     });
-    /*
-    // is called if a subscribed object changes
-    adapter.on('objectChange', (id, obj) => {
-        if (obj) {
-            // The object was changed
-            adapter.log.debug(`object ${id} changed: ${JSON.stringify(obj)}`);
-        } else {
-            // The object was deleted
-            adapter.log.debug(`object ${id} deleted`);
-        }
-    });
-    */
 
     // is called if a subscribed state changes
     adapter.on('stateChange', (id, state) => {
@@ -97,12 +85,20 @@ function checkState() {
 
                 if (result[0] && result[0].starts_on !== 'undefined') {
                     // Set schoolfree today
+                    let currentStart;
+                    let currentEnd;
+
+                    currentStart = result[0].starts_on.split('-');
+                    currentStart = (currentStart[2] + '.' + currentStart[1] + '.' + currentStart[0]);
+                    currentEnd = result[0].ends_on.split('-');
+                    currentEnd = (currentEnd[2] + '.' + currentEnd[1] + '.' + currentEnd[0]);
+
                     if (result[0].starts_on <= today && result[0].ends_on >= today) {
                         adapter.log.debug('school free name: ' + result[0].name);
                         adapter.log.debug('school free today');
                         adapter.setState('info.today', { val: true, ack: true });
-                        adapter.setState('info.current.start', { val: result[0].starts_on, ack: true });
-                        adapter.setState('info.current.end', { val: result[0].ends_on, ack: true });
+                        adapter.setState('info.current.start', { val: currentStart, ack: true });
+                        adapter.setState('info.current.end', { val: currentEnd, ack: true });
                         adapter.setState('info.current.name', { val: result[0].name, ack: true });
                         adapter.log.debug('string: ' + JSON.stringify(result[0]));
                     } else {
@@ -113,8 +109,8 @@ function checkState() {
                         adapter.log.debug('school free name: ' + result[0].name)
                         adapter.log.debug('school free tomorrow')
                         adapter.setState('info.tomorrow', { val: true, ack: true });
-                        adapter.setState('info.current.start', { val: result[0].starts_on, ack: true });
-                        adapter.setState('info.current.end', { val: result[0].ends_on, ack: true });
+                        adapter.setState('info.current.start', { val: currentStart, ack: true });
+                        adapter.setState('info.current.end', { val: currentEnd, ack: true });
                         adapter.setState('info.current.name', { val: result[0].name, ack: true });
                         adapter.log.debug('string: ' + JSON.stringify(result[0]));
                     } else {
@@ -127,19 +123,32 @@ function checkState() {
                         adapter.setState('info.current.name', { val: 'none', ack: true });
                     }
                     // Set next holiday
+                    let nextStart;
+                    let nextEnd;
+
                     if (result[0].starts_on > today) {
-                        adapter.setState('info.next.start', { val: result[0].starts_on, ack: true });
-                        adapter.setState('info.next.end', { val: result[0].ends_on, ack: true });
+                        nextStart = result[0].starts_on.split('-');
+                        nextStart = (nextStart[2] + '.' + nextStart[1] + '.' + nextStart[0]);
+                        nextEnd = result[0].ends_on.split('-');
+                        nextEnd = (nextEnd[2] + '.' + nextEnd[1] + '.' + nextEnd[0]);
+
+                        adapter.setState('info.next.start', { val: nextStart, ack: true });
+                        adapter.setState('info.next.end', { val: nextEnd, ack: true });
                         adapter.setState('info.next.name', { val: result[0].name, ack: true });
                     } else if (result[0].starts_on <= today && result[0].ends_on >= today) {
-                        adapter.setState('info.next.start', { val: result[1].starts_on, ack: true });
-                        adapter.setState('info.next.end', { val: result[1].ends_on, ack: true });
+                        nextStart = result[1].starts_on.split('-');
+                        nextStart = (nextStart[2] + '.' + nextStart[1] + '.' + nextStart[0]);
+                        nextEnd = result[1].ends_on.split('-');
+                        nextEnd = (nextEnd[2] + '.' + nextEnd[1] + '.' + nextEnd[0]);
+
+                        adapter.setState('info.next.start', { val: nextStart, ack: true });
+                        adapter.setState('info.next.end', { val: nextEnd, ack: true });
                         adapter.setState('info.next.name', { val: result[1].name, ack: true });
                     }
-                    adapter.log.debug('Request done');
+                    adapter.log.info('schoolfree request done');
                 }
             } else if (error) {
-                adapter.log.warn('Request error');
+                adapter.log.warn('schoolfree request error');
             }
         });
 }
