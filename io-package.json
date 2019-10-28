@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "schoolfree",
-        "version": "0.3.0",
+        "version": "0.3.1",
         "news": {
+            "0.3.1": {
+                "en": "Fix start after install",
+                "de": "Fix Start nach der Installation",
+                "ru": "Исправить первый запуск после установки",
+                "pt": "Corrija o primeiro início após a instalação",
+                "nl": "Herstel eerste start na installatie",
+                "fr": "Fixer le premier démarrage après l'installation",
+                "it": "Correggi il primo avvio dopo l'installazione",
+                "es": "Arreglar el primer inicio después de la instalación",
+                "pl": "Napraw pierwszy start po instalacji",
+                "zh-cn": "修复安装后首次启动"
+            },
             "0.3.0": {
                 "en": "end of node 6 support; changed dateformat",
                 "de": "Ende der Unterstützung von node 6; Datumsformat geändert",
@@ -122,6 +134,7 @@
         "loglevel": "info",
         "mode": "schedule",
         "schedule": "1 0 * * *",
+        "allowInit": true,
         "type": "date-and-time",
         "compact": true,
         "materialize": true,
