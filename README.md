@@ -69,6 +69,9 @@ The following data points are available for further processing with Schoolfree:
 
 ## Changelog
 
+### 0.4.0 (21.03.2020)
+* (simatec) added new api v2.0 from www.mehr-schulferien.de
+
 ### 0.3.1 (28.10.2019)
 * (simatec) Fix start after install
 

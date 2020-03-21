@@ -64,7 +64,7 @@ function checkState() {
     // request API from www.mehr-schulferien.de
     request(
         {
-            url: 'https://www.mehr-schulferien.de/api/v1.0/periods',
+            url: 'https://www.mehr-schulferien.de/api/v2.0/periods',
             json: true
         },
 
