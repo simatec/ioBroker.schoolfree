@@ -73,7 +73,8 @@ function checkState() {
             if (content) {
                 const federalStateStr = adapter.config.federalState;
                 // Filter current federal State
-                const arrFederalState = content.data.filter(d => d.federal_state_id == federalStateStr);
+                //const arrFederalState = content.data.filter(d => d.federal_state_id == federalStateStr);
+                const arrFederalState = content.data.filter(d => d.id == federalStateStr);
                 // Filter old holidays
                 const arrNewHoliday = arrFederalState.filter(d => d.ends_on >= today);
                 // Filter Long weekends
@@ -122,6 +123,7 @@ function checkState() {
                         adapter.setState('info.current.end', { val: 'none', ack: true });
                         adapter.setState('info.current.name', { val: 'none', ack: true });
                     }
+                    /*
                     // Set next holiday
                     let nextStart;
                     let nextEnd;
@@ -145,6 +147,7 @@ function checkState() {
                         adapter.setState('info.next.end', { val: nextEnd, ack: true });
                         adapter.setState('info.next.name', { val: result[1].name, ack: true });
                     }
+                    */
                     adapter.log.info('schoolfree request done');
                 }
             } else if (error) {
