@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "schoolfree",
-        "version": "0.4.0",
+        "version": "0.4.1",
         "news": {
+            "0.4.1": {
+                "en": "new query as adaptation to API v2.0; Adjustment of the federal state IDs; Code fix for autochecker; update Dependencies",
+                "de": "neue Abfrage als Anpassung an API v2.0; Anpassung der Bundesland ID's; Codefix für Autochecker; Abhängigkeiten aktualisiert",
+                "ru": "новый запрос как адаптация к API v2.0; Корректировка федеральных государственных удостоверений личности; Исправление кода для автоматической проверки; обновить зависимости",
+                "pt": "nova consulta como adaptação à API v2.0; Ajuste dos IDs estaduais federais; Correção de código para o verificador automático; atualizar dependências",
+                "nl": "nieuwe query als aanpassing aan API v2.0; Aanpassing van de federale staat-ID's; Code fix voor autochecker; afhankelijkheden bijwerken",
+                "fr": "nouvelle requête comme adaptation à l'API v2.0; Ajustement des identifiants des États fédéraux; Correction de code pour autochecker; mettre à jour les dépendances",
+                "it": "nuova query come adattamento all'API v2.0; Adeguamento degli ID dello stato federale; Correzione del codice per il controllo automatico; aggiornare le dipendenze",
+                "es": "nueva consulta como adaptación a API v2.0; Ajuste de las identificaciones estatales federales; Corrección de código para autochecker; actualizar dependencias",
+                "pl": "nowe zapytanie jako adaptacja do API v2.0; Dostosowanie federalnych identyfikatorów stanu; Poprawka kodu dla autokontrolera; aktualizacja Zależności",
+                "zh-cn": "新查询适应API v2.0；调整联邦州ID；自动检查程序的代码修复；更新依赖"
+            },
             "0.4.0": {
                 "en": "added new api v2.0 from www.mehr-schulferien.de",
                 "de": "neue API v2.0 von www.mehr-schulferien.de hinzugefügt",

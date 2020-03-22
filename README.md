@@ -69,6 +69,12 @@ The following data points are available for further processing with Schoolfree:
 
 ## Changelog
 
+### 0.4.1 (22.03.2020)
+* (simatec) new query as adaptation to API v2.0
+* (simatec) Adjustment of the federal state IDs"
+* (simatec) Code fix for autochecker
+* (simatec) update Dependencies
+
 ### 0.4.0 (21.03.2020)
 * (simatec) added new api v2.0 from www.mehr-schulferien.de
 
