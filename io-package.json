@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "schoolfree",
-        "version": "0.4.1",
+        "version": "0.5.0",
         "news": {
+            "0.5.0": {
+                "en": "added public holidays; Bugfix next schoolfree for API 2.0; Bugfix schoolfree-name for API 2.0",
+                "de": "Feiertage hinzugefügt; Bugfix next schoolfree für API 2.0; Bugfix schulfreier Name für API 2.0",
+                "ru": "добавлены праздничные дни; Исправлена следующая ошибка для API 2.0; Исправлено школьное имя для API 2.0",
+                "pt": "feriados públicos adicionados; Correção de bugs na próxima escola para API 2.0; Nome da escola do bugfix livre para API 2.0",
+                "nl": "feestdagen toegevoegd; Bugfix volgende schoolvrij voor API 2.0; Bugfix schoolvrije naam voor API 2.0",
+                "fr": "jours fériés ajoutés; Correctif suivant sans école pour API 2.0; Bugfix schoolfree-name pour API 2.0",
+                "it": "aggiunti giorni festivi; Bugfix next schoolfree per API 2.0; Bugfix nome-scuola per API 2.0",
+                "es": "feriados públicos adicionales; Bugfix next schoolfree for API 2.0; Bugfix schoolfree-name para API 2.0",
+                "pl": "dodane święta państwowe; Bugfix next schoolfree for API 2.0; Bugfix schoolfree-name for API 2.0",
+                "zh-cn": "增加公众假期；修正了针对API 2.0的下一学期漏洞； API 2.0的Bugfix Schoolfree名称"
+            },
             "0.4.1": {
                 "en": "new query as adaptation to API v2.0; Adjustment of the federal state IDs; Code fix for autochecker; update Dependencies",
                 "de": "neue Abfrage als Anpassung an API v2.0; Anpassung der Bundesland ID's; Codefix für Autochecker; Abhängigkeiten aktualisiert",
@@ -170,7 +182,8 @@
         ]
     },
     "native": {
-        "federalState": ""
+        "federalState": "",
+        "ignorePublicHoliday": true
     },
     "objects": [],
     "instanceObjects": [

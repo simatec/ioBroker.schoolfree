@@ -69,6 +69,11 @@ The following data points are available for further processing with Schoolfree:
 
 ## Changelog
 
+### 0.5.0 (23.03.2020)
+* (simatec) added public holidays
+* (simatec) Bugfix next schoolfree for API 2.0
+* (simatec) Bugfix schoolfree-name for API 2.0
+
 ### 0.4.1 (22.03.2020)
 * (simatec) new query as adaptation to API v2.0
 * (simatec) Adjustment of the federal state IDs"
