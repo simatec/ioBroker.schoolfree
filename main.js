@@ -2,6 +2,7 @@
 
 const utils = require('@iobroker/adapter-core');
 const request = require('request');
+const fs = require('fs');
 
 /** @type {number | undefined} */
 let timerRequest;
@@ -71,6 +72,7 @@ function checkHolidayNames() {
             }
         });
 }
+
 function checkState(holidayNames) {
 
     // calc current date
@@ -97,7 +99,26 @@ function checkState(holidayNames) {
         function (error, response, content) {
 
             try {
-                const federalStateStr = adapter.config.federalState;
+                let federalStateStr = 0;
+                let searchLocation = content.data.filter(d => d.location_id == adapter.config.schools);
+
+                if (searchLocation.location_id !== undefined) {
+                    federalStateStr = adapter.config.schools;
+                } else {
+                    searchLocation = content.data.filter(d => d.location_id == adapter.config.places);
+                    if (searchLocation.location_id !== undefined) {
+                        federalStateStr = adapter.config.places;
+                    } else {
+                        searchLocation = content.data.filter(d => d.location_id == adapter.config.counties);
+                        if (searchLocation.location_id !== undefined) {
+                            federalStateStr = adapter.config.counties;
+                        } else {
+                            federalStateStr = adapter.config.federalState;
+                        }
+                    }
+                }
+
+                //federalStateStr = adapter.config.federalState;
                 // Filter current federal State
                 const arrFederalState = content.data.filter(d => d.location_id == federalStateStr);
                 // Filter old holidays
@@ -116,7 +137,6 @@ function checkState(holidayNames) {
                 }
                 // sort for start holiday
                 const result = resData.sort((a, b) => (a.starts_on > b.starts_on) ? 1 : -1);
-                adapter.log.debug(result[1].holiday_or_vacation_type_id);
                 let currentName = holidayNames.filter(d => d.id == result[0].holiday_or_vacation_type_id);
                 let nextName = holidayNames.filter(d => d.id == result[1].holiday_or_vacation_type_id);
 
@@ -197,19 +217,70 @@ function checkState(holidayNames) {
                     adapter.log.info('schoolfree request done');
                     timerRequest = setTimeout(function () {
                         adapter.stop();
-                    }, 5000);
+                    }, 20000);
                 }
             } catch (e) {
                 adapter.log.warn('schoolfree request error');
                 adapter.log.error(e);
                 timerError = setTimeout(function () {
                     adapter.stop();
-                }, 5000);
+                }, 20000);
             }
         });
 }
+function fillLocation() {
+    adapter.getState('data.locations', (err, state) => {
+        if (state || state.val) {
+            try {
+                const locations = JSON.parse(state.val);
+
+                const arrCounties = locations.filter(d => d.id == adapter.config.counties);
+                adapter.log.debug('counties number: ' + adapter.config.counties);
+                if (adapter.config.counties !== 'allCounties') {
+                    adapter.setState('location.countieName', { val: arrCounties[0].name ? arrCounties[0].name : 'no selection', ack: true });
+                } else {
+                    adapter.setState('location.countieName', { val: 'no selection', ack: true });
+                }
+
+                const arrPlaces = locations.filter(d => d.id == adapter.config.places);
+                adapter.log.debug('places number: ' + adapter.config.places);
+                if (adapter.config.places !== 'allPlaces') {
+                    adapter.setState('location.placeName', { val: arrPlaces[0].name ? arrPlaces[0].name : 'no selection', ack: true });
+                } else {
+                    adapter.setState('location.placeName', { val: 'no selection', ack: true });
+                }
+
+                const arrSchools = locations.filter(d => d.id == adapter.config.schools);
+                adapter.log.debug('schools number: ' + adapter.config.schools);
+                if (adapter.config.schools !== 'allschools') {
+                    adapter.setState('location.schoolName', { val: arrSchools[0].name ? arrSchools[0].name : 'no selection', ack: true });
+                } else {
+                    adapter.setState('location.schoolName', { val: 'no selection', ack: true });
+                }
+            } catch (e) {
+                adapter.log.warn('schoolfree set state error');
+                adapter.log.error(e);
+            }
+        }
+    });
+}
+function loadLocationsData() {
+    adapter.getState('data.locations', (err, state) => {
+        if (!state || !state.val) {
+            try {
+                const locations = require('./locations.json');
+                adapter.setState('data.locations', { val: JSON.stringify(locations), ack: true });
+            } catch (err) {
+                err && adapter.log.error(err);
+                adapter.log.error('Cannot parse data');
+            }
+        }
+    });
+}
 function main() {
     // function for request
+    loadLocationsData();
+    fillLocation();
     checkHolidayNames();
 }
 // If started as allInOne/compact mode => return function to create instance

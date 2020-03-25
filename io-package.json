@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "schoolfree",
-        "version": "0.5.0",
+        "version": "0.5.1",
         "news": {
             "0.5.0": {
                 "en": "added public holidays; Bugfix next schoolfree for API 2.0; Bugfix schoolfree-name for API 2.0",
@@ -174,6 +174,7 @@
         "type": "date-and-time",
         "compact": true,
         "materialize": true,
+        "messagebox": true,
 
         "dependencies": [
             {
@@ -183,10 +184,32 @@
     },
     "native": {
         "federalState": "",
-        "ignorePublicHoliday": true
+        "ignorePublicHoliday": true,
+        "counties": "",
+        "places": "",
+        "schools": "",
+        "countieName": "",
+        "placeName": "",
+        "schoolName": ""
     },
     "objects": [],
     "instanceObjects": [
+        {
+            "_id":  "data",
+            "type": "channel",
+            "common": {
+                "name": "data"
+            },
+            "native": {}
+        },
+        {
+            "_id":  "location",
+            "type": "channel",
+            "common": {
+                "name": "location info"
+            },
+            "native": {}
+        },
         {
             "_id":  "info",
             "type": "channel",
@@ -208,6 +231,38 @@
             "type": "channel",
             "common": {
                 "name": "next Info"
+            },
+            "native": {}
+        },
+        {
+            "_id":  "data.locations",
+            "type": "state",
+            "common": {
+                "name": "data locations"
+            },
+            "native": {}
+        },
+        {
+            "_id":  "location.countieName",
+            "type": "state",
+            "common": {
+                "name": "Countie Name"
+            },
+            "native": {}
+        },
+        {
+            "_id":  "location.placeName",
+            "type": "state",
+            "common": {
+                "name": "Place Name"
+            },
+            "native": {}
+        },
+        {
+            "_id":  "location.schoolName",
+            "type": "state",
+            "common": {
+                "name": "school Name"
             },
             "native": {}
         },

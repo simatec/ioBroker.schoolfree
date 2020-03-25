@@ -3,15 +3,21 @@
 <head>
 
     <!-- Load ioBroker scripts and styles-->
+    <link rel="stylesheet" type="text/css" href="../../lib/css/fancytree/ui.fancytree.min.css" />
     <link rel="stylesheet" type="text/css" href="../../css/adapter.css" />
     <link rel="stylesheet" type="text/css" href="../../lib/css/materialize.css">
 
     <script type="text/javascript" src="../../lib/js/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="../../socket.io/socket.io.js"></script>
 
-    <script type="text/javascript" src="../../js/translate.js"></script>
     <script type="text/javascript" src="../../lib/js/materialize.js"></script>
+    <script type="text/javascript" src="../../lib/js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="../../lib/js/jquery.fancytree-all.min.js"></script>
+
+    <script type="text/javascript" src="../../js/translate.js"></script>
+    <script type="text/javascript" src="../../lib/js/selectID.js"></script>
     <script type="text/javascript" src="../../js/adapter-settings.js"></script>
+    <script type="text/javascript" src="actions.js"></script>
 
     <!-- Load our own files -->
     <link rel="stylesheet" type="text/css" href="style.css" />
@@ -41,6 +47,97 @@
             onChange(false);
             // reinitialize all the Materialize labels on the page if you are dynamically adding inputs:
             if (M) M.updateTextFields();
+
+            socket.emit('getState', adapter + '.' + instance + '.data.locations', function (err, state) {
+                if (state && state.val) {
+                    const locations = JSON.parse(state.val);
+                    fillCounties(settings['counties'], locations);
+                    fillPlaces(settings['places'], locations);
+                    fillSchools(settings['schools'], locations);
+                }
+            });
+            $('#federalState').on('change', function () {
+                socket.emit('getState', adapter + '.' + instance + '.data.locations', function (err, state) {
+                    if (state && state.val) {
+                        const locations = JSON.parse(state.val);
+                        fillCounties(settings['counties'], locations)
+                        fillPlaces(settings['places'], locations);
+                        fillSchools(settings['schools'], locations);
+                    }
+                });
+
+            });
+            $('#counties').on('change', function () {
+                socket.emit('getState', adapter + '.' + instance + '.data.locations', function (err, state) {
+                    if (state && state.val) {
+                        const locations = JSON.parse(state.val);
+                        fillPlaces(settings['places'], locations);
+                        fillSchools(settings['schools'], locations)
+                    }
+                });
+
+            });
+            $('#places').on('change', function () {
+                socket.emit('getState', adapter + '.' + instance + '.data.locations', function (err, state) {
+                    if (state && state.val) {
+                        const locations = JSON.parse(state.val);
+                        fillSchools(settings['schools'], locations)
+                    }
+                });
+
+            });
+        }
+        function fillCounties(id, str) {
+            var $sel = $('#counties');
+            let result = [];
+            let arrCounties = [];
+            arrCounties = str.filter(d => d.parent_location_id == $('#federalState').val());
+            arrCounties = arrCounties.sort((a, b) => (a.name > b.name) ? 1 : -1);
+            for (const i in arrCounties) {
+                result.push(arrCounties[i].id + ':' + arrCounties[i].name);
+            }
+            $sel.html('<option value="allCounties">' + _('no selection') + '</option>');
+
+            result.forEach(function (val) {
+                val = val.split(':');
+                $('#counties').append('<option value="' + val[0] + '"' + (id === val[0] ? ' selected' : '') + '>' + val[1] + '</option>');
+            });
+            $sel.select();
+        }
+        function fillPlaces(id, str) {
+            var $sel = $('#places');
+            let result = [];
+            let arrPlaces = [];
+            arrPlaces = str.filter(d => d.parent_location_id == $('#counties').val());
+            arrPlaces = arrPlaces.sort((a, b) => (a.name > b.name) ? 1 : -1);
+            for (const i in arrPlaces) {
+                result.push(arrPlaces[i].id + ':' + arrPlaces[i].name);
+            }
+
+            $sel.html('<option value="allPlaces">' + _('no selection') + '</option>');
+
+            result.forEach(function (val) {
+                val = val.split(':');
+                $('#places').append('<option value="' + val[0] + '"' + (id === val[0] ? ' selected' : '') + '>' + val[1] + '</option>');
+            });
+            $sel.select();
+        }
+        function fillSchools(id, str) {
+            var $sel = $('#schools');
+            let result = [];
+            let arrSchools = [];
+            arrSchools = str.filter(d => d.parent_location_id == $('#places').val());
+            arrSchools = arrSchools.sort((a, b) => (a.name > b.name) ? 1 : -1);
+            for (const i in arrSchools) {
+                result.push(arrSchools[i].id + ':' + arrSchools[i].name);
+            }
+            $sel.html('<option value="allschools">' + _('no selection') + '</option>');
+
+            result.forEach(function (val) {
+                val = val.split(':');
+                $('#schools').append('<option value="' + val[0] + '"' + (id === val[0] ? ' selected' : '') + '>' + val[1] + '</option>');
+            });
+            $sel.select();
         }
 
         // This will be called by the admin adapter when the user presses the save button
@@ -93,10 +190,24 @@
                 </select>
                 <label for="federalState" class="translate">federal state</label>
             </div>
+            <div class="input-field col s12 m4">
+                <select class="value" id="counties"></select>
+                <label class="translate" for="counties">counties</label>
+            </div>
         </div>
         <div class="row">
-            <div class="input-field col s6 l3 ">
-                <input class="value" id="ignorePublicHoliday" type="checkbox"/>
+            <div class="input-field col s12 m4">
+                <select class="value" id="places"></select>
+                <label class="translate" for="places">places</label>
+            </div>
+            <div class="input-field col s12 m4">
+                <select class="value" id="schools"></select>
+                <label class="translate" for="schools">schools</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s6 l4 ">
+                <input class="value" id="ignorePublicHoliday" type="checkbox" />
                 <label for="ignorePublicHoliday" class="translate">ignore Public Holidays</label>
             </div>
         </div>
