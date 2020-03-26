@@ -101,16 +101,15 @@ function checkState(holidayNames) {
             try {
                 let federalStateStr = 0;
                 let searchLocation = content.data.filter(d => d.location_id == adapter.config.schools);
-
-                if (searchLocation.location_id !== undefined) {
+                if (JSON.stringify(searchLocation) !== '[]') {
                     federalStateStr = adapter.config.schools;
                 } else {
                     searchLocation = content.data.filter(d => d.location_id == adapter.config.places);
-                    if (searchLocation.location_id !== undefined) {
+                    if (JSON.stringify(searchLocation) !== '[]') {
                         federalStateStr = adapter.config.places;
                     } else {
                         searchLocation = content.data.filter(d => d.location_id == adapter.config.counties);
-                        if (searchLocation.location_id !== undefined) {
+                        if (JSON.stringify(searchLocation) !== '[]') {
                             federalStateStr = adapter.config.counties;
                         } else {
                             federalStateStr = adapter.config.federalState;

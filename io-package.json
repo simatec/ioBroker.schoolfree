@@ -238,7 +238,12 @@
             "_id":  "data.locations",
             "type": "state",
             "common": {
-                "name": "data locations"
+                "name": "data locations",
+                "role":  "indicator",
+                "type":  "string",
+                "read":  true,
+                "write": false,
+                "def":   ""
             },
             "native": {}
         },
@@ -246,7 +251,12 @@
             "_id":  "location.countieName",
             "type": "state",
             "common": {
-                "name": "Countie Name"
+                "name": "Countie Name",
+                "role":  "indicator",
+                "type":  "string",
+                "read":  true,
+                "write": false,
+                "def":   ""
             },
             "native": {}
         },
@@ -254,7 +264,12 @@
             "_id":  "location.placeName",
             "type": "state",
             "common": {
-                "name": "Place Name"
+                "name": "Place Name",
+                "role":  "indicator",
+                "type":  "string",
+                "read":  true,
+                "write": false,
+                "def":   ""
             },
             "native": {}
         },
@@ -262,7 +277,12 @@
             "_id":  "location.schoolName",
             "type": "state",
             "common": {
-                "name": "school Name"
+                "name": "school Name",
+                "role":  "indicator",
+                "type":  "string",
+                "read":  true,
+                "write": false,
+                "def":   ""
             },
             "native": {}
         },
