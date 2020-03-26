@@ -230,7 +230,7 @@ function checkState(holidayNames) {
 }
 function fillLocation() {
     adapter.getState('data.locations', (err, state) => {
-        if (state || state.val) {
+        if (state) {
             try {
                 const locations = JSON.parse(state.val);
 
