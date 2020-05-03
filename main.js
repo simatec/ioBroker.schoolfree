@@ -135,94 +135,74 @@ function checkState(holidayNames) {
                     resData = arrNewHoliday.map(({ starts_on, ends_on, holiday_or_vacation_type_id }) => ({ starts_on, ends_on, holiday_or_vacation_type_id }));
                 }
                 // sort for start holiday
-                const result = resData.sort((a, b) => (a.starts_on > b.starts_on) ? 1 : -1);
-                let currentName = holidayNames.filter(d => d.id == result[0].holiday_or_vacation_type_id);
-                let nextName = holidayNames.filter(d => d.id == result[1].holiday_or_vacation_type_id);
+                                const result = resData.sort((a, b) => (a.starts_on > b.starts_on) ? 1 : -1);
+                let currentName;
+                let pointer = 0;
+                let currentStart;
+                let currentEnd;
 
-                if (result[0] && result[0].starts_on !== 'undefined') {
-                    // Set schoolfree today
-                    let currentStart;
-                    let currentEnd;
-                    let nextset = false;
-
-                    currentStart = result[0].starts_on.split('-');
+                // check whether today is holiday
+                if (result[pointer] && result[pointer].starts_on !== 'undefined') {
+                    currentStart = result[pointer].starts_on.split('-');
                     currentStart = (currentStart[2] + '.' + currentStart[1] + '.' + currentStart[0]);
-                    currentEnd = result[0].ends_on.split('-');
+                    currentEnd = result[pointer].ends_on.split('-');
                     currentEnd = (currentEnd[2] + '.' + currentEnd[1] + '.' + currentEnd[0]);
+                    currentName = holidayNames.filter(d => d.id == result[pointer].holiday_or_vacation_type_id);
 
-                    if (result[0].starts_on <= today && result[0].ends_on >= today) {
+                    if (result[pointer].starts_on <= today && result[pointer].ends_on >= today) {
                         adapter.log.debug(`school free name: ${currentName[0].colloquial ? currentName[0].colloquial : currentName[0].name}`);
                         adapter.log.debug('school free today');
-
                         adapter.setState('info.today', { val: true, ack: true });
                         adapter.setState('info.current.start', { val: currentStart, ack: true });
                         adapter.setState('info.current.end', { val: currentEnd, ack: true });
                         adapter.setState('info.current.name', { val: currentName[0].colloquial ? currentName[0].colloquial : currentName[0].name, ack: true });
-
                         adapter.log.debug('string: ' + JSON.stringify(result[0]));
+                        pointer = pointer + 1
                     } else {
-                        adapter.setState('info.today', { val: false, ack: true });
-                    }
-                    // Set schoolfree tomorrow
-                    if (result[0].starts_on <= Tomorrow && result[0].ends_on >= Tomorrow) {
-                        adapter.log.debug(`school free name: ${currentName[0].colloquial ? currentName[0].colloquial : currentName[0].name}`);
-                        adapter.log.debug('school free tomorrow');
-                        nextset = true;
-                        adapter.setState('info.tomorrow', { val: true, ack: true });
-                        adapter.setState('info.next.start', { val: currentStart, ack: true });
-                        adapter.setState('info.next.end', { val: currentEnd, ack: true });
-                        adapter.setState('info.next.name', { val: currentName[0].colloquial ? currentName[0].colloquial : currentName[0].name, ack: true });
-
-                        adapter.log.debug('string: ' + JSON.stringify(result[0]));
-                    } else {
-                        adapter.setState('info.tomorrow', { val: false, ack: true });
-                    }
-                    // clear schoolfree after holiday
-                    if (result[0].starts_on > today) {
                         adapter.setState('info.current.start', { val: 'none', ack: true });
                         adapter.setState('info.current.end', { val: 'none', ack: true });
                         adapter.setState('info.current.name', { val: 'none', ack: true });
+                        adapter.setState('info.today', { val: false, ack: true });
                     }
-                    if (result[1] && result[1].starts_on !== 'undefined') {
-                        if (result[1].starts_on == Tomorrow) {
-                            adapter.setState('info.tomorrow', { val: true, ack: true });
-                        }
-                    }
-                    // Set next holiday
-                    let nextStart;
-                    let nextEnd;
-
-                    if (result[0].starts_on > today) {
-                        nextStart = result[0].starts_on.split('-');
-                        nextStart = (nextStart[2] + '.' + nextStart[1] + '.' + nextStart[0]);
-                        nextEnd = result[0].ends_on.split('-');
-                        nextEnd = (nextEnd[2] + '.' + nextEnd[1] + '.' + nextEnd[0]);
-
-                        adapter.setState('info.next.start', { val: nextStart, ack: true });
-                        adapter.setState('info.next.end', { val: nextEnd, ack: true });
-                        adapter.setState('info.next.name', { val: currentName[0].colloquial ? currentName[0].colloquial : currentName[0].name, ack: true });
-                    } else if (result[0].starts_on <= today && result[0].ends_on >= today && !nextset) {
-                        if (result[1] && result[1].starts_on !== 'undefined') {
-                            nextStart = result[1].starts_on.split('-');
-                            nextStart = (nextStart[2] + '.' + nextStart[1] + '.' + nextStart[0]);
-                            nextEnd = result[1].ends_on.split('-');
-                            nextEnd = (nextEnd[2] + '.' + nextEnd[1] + '.' + nextEnd[0]);
-
-                            adapter.setState('info.next.start', { val: nextStart, ack: true });
-                            adapter.setState('info.next.end', { val: nextEnd, ack: true });
-                            adapter.setState('info.next.name', { val: nextName[0].colloquial ? nextName[0].colloquial : nextName[0].name, ack: true });
-                        } else {
-                            adapter.setState('info.next.start', { val: 'No data available', ack: true });
-                            adapter.setState('info.next.end', { val: 'No data available', ack: true });
-                            adapter.setState('info.next.name', { val: 'No data available', ack: true });
-                        }
-                    }
-
-                    adapter.log.info('schoolfree request done');
-                    timerRequest = setTimeout(function () {
-                        adapter.stop();
-                    }, 20000);
                 }
+                // check whether tomorrow is holiday
+                if (result[pointer] && result[pointer].starts_on !== 'undefined') {
+                    currentStart = result[pointer].starts_on.split('-');
+                    currentStart = (currentStart[2] + '.' + currentStart[1] + '.' + currentStart[0]);
+                    currentEnd = result[pointer].ends_on.split('-');
+                    currentEnd = (currentEnd[2] + '.' + currentEnd[1] + '.' + currentEnd[0]);
+                    currentName = holidayNames.filter(d => d.id == result[pointer].holiday_or_vacation_type_id);
+
+                    if (result[pointer].starts_on <= Tomorrow && result[pointer].ends_on >= Tomorrow) {
+                        adapter.setState('info.tomorrow', { val: true, ack: true });
+                    } else {
+                        adapter.setState('info.tomorrow', { val: false, ack: true });
+                    }
+                    adapter.log.debug(`school free name: ${currentName[0].colloquial ? currentName[0].colloquial : currentName[0].name}`);
+                    adapter.log.debug('school free tomorrow');
+                    adapter.setState('info.next.start', { val: currentStart, ack: true });
+                    adapter.setState('info.next.end', { val: currentEnd, ack: true });
+                    adapter.setState('info.next.name', { val: currentName[0].colloquial ? currentName[0].colloquial : currentName[0].name, ack: true });
+                    adapter.log.debug('string: ' + JSON.stringify(result[0]));
+                }  else {
+                    adapter.setState('info.next.start', { val: "undefined", ack: true });
+                    adapter.setState('info.next.end',   { val: "undefined", ack: true });
+                    adapter.setState('info.next.name',  { val: "undefined", ack: true });
+                }
+
+                // set free tomorrow or free today depending on weekend
+                if ((date.getDay() == 6)  || (date.getDay() === 0)) {
+                    adapter.log.debug('school free today true because of weekend');
+                    adapter.setState('info.today', { val: true, ack: true });}
+                if ((dateTomorrow.getDay() == 6)  || (dateTomorrow.getDay() === 0)) {
+                    adapter.setState('info.tomorrow', { val: true, ack: true });
+                    adapter.log.debug('school free tomorrow true because of weekend');
+                }
+
+                adapter.log.info('schoolfree request done');
+                timerRequest = setTimeout(function () {
+                    adapter.stop();
+                }, 20000);
             } catch (e) {
                 adapter.log.warn('schoolfree request error');
                 adapter.log.error(e);
