@@ -164,6 +164,10 @@ function checkState(holidayNames) {
                         adapter.setState('info.current.name', { val: 'none', ack: true });
                         adapter.setState('info.today', { val: false, ack: true });
                     }
+                } else {
+                    adapter.setState('info.current.start', { val: "undefined", ack: true });
+                    adapter.setState('info.current.end',   { val: "undefined", ack: true });
+                    adapter.setState('info.current.name',  { val: "undefined", ack: true });
                 }
                 // check whether tomorrow is holiday
                 if (result[pointer] && result[pointer].starts_on !== 'undefined') {
