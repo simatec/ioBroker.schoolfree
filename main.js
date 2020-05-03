@@ -143,6 +143,7 @@ function checkState(holidayNames) {
                     // Set schoolfree today
                     let currentStart;
                     let currentEnd;
+                    let nextset = false;
 
                     currentStart = result[0].starts_on.split('-');
                     currentStart = (currentStart[2] + '.' + currentStart[1] + '.' + currentStart[0]);
@@ -166,7 +167,7 @@ function checkState(holidayNames) {
                     if (result[0].starts_on <= Tomorrow && result[0].ends_on >= Tomorrow) {
                         adapter.log.debug(`school free name: ${currentName[0].colloquial ? currentName[0].colloquial : currentName[0].name}`);
                         adapter.log.debug('school free tomorrow');
-
+                        nextset = true;
                         adapter.setState('info.tomorrow', { val: true, ack: true });
                         adapter.setState('info.next.start', { val: currentStart, ack: true });
                         adapter.setState('info.next.end', { val: currentEnd, ack: true });
@@ -200,7 +201,7 @@ function checkState(holidayNames) {
                         adapter.setState('info.next.start', { val: nextStart, ack: true });
                         adapter.setState('info.next.end', { val: nextEnd, ack: true });
                         adapter.setState('info.next.name', { val: currentName[0].colloquial ? currentName[0].colloquial : currentName[0].name, ack: true });
-                    } else if (result[0].starts_on <= today && result[0].ends_on >= today) {
+                    } else if (result[0].starts_on <= today && result[0].ends_on >= today && !nextset) {
                         if (result[1] && result[1].starts_on !== 'undefined') {
                             nextStart = result[1].starts_on.split('-');
                             nextStart = (nextStart[2] + '.' + nextStart[1] + '.' + nextStart[0]);
