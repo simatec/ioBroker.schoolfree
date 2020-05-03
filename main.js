@@ -165,9 +165,9 @@ function checkState(holidayNames) {
                         adapter.setState('info.today', { val: false, ack: true });
                     }
                 } else {
-                    adapter.setState('info.current.start', { val: "undefined", ack: true });
-                    adapter.setState('info.current.end',   { val: "undefined", ack: true });
-                    adapter.setState('info.current.name',  { val: "undefined", ack: true });
+                    adapter.setState('info.current.start', { val: "no data available", ack: true });
+                    adapter.setState('info.current.end',   { val: "no data available", ack: true });
+                    adapter.setState('info.current.name',  { val: "no data available", ack: true });
                 }
                 // check whether tomorrow is holiday
                 if (result[pointer] && result[pointer].starts_on !== 'undefined') {
@@ -189,18 +189,9 @@ function checkState(holidayNames) {
                     adapter.setState('info.next.name', { val: currentName[0].colloquial ? currentName[0].colloquial : currentName[0].name, ack: true });
                     adapter.log.debug('string: ' + JSON.stringify(result[0]));
                 }  else {
-                    adapter.setState('info.next.start', { val: "undefined", ack: true });
-                    adapter.setState('info.next.end',   { val: "undefined", ack: true });
-                    adapter.setState('info.next.name',  { val: "undefined", ack: true });
-                }
-
-                // set free tomorrow or free today depending on weekend
-                if ((date.getDay() == 6)  || (date.getDay() === 0)) {
-                    adapter.log.debug('school free today true because of weekend');
-                    adapter.setState('info.today', { val: true, ack: true });}
-                if ((dateTomorrow.getDay() == 6)  || (dateTomorrow.getDay() === 0)) {
-                    adapter.setState('info.tomorrow', { val: true, ack: true });
-                    adapter.log.debug('school free tomorrow true because of weekend');
+                    adapter.setState('info.next.start', { val: "no data available", ack: true });
+                    adapter.setState('info.next.end',   { val: "no data available", ack: true });
+                    adapter.setState('info.next.name',  { val: "no data available", ack: true });
                 }
 
                 adapter.log.info('schoolfree request done');
