@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "schoolfree",
-        "version": "0.5.1",
+        "version": "0.6.0",
         "news": {
+            "0.6.0": {
+                "en": "added new features; Bugfix next day schoolfree; added sentry.io; added translations; added error handling",
+                "de": "neue Funktionen hinzugefügt; Bugfix am nächsten Tag schulfrei; sentry.io hinzugefügt; Übersetzungen hinzugefügt; Fehlerbehandlung hinzugefügt",
+                "ru": "добавлены новые функции; Ошибка на следующий день без школы; добавлено sentry.io; добавлены переводы; добавлена обработка ошибок",
+                "pt": "adicionado novos recursos; Correção de erros no dia seguinte, sem aulas; adicionado sentry.io; traduções adicionadas; tratamento de erros adicionado",
+                "nl": "nieuwe functies toegevoegd; Bugfix de volgende dag schoolvrij; sentry.io toegevoegd; vertalingen toegevoegd; foutafhandeling toegevoegd",
+                "fr": "ajouté de nouvelles fonctionnalités; Bugfix le lendemain sans école; ajouté sentry.io; traductions ajoutées; gestion des erreurs ajoutée",
+                "it": "aggiunte nuove funzionalità; Bugfix il giorno successivo senza scuola; aggiunto sentry.io; traduzioni aggiunte; aggiunta gestione degli errori",
+                "es": "nuevas características agregadas; Corrección de errores al día siguiente sin clases; agregado sentry.io; traducciones agregadas; manejo de errores agregado",
+                "pl": "dodano nowe funkcje; Bugfix następnego dnia bez szkoły; dodano sentry.io; dodane tłumaczenia; dodano obsługę błędów",
+                "zh-cn": "增加了新功能；次日免费修正错误；添加了sendry.io;增加翻译；增加了错误处理"
+            },
             "0.5.0": {
                 "en": "added public holidays; Bugfix next schoolfree for API 2.0; Bugfix schoolfree-name for API 2.0",
                 "de": "Feiertage hinzugefügt; Bugfix next schoolfree für API 2.0; Bugfix schulfreier Name für API 2.0",
@@ -175,15 +187,20 @@
         "compact": true,
         "materialize": true,
         "messagebox": true,
-
         "dependencies": [
             {
                 "admin": ">=3.0.0"
             }
-        ]
+        ],
+        "installedFrom": "https://github.com/simatec/ioBroker.schoolfree/tarball/master",
+        "plugins": {
+            "sentry": {
+              "dsn": "https://b222b874f4bd4a0fa8d0e6b4ad0d554d@sentry.iobroker.net/63"
+            }
+          }
     },
     "native": {
-        "federalState": "",
+        "federalState": "4",
         "ignorePublicHoliday": true,
         "counties": "",
         "places": "",
@@ -195,7 +212,7 @@
     "objects": [],
     "instanceObjects": [
         {
-            "_id":  "data",
+            "_id": "data",
             "type": "channel",
             "common": {
                 "name": "data"
@@ -203,7 +220,7 @@
             "native": {}
         },
         {
-            "_id":  "location",
+            "_id": "location",
             "type": "channel",
             "common": {
                 "name": "location info"
@@ -211,7 +228,7 @@
             "native": {}
         },
         {
-            "_id":  "info",
+            "_id": "info",
             "type": "channel",
             "common": {
                 "name": "Info Logs"
@@ -219,7 +236,7 @@
             "native": {}
         },
         {
-            "_id":  "info.current",
+            "_id": "info.current",
             "type": "channel",
             "common": {
                 "name": "current Info"
@@ -227,7 +244,7 @@
             "native": {}
         },
         {
-            "_id":  "info.next",
+            "_id": "info.next",
             "type": "channel",
             "common": {
                 "name": "next Info"
@@ -235,158 +252,158 @@
             "native": {}
         },
         {
-            "_id":  "data.locations",
+            "_id": "data.locations",
             "type": "state",
             "common": {
                 "name": "data locations",
-                "role":  "indicator",
-                "type":  "string",
-                "read":  true,
+                "role": "indicator",
+                "type": "string",
+                "read": true,
                 "write": false,
-                "def":   ""
+                "def": ""
             },
             "native": {}
         },
         {
-            "_id":  "location.countieName",
+            "_id": "location.countieName",
             "type": "state",
             "common": {
                 "name": "Countie Name",
-                "role":  "indicator",
-                "type":  "string",
-                "read":  true,
+                "role": "indicator",
+                "type": "string",
+                "read": true,
                 "write": false,
-                "def":   ""
+                "def": ""
             },
             "native": {}
         },
         {
-            "_id":  "location.placeName",
+            "_id": "location.placeName",
             "type": "state",
             "common": {
                 "name": "Place Name",
-                "role":  "indicator",
-                "type":  "string",
-                "read":  true,
+                "role": "indicator",
+                "type": "string",
+                "read": true,
                 "write": false,
-                "def":   ""
+                "def": ""
             },
             "native": {}
         },
         {
-            "_id":  "location.schoolName",
+            "_id": "location.schoolName",
             "type": "state",
             "common": {
                 "name": "school Name",
-                "role":  "indicator",
-                "type":  "string",
-                "read":  true,
+                "role": "indicator",
+                "type": "string",
+                "read": true,
                 "write": false,
-                "def":   ""
+                "def": ""
             },
             "native": {}
         },
         {
-            "_id":  "info.today",
+            "_id": "info.today",
             "type": "state",
             "common": {
-                "role":  "switch",
-                "name":  "school free today",
-                "type":  "boolean",
-                "read":  true,
+                "role": "switch",
+                "name": "school free today",
+                "type": "boolean",
+                "read": true,
                 "write": true,
-                "def":   false
+                "def": false
             },
             "native": {}
         },
         {
-            "_id":  "info.tomorrow",
+            "_id": "info.tomorrow",
             "type": "state",
             "common": {
-                "role":  "switch",
-                "name":  "school free tomorrow",
-                "type":  "boolean",
-                "read":  true,
+                "role": "switch",
+                "name": "school free tomorrow",
+                "type": "boolean",
+                "read": true,
                 "write": true,
-                "def":   false
+                "def": false
             },
             "native": {}
         },
         {
-            "_id":  "info.current.start",
+            "_id": "info.current.start",
             "type": "state",
             "common": {
-                "role":  "indicator",
-                "name":  "start for current schoolfree",
-                "type":  "string",
-                "read":  true,
+                "role": "indicator",
+                "name": "start for current schoolfree",
+                "type": "string",
+                "read": true,
                 "write": false,
-                "def":   ""
+                "def": ""
             },
             "native": {}
         },
         {
-            "_id":  "info.current.end",
+            "_id": "info.current.end",
             "type": "state",
             "common": {
-                "role":  "indicator",
-                "name":  "end for current schoolfree",
-                "type":  "string",
-                "read":  true,
+                "role": "indicator",
+                "name": "end for current schoolfree",
+                "type": "string",
+                "read": true,
                 "write": false,
-                "def":   ""
+                "def": ""
             },
             "native": {}
         },
         {
-            "_id":  "info.current.name",
+            "_id": "info.current.name",
             "type": "state",
             "common": {
-                "role":  "indicator",
-                "name":  "name of current schoolfree",
-                "type":  "string",
-                "read":  true,
+                "role": "indicator",
+                "name": "name of current schoolfree",
+                "type": "string",
+                "read": true,
                 "write": false,
-                "def":   ""
+                "def": ""
             },
             "native": {}
         },
         {
-            "_id":  "info.next.start",
+            "_id": "info.next.start",
             "type": "state",
             "common": {
-                "role":  "indicator",
-                "name":  "start for next schoolfree",
-                "type":  "string",
-                "read":  true,
+                "role": "indicator",
+                "name": "start for next schoolfree",
+                "type": "string",
+                "read": true,
                 "write": false,
-                "def":   ""
+                "def": ""
             },
             "native": {}
         },
         {
-            "_id":  "info.next.end",
+            "_id": "info.next.end",
             "type": "state",
             "common": {
-                "role":  "indicator",
-                "name":  "end for next schoolfree",
-                "type":  "string",
-                "read":  true,
+                "role": "indicator",
+                "name": "end for next schoolfree",
+                "type": "string",
+                "read": true,
                 "write": false,
-                "def":   ""
+                "def": ""
             },
             "native": {}
         },
         {
-            "_id":  "info.next.name",
+            "_id": "info.next.name",
             "type": "state",
             "common": {
-                "role":  "indicator",
-                "name":  "name of next schoolfree",
-                "type":  "string",
-                "read":  true,
+                "role": "indicator",
+                "name": "name of next schoolfree",
+                "type": "string",
+                "read": true,
                 "write": false,
-                "def":   ""
+                "def": ""
             },
             "native": {}
         }

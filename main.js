@@ -54,23 +54,24 @@ function startAdapter(options) {
     });
 }
 function checkHolidayNames() {
-    request(
-        {
-            url: 'https://www.mehr-schulferien.de/api/v2.0/holiday_or_vacation_types',
-            json: true
-        },
+    try {
+        request(
+            {
+                url: 'https://www.mehr-schulferien.de/api/v2.0/holiday_or_vacation_types',
+                json: true
+            },
 
-        function (error, response, content) {
-            try {
+            function (error, response, content) {
+
                 checkState(content.data);
-            } catch (e) {
-                adapter.log.warn('schoolfree request error');
-                adapter.log.error(e);
-                timerError = setTimeout(function () {
-                    adapter.stop();
-                }, 5000);
-            }
-        });
+            });
+    } catch (e) {
+        adapter.log.warn('schoolfree request error');
+        adapter.log.warn(e);
+        timerError = setTimeout(function () {
+            adapter.stop();
+        }, 5000);
+    }
 }
 
 function checkState(holidayNames) {
@@ -90,15 +91,15 @@ function checkState(holidayNames) {
     let Tomorrow = (yearTomorrow + '-' + ('0' + monthIndexTomorrow).slice(-2) + '-' + ('0' + dayTomorrow).slice(-2));
 
     // request API from www.mehr-schulferien.de
-    request(
-        {
-            url: 'https://www.mehr-schulferien.de/api/v2.0/periods',
-            json: true
-        },
+    try {
+        request(
+            {
+                url: 'https://www.mehr-schulferien.de/api/v2.0/periods',
+                json: true
+            },
 
-        function (error, response, content) {
+            function (error, response, content) {
 
-            try {
                 let federalStateStr = 0;
                 let searchLocation = content.data.filter(d => d.location_id == adapter.config.schools);
                 if (JSON.stringify(searchLocation) !== '[]') {
@@ -173,6 +174,8 @@ function checkState(holidayNames) {
                         adapter.setState('info.current.name', { val: currentName[0].colloquial ? currentName[0].colloquial : currentName[0].name, ack: true });
 
                         adapter.log.debug('string: ' + JSON.stringify(result[0]));
+                    } else if (result[1].starts_on == Tomorrow) {
+                        adapter.setState('info.tomorrow', { val: true, ack: true });
                     } else {
                         adapter.setState('info.tomorrow', { val: false, ack: true });
                     }
@@ -217,15 +220,21 @@ function checkState(holidayNames) {
                     timerRequest = setTimeout(function () {
                         adapter.stop();
                     }, 20000);
+                } else {
+                    adapter.log.warn('schoolfree cannot request ...');
+                    timerRequest = setTimeout(function () {
+                        adapter.stop();
+                    }, 20000);
                 }
-            } catch (e) {
-                adapter.log.warn('schoolfree request error');
-                adapter.log.error(e);
-                timerError = setTimeout(function () {
-                    adapter.stop();
-                }, 20000);
-            }
-        });
+            });
+    } catch (e) {
+        adapter.log.warn('schoolfree request error');
+        adapter.log.warn(e);
+        timerError = setTimeout(function () {
+            adapter.stop();
+        }, 20000);
+    }
+
 }
 function fillLocation() {
     adapter.getState('data.locations', (err, state) => {
