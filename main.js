@@ -288,7 +288,7 @@ function loadLocationsData() {
 function main() {
     // function for request
     loadLocationsData();
-    if (adapter.config.federalState !== 0) {
+    if (adapter.config.federalState !== 'none') {
         fillLocation();
         checkHolidayNames();
     } else {
