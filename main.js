@@ -289,6 +289,10 @@ function main() {
     if (adapter.config.federalState !== 'none') {
         fillLocation();
         checkHolidayNames();
+    } else {
+        timerError = setTimeout(function () {
+            adapter.stop();
+        }, 5000);
     }
 }
 // If started as allInOne/compact mode => return function to create instance
