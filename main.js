@@ -288,8 +288,12 @@ function loadLocationsData() {
 function main() {
     // function for request
     loadLocationsData();
-    fillLocation();
-    checkHolidayNames();
+    if (adapter.config.federalState !== 0) {
+        fillLocation();
+        checkHolidayNames();
+    } else {
+        adapter.log.warn('please choose your federal state first and try again ...')
+    }
 }
 // If started as allInOne/compact mode => return function to create instance
 if (module && module.parent) {
