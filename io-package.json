@@ -200,7 +200,7 @@
           }
     },
     "native": {
-        "federalState": "0",
+        "federalState": "none",
         "ignorePublicHoliday": true,
         "counties": "",
         "places": "",

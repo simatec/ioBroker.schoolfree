@@ -266,8 +266,7 @@ function fillLocation() {
                     adapter.setState('location.schoolName', { val: 'no selection', ack: true });
                 }
             } catch (e) {
-                adapter.log.warn('schoolfree set state error');
-                adapter.log.error(e);
+                adapter.log.warn('schoolfree set state error: ' + e);
             }
         }
     });
@@ -279,8 +278,7 @@ function loadLocationsData() {
                 const locations = require('./locations.json');
                 adapter.setState('data.locations', { val: JSON.stringify(locations), ack: true });
             } catch (err) {
-                err && adapter.log.error(err);
-                adapter.log.error('Cannot parse data');
+                adapter.log.warn('Cannot parse data: ' + err);
             }
         }
     });
