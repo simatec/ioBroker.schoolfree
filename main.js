@@ -292,7 +292,7 @@ function main() {
     } else {
         timerError = setTimeout(function () {
             adapter.stop();
-        }, 5000);
+        }, 10000);
     }
 }
 // If started as allInOne/compact mode => return function to create instance
