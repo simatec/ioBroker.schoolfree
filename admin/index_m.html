@@ -53,6 +53,15 @@
                     fillCounties(settings['counties'], locations);
                     fillPlaces(settings['places'], locations);
                     fillSchools(settings['schools'], locations);
+                } else if (!state || !state.val) {
+                    setTimeout(function () {
+                        if (state && state.val) {
+                            const locations = JSON.parse(state.val);
+                            fillCounties(settings['counties'], locations);
+                            fillPlaces(settings['places'], locations);
+                            fillSchools(settings['schools'], locations);
+                        }
+                    }, 1000);
                 }
             });
             $('#federalState').on('change', function () {
