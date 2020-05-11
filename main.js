@@ -54,24 +54,26 @@ function startAdapter(options) {
     });
 }
 function checkHolidayNames() {
-    try {
-        request(
-            {
-                url: 'https://www.mehr-schulferien.de/api/v2.0/holiday_or_vacation_types',
-                json: true
-            },
+    request(
+        {
+            url: 'https://www.mehr-schulferien.de/api/v2.0/holiday_or_vacation_types',
+            json: true
+        },
 
-            function (error, response, content) {
+        function (error, response, content) {
+            if (content && content.data !== 'undefined') {
+                try {
+                    checkState(content.data);
+                } catch (e) {
+                    adapter.log.warn('schoolfree request error');
+                    adapter.log.warn(e);
+                    timerError = setTimeout(function () {
+                        adapter.stop();
+                    }, 5000);
+                }
+            }
+        });
 
-                checkState(content.data);
-            });
-    } catch (e) {
-        adapter.log.warn('schoolfree request error');
-        adapter.log.warn(e);
-        timerError = setTimeout(function () {
-            adapter.stop();
-        }, 5000);
-    }
 }
 
 function checkState(holidayNames) {
@@ -101,21 +103,29 @@ function checkState(holidayNames) {
             function (error, response, content) {
 
                 let federalStateStr = 0;
-                let searchLocation = content.data.filter(d => d.location_id == adapter.config.schools);
-                if (JSON.stringify(searchLocation) !== '[]') {
-                    federalStateStr = adapter.config.schools;
-                } else {
-                    searchLocation = content.data.filter(d => d.location_id == adapter.config.places);
+                let searchLocation;
+                if (content && content.data !== 'undefined') {
+                    searchLocation = content.data.filter(d => d.location_id == adapter.config.schools);
                     if (JSON.stringify(searchLocation) !== '[]') {
-                        federalStateStr = adapter.config.places;
+                        federalStateStr = adapter.config.schools;
                     } else {
-                        searchLocation = content.data.filter(d => d.location_id == adapter.config.counties);
+                        searchLocation = content.data.filter(d => d.location_id == adapter.config.places);
                         if (JSON.stringify(searchLocation) !== '[]') {
-                            federalStateStr = adapter.config.counties;
+                            federalStateStr = adapter.config.places;
                         } else {
-                            federalStateStr = adapter.config.federalState;
+                            searchLocation = content.data.filter(d => d.location_id == adapter.config.counties);
+                            if (JSON.stringify(searchLocation) !== '[]') {
+                                federalStateStr = adapter.config.counties;
+                            } else {
+                                federalStateStr = adapter.config.federalState;
+                            }
                         }
                     }
+                } else {
+                    adapter.log.warn('schoolfree request error');
+                    timerError = setTimeout(function () {
+                        adapter.stop();
+                    }, 5000);
                 }
 
                 //federalStateStr = adapter.config.federalState;

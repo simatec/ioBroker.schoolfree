@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "schoolfree",
-        "version": "0.6.0",
+        "version": "0.6.1",
         "news": {
+            "0.6.1": {
+                "en": "added errorhandling for sentry.io; added node 14 support",
+                "de": "Fehlerbehandlung für sentry.io hinzugefügt; Unterstützung für node 14 hinzugefügt",
+                "ru": "добавлена обработка ошибок для sentry.io; добавлена поддержка узла 14",
+                "pt": "adicionado tratamento de erros para sentry.io; adicionado suporte ao node 14",
+                "nl": "foutafhandeling toegevoegd voor sentry.io; ondersteuning voor node 14 toegevoegd",
+                "fr": "gestion des erreurs ajoutée pour sentry.io; ajout de la prise en charge du node 14",
+                "it": "aggiunta gestione degli errori per sentry.io; aggiunto il supporto del node 14",
+                "es": "manejo de errores agregado para sentry.io; Soporte de node 14 agregado",
+                "pl": "dodano obsługę błędów dla sentry.io; dodano obsługę node 14",
+                "zh-cn": "为sendry.io添加了错误处理；添加了节点14支持"
+            },
             "0.6.0": {
                 "en": "added new features; Bugfix next day schoolfree; added sentry.io; added translations; added error handling",
                 "de": "neue Funktionen hinzugefügt; Bugfix am nächsten Tag schulfrei; sentry.io hinzugefügt; Übersetzungen hinzugefügt; Fehlerbehandlung hinzugefügt",
