@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "schoolfree",
-        "version": "0.6.1",
+        "version": "0.6.2",
         "news": {
+            "0.6.2": {
+                "en": "small Bugfixes at locations settings",
+                "de": "kleine Bugfixes an Standorteinstellungen",
+                "ru": "небольшие исправления в настройках локаций",
+                "pt": "pequenas correções de bugs nas configurações de locais",
+                "nl": "kleine bugfixes bij locatie-instellingen",
+                "fr": "petites corrections de bugs aux paramètres de localisation",
+                "it": "piccole correzioni alle impostazioni delle posizioni",
+                "es": "pequeñas correcciones de errores en la configuración de ubicaciones",
+                "pl": "małe poprawki w ustawieniach lokalizacji",
+                "zh-cn": "位置设置的小错误修正"
+            },
             "0.6.1": {
                 "en": "added errorhandling for sentry.io; added node 14 support",
                 "de": "Fehlerbehandlung für sentry.io hinzugefügt; Unterstützung für node 14 hinzugefügt",

@@ -128,7 +128,6 @@ function checkState(holidayNames) {
                     }, 5000);
                 }
 
-                //federalStateStr = adapter.config.federalState;
                 // Filter current federal State
                 const arrFederalState = content.data.filter(d => d.location_id == federalStateStr);
                 // Filter old holidays
@@ -252,25 +251,25 @@ function fillLocation() {
             try {
                 const locations = JSON.parse(state.val);
 
-                const arrCounties = locations.filter(d => d.id == adapter.config.counties);
-                adapter.log.debug('counties number: ' + adapter.config.counties);
-                if (adapter.config.counties !== 'allCounties') {
+                if (adapter.config.counties !== 'allCounties' || adapter.config.counties !== '') {
+                    const arrCounties = locations.filter(d => d.id == adapter.config.counties);
+                    adapter.log.debug('counties number: ' + adapter.config.counties);
                     adapter.setState('location.countieName', { val: arrCounties[0].name ? arrCounties[0].name : 'no selection', ack: true });
                 } else {
                     adapter.setState('location.countieName', { val: 'no selection', ack: true });
                 }
 
-                const arrPlaces = locations.filter(d => d.id == adapter.config.places);
-                adapter.log.debug('places number: ' + adapter.config.places);
-                if (adapter.config.places !== 'allPlaces') {
+                if (adapter.config.places !== 'allPlaces' || adapter.config.places !== '') {
+                    const arrPlaces = locations.filter(d => d.id == adapter.config.places);
+                    adapter.log.debug('places number: ' + adapter.config.places);
                     adapter.setState('location.placeName', { val: arrPlaces[0].name ? arrPlaces[0].name : 'no selection', ack: true });
                 } else {
                     adapter.setState('location.placeName', { val: 'no selection', ack: true });
                 }
 
-                const arrSchools = locations.filter(d => d.id == adapter.config.schools);
-                adapter.log.debug('schools number: ' + adapter.config.schools);
-                if (adapter.config.schools !== 'allschools') {
+                if (adapter.config.schools !== 'allschools' || adapter.config.schools !== '') {
+                    const arrSchools = locations.filter(d => d.id == adapter.config.schools);
+                    adapter.log.debug('schools number: ' + adapter.config.schools);
                     adapter.setState('location.schoolName', { val: arrSchools[0].name ? arrSchools[0].name : 'no selection', ack: true });
                 } else {
                     adapter.setState('location.schoolName', { val: 'no selection', ack: true });
