@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "schoolfree",
-        "version": "0.6.2",
+        "version": "0.6.3",
         "news": {
+            "0.6.3": {
+                "en": "Bugfix API Request error",
+                "de": "Bugfix API Request Fehler",
+                "ru": "Bugfix API Ошибка запроса",
+                "pt": "Bugfix API Request error",
+                "nl": "Bugfix API Request-fout",
+                "fr": "Erreur de demande d'API Bugfix",
+                "it": "Errore richiesta API bugfix",
+                "es": "Error de solicitud de API de corrección de errores",
+                "pl": "Błąd żądania API API",
+                "zh-cn": "错误修正API请求错误"
+            },
             "0.6.2": {
                 "en": "small Bugfixes at locations settings",
                 "de": "kleine Bugfixes an Standorteinstellungen",
@@ -216,7 +228,6 @@
                 "admin": ">=3.0.0"
             }
         ],
-        "installedFrom": "https://github.com/simatec/ioBroker.schoolfree/tarball/master",
         "plugins": {
             "sentry": {
               "dsn": "https://b222b874f4bd4a0fa8d0e6b4ad0d554d@sentry.iobroker.net/63"

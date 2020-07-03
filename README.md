@@ -79,6 +79,9 @@ When the adapter crashes or an other Code error happens, this error message that
 
 ## Changelog
 
+### 0.6.3 (02.07.2020)
+* (simatec) Bugfix API Request error
+
 ### 0.6.2 (27.05.2020)
 * (simatec) small Bugfixes at locations settings
 
