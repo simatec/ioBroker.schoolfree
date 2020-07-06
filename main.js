@@ -2,12 +2,9 @@
 
 const utils = require('@iobroker/adapter-core');
 const request = require('request');
-const fs = require('fs');
 
 /** @type {number | undefined} */
 let timerRequest;
-/** @type {number | undefined} */
-let timerError;
 
 /**
  * The adapter instance
@@ -35,7 +32,6 @@ function startAdapter(options) {
         try {
             adapter.log.debug('cleaned everything up...');
             clearTimeout(timerRequest);
-            clearTimeout(timerError);
             callback();
         } catch (e) {
             callback();
@@ -67,18 +63,21 @@ function checkHolidayNames() {
                 } catch (e) {
                     adapter.log.warn('schoolfree request error');
                     adapter.log.warn(e);
-                    timerError = setTimeout(function () {
-                        adapter.stop();
-                    }, 5000);
+                    stopSchoolfree();
                 }
             } else {
                 adapter.log.warn('schoolfree request error ... ... API not reachable!!');
-                timerError = setTimeout(function () {
-                    adapter.stop();
-                }, 2000);
+                stopSchoolfree();
             }
         });
 
+}
+
+function stopSchoolfree() {
+    timerRequest = setTimeout(function () {
+        adapter.log.debug('schoolfree stopped ...')
+        adapter.stop();
+    }, 10000);
 }
 
 function checkState(holidayNames) {
@@ -108,7 +107,8 @@ function checkState(holidayNames) {
             function (error, response, content) {
 
                 let federalStateStr = 0;
-                let searchLocation;
+                /** @type {never[]} */
+                let searchLocation = [];
 
                 if (content && content.data !== undefined) {
                     if (adapter.config.schools !== 'allschools') {
@@ -135,9 +135,7 @@ function checkState(holidayNames) {
                     }
                 } else {
                     adapter.log.warn('schoolfree request error ... API not reachable!!');
-                    timerError = setTimeout(function () {
-                    adapter.stop();
-                    }, 5000);
+                    stopSchoolfree();
                 }
 
                 // Filter current federal State
@@ -239,28 +237,20 @@ function checkState(holidayNames) {
                         }
 
                         adapter.log.info('schoolfree request done');
-                        timerRequest = setTimeout(function () {
-                            adapter.stop();
-                        }, 20000);
+                        stopSchoolfree();
                     } else {
                         adapter.log.warn('schoolfree cannot request ...... API not reachable!!');
-                        timerRequest = setTimeout(function () {
-                            adapter.stop();
-                        }, 2000);
+                        stopSchoolfree();
                     }
                 } else {
                     adapter.log.warn('schoolfree request error ... ... API not reachable!!');
-                    timerError = setTimeout(function () {
-                        adapter.stop();
-                    }, 2000);
+                    stopSchoolfree();
                 }
             });
     } catch (e) {
         adapter.log.warn('schoolfree request error ... ... API not reachable!!');
         adapter.log.warn(e);
-        timerError = setTimeout(function () {
-            adapter.stop();
-        }, 20000);
+        stopSchoolfree();
     }
 
 }
@@ -318,9 +308,7 @@ function main() {
         fillLocation();
         checkHolidayNames();
     } else {
-        timerError = setTimeout(function () {
-            adapter.stop();
-        }, 10000);
+        stopSchoolfree();
     }
 }
 // If started as allInOne/compact mode => return function to create instance

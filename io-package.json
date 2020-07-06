@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "schoolfree",
-        "version": "0.6.3",
+        "version": "0.6.4",
         "news": {
+            "0.6.4": {
+                "en": "small Bugfixes",
+                "de": "kleine Bugfixes",
+                "ru": "небольшие исправления",
+                "pt": "pequenas correções de bugs",
+                "nl": "kleine bugfixes",
+                "fr": "petites corrections de bugs",
+                "it": "piccole correzioni",
+                "es": "pequeñas correcciones de errores",
+                "pl": "małe poprawki",
+                "zh-cn": "小错误修正"
+            },
             "0.6.3": {
                 "en": "Bugfix API Request error",
                 "de": "Bugfix API Request Fehler",
