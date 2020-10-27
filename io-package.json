@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "schoolfree",
-        "version": "0.6.4",
+        "version": "0.7.0",
         "news": {
+            "0.7.0": {
+                "en": "Changeover from request to axios for data retrieval; Conversion of the code structure; code cleaned; dependencies updated",
+                "de": "Umstellung von Anfrage auf Axios zum Abrufen von Daten; Konvertierung der Codestruktur; Code gereinigt; Abhängigkeiten aktualisiert",
+                "ru": "Переход от запроса к axios для поиска данных; Преобразование структуры кода; код очищен; зависимости обновлены",
+                "pt": "Mudança de pedido para axios para recuperação de dados; Conversão da estrutura do código; código limpo; dependências atualizadas",
+                "nl": "Omschakeling van verzoek naar axios voor het opvragen van gegevens; Conversie van de codestructuur; code opgeschoond; afhankelijkheden bijgewerkt",
+                "fr": "Passage de la demande à axios pour la récupération des données; Conversion de la structure du code; code nettoyé; dépendances mises à jour",
+                "it": "Passaggio dalla richiesta agli assi per il recupero dei dati; Conversione della struttura del codice; codice pulito; dipendenze aggiornate",
+                "es": "Cambio de solicitud a axios para la recuperación de datos; Conversión de la estructura del código; código limpiado; dependencias actualizadas",
+                "pl": "Przejście od żądania do axios w celu pobrania danych; Konwersja struktury kodu; kod wyczyszczony; zaktualizowane zależności",
+                "zh-cn": "从请求转换为axios以进行数据检索；代码结构的转换；代码已清除；依赖关系已更新"
+            },
             "0.6.4": {
                 "en": "small Bugfixes",
                 "de": "kleine Bugfixes",
@@ -259,14 +271,6 @@
     "objects": [],
     "instanceObjects": [
         {
-            "_id": "data",
-            "type": "channel",
-            "common": {
-                "name": "data"
-            },
-            "native": {}
-        },
-        {
             "_id": "location",
             "type": "channel",
             "common": {
@@ -295,19 +299,6 @@
             "type": "channel",
             "common": {
                 "name": "next Info"
-            },
-            "native": {}
-        },
-        {
-            "_id": "data.locations",
-            "type": "state",
-            "common": {
-                "name": "data locations",
-                "role": "indicator",
-                "type": "string",
-                "read": true,
-                "write": false,
-                "def": ""
             },
             "native": {}
         },
