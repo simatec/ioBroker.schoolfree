@@ -1,7 +1,9 @@
 'use strict';
 
 const utils = require('@iobroker/adapter-core');
-const request = require('request');
+const axios = require('axios').default;
+
+const schoolfreeURL = 'https://www.mehr-schulferien.de/api/v2.0/';
 
 /** @type {number | undefined} */
 let timerRequest;
@@ -49,28 +51,32 @@ function startAdapter(options) {
         }
     });
 }
-function checkHolidayNames() {
-    request(
-        {
-            url: 'https://www.mehr-schulferien.de/api/v2.0/holiday_or_vacation_types',
-            json: true
-        },
 
-        function (error, response, content) {
-            if (content && content.data !== undefined) {
-                try {
-                    checkState(content.data);
-                } catch (e) {
-                    adapter.log.warn('schoolfree request error');
-                    adapter.log.warn(e);
-                    stopSchoolfree();
-                }
-            } else {
-                adapter.log.warn('schoolfree request error ... ... API not reachable!!');
+async function checkHolidayNames() {
+    await axios({
+        method: 'get',
+        baseURL: schoolfreeURL,
+        url: '/holiday_or_vacation_types/',
+        responseType: 'json'
+    }).then(function (response) {
+        const content = response.data;
+        adapter.log.debug(`schoolfree request holiday_or_vacation_types done`);
+        adapter.log.debug(`schoolfree request holiday_or_vacation_types: ${JSON.stringify(content.data)}`);
+        if (content && content.data !== undefined) {
+            try {
+                checkState(content.data);
+            } catch (e) {
+                adapter.log.warn(`schoolfree request holiday_or_vacation_types error: ${e}`);
                 stopSchoolfree();
             }
-        });
-
+        } else {
+            adapter.log.warn('schoolfree request holiday_or_vacation_types error... API not reachable!!');
+            stopSchoolfree();
+        }
+    }).catch(function (error) {
+        adapter.log.warn(`schoolfree request holiday_or_vacation_types error: ${error}`);
+        stopSchoolfree();
+    })
 }
 
 function stopSchoolfree() {
@@ -80,7 +86,7 @@ function stopSchoolfree() {
     }, 10000);
 }
 
-function checkState(holidayNames) {
+async function checkState(holidayNames) {
 
     // calc current date
     let date = new Date();
@@ -97,203 +103,203 @@ function checkState(holidayNames) {
     let Tomorrow = (yearTomorrow + '-' + ('0' + monthIndexTomorrow).slice(-2) + '-' + ('0' + dayTomorrow).slice(-2));
 
     // request API from www.mehr-schulferien.de
-    try {
-        request(
-            {
-                url: 'https://www.mehr-schulferien.de/api/v2.0/periods',
-                json: true
-            },
+    await axios({
+        method: 'get',
+        baseURL: schoolfreeURL,
+        url: '/periods/',
+        responseType: 'json'
+    }).then(function (response) {
+        const content = response.data;
+        adapter.log.debug(`schoolfree request periods done`);
+        adapter.log.debug(`schoolfree request periods: ${JSON.stringify(content.data)}`);
 
-            function (error, response, content) {
+        let federalStateStr = 0;
+        /** @type {never[]} */
+        let searchLocation = [];
 
-                let federalStateStr = 0;
-                /** @type {never[]} */
-                let searchLocation = [];
-
-                if (content && content.data !== undefined) {
-                    if (adapter.config.schools !== 'allschools') {
-                        searchLocation = content.data.filter(d => d.location_id == adapter.config.schools);
+        if (content && content.data !== undefined) {
+            if (adapter.config.schools !== 'allschools') {
+                searchLocation = Object.values(content.data).filter(d => d.location_id == adapter.config.schools);
+            }
+            if (JSON.stringify(searchLocation) !== '[]') {
+                federalStateStr = adapter.config.schools;
+            } else {
+                if (adapter.config.places !== 'allPlaces') {
+                    searchLocation = Object.values(content.data).filter(d => d.location_id == adapter.config.places);
+                }
+                if (JSON.stringify(searchLocation) !== '[]') {
+                    federalStateStr = adapter.config.places;
+                } else {
+                    if (adapter.config.counties !== 'allCounties') {
+                        searchLocation = Object.values(content.data).filter(d => d.location_id == adapter.config.counties);
                     }
                     if (JSON.stringify(searchLocation) !== '[]') {
-                        federalStateStr = adapter.config.schools;
+                        federalStateStr = adapter.config.counties;
                     } else {
-                        if (adapter.config.places !== 'allPlaces') {
-                            searchLocation = content.data.filter(d => d.location_id == adapter.config.places);
-                        }
-                        if (JSON.stringify(searchLocation) !== '[]') {
-                            federalStateStr = adapter.config.places;
-                        } else {
-                            if (adapter.config.counties !== 'allCounties') {
-                                searchLocation = content.data.filter(d => d.location_id == adapter.config.counties);
-                            }
-                            if (JSON.stringify(searchLocation) !== '[]') {
-                                federalStateStr = adapter.config.counties;
-                            } else {
-                                federalStateStr = adapter.config.federalState;
-                            }
-                        }
+                        federalStateStr = adapter.config.federalState;
                     }
+                }
+            }
+        } else {
+            adapter.log.warn('schoolfree request periods error... API not reachable!!');
+            stopSchoolfree();
+        }
+
+        // Filter current federal State
+        if (content && content.data !== undefined) {
+            const arrFederalState = content.data.filter(d => d.location_id == federalStateStr);
+            // Filter old holidays
+            const arrNewHoliday = arrFederalState.filter(d => d.ends_on >= today);
+
+            let arrOnlyholiday;
+            let resData;
+            if (adapter.config.ignorePublicHoliday) {
+                adapter.log.debug('ignore public holiday');
+                // Filter Long weekends
+                arrOnlyholiday = arrNewHoliday.filter(d => d.starts_on != d.ends_on);
+                // Filter Data
+                resData = arrOnlyholiday.map(({ starts_on, ends_on, holiday_or_vacation_type_id }) => ({ starts_on, ends_on, holiday_or_vacation_type_id }));
+            } else {
+                resData = arrNewHoliday.map(({ starts_on, ends_on, holiday_or_vacation_type_id }) => ({ starts_on, ends_on, holiday_or_vacation_type_id }));
+            }
+            // sort for start holiday
+            const result = resData.sort((a, b) => (a.starts_on > b.starts_on) ? 1 : -1);
+            let currentName = Object.values(holidayNames).filter(d => d.id == result[0].holiday_or_vacation_type_id);
+            let nextName = Object.values(holidayNames).filter(d => d.id == result[1].holiday_or_vacation_type_id);
+
+            if (result[0] && result[0].starts_on !== 'undefined') {
+                // Set schoolfree today
+                let currentStart;
+                let currentEnd;
+
+                currentStart = result[0].starts_on.split('-');
+                currentStart = (currentStart[2] + '.' + currentStart[1] + '.' + currentStart[0]);
+                currentEnd = result[0].ends_on.split('-');
+                currentEnd = (currentEnd[2] + '.' + currentEnd[1] + '.' + currentEnd[0]);
+
+                if (result[0].starts_on <= today && result[0].ends_on >= today) {
+                    adapter.log.debug(`school free name: ${currentName[0].colloquial ? currentName[0].colloquial : currentName[0].name}`);
+                    adapter.log.debug('school free today');
+
+                    adapter.setState('info.today', { val: true, ack: true });
+                    adapter.setState('info.current.start', { val: currentStart, ack: true });
+                    adapter.setState('info.current.end', { val: currentEnd, ack: true });
+                    adapter.setState('info.current.name', { val: currentName[0].colloquial ? currentName[0].colloquial : currentName[0].name, ack: true });
+
+                    adapter.log.debug(`string: ${JSON.stringify(result[0])}`);
                 } else {
-                    adapter.log.warn('schoolfree request error ... API not reachable!!');
-                    stopSchoolfree();
+                    adapter.setState('info.today', { val: false, ack: true });
+                }
+                // Set schoolfree tomorrow
+                if (result[0].starts_on <= Tomorrow && result[0].ends_on >= Tomorrow) {
+                    adapter.log.debug(`school free name: ${currentName[0].colloquial ? currentName[0].colloquial : currentName[0].name}`);
+                    adapter.log.debug('school free tomorrow');
+
+                    adapter.setState('info.tomorrow', { val: true, ack: true });
+                    adapter.setState('info.current.start', { val: currentStart, ack: true });
+                    adapter.setState('info.current.end', { val: currentEnd, ack: true });
+                    adapter.setState('info.current.name', { val: currentName[0].colloquial ? currentName[0].colloquial : currentName[0].name, ack: true });
+
+                    adapter.log.debug(`string: ${JSON.stringify(result[0])}`);
+                } else if (result[1].starts_on == Tomorrow) {
+                    adapter.setState('info.tomorrow', { val: true, ack: true });
+                } else {
+                    adapter.setState('info.tomorrow', { val: false, ack: true });
+                }
+                // clear schoolfree after holiday
+                if (result[0].starts_on > today && result[0].starts_on > Tomorrow) {
+                    adapter.setState('info.current.start', { val: 'none', ack: true });
+                    adapter.setState('info.current.end', { val: 'none', ack: true });
+                    adapter.setState('info.current.name', { val: 'none', ack: true });
                 }
 
-                // Filter current federal State
-                if (content && content.data !== undefined) {
-                    const arrFederalState = content.data.filter(d => d.location_id == federalStateStr);
-                    // Filter old holidays
-                    const arrNewHoliday = arrFederalState.filter(d => d.ends_on >= today);
+                // Set next holiday
+                let nextStart;
+                let nextEnd;
 
-                    let arrOnlyholiday;
-                    let resData;
-                    if (adapter.config.ignorePublicHoliday) {
-                        adapter.log.debug('ignore public holiday');
-                        // Filter Long weekends
-                        arrOnlyholiday = arrNewHoliday.filter(d => d.starts_on != d.ends_on);
-                        // Filter Data
-                        resData = arrOnlyholiday.map(({ starts_on, ends_on, holiday_or_vacation_type_id }) => ({ starts_on, ends_on, holiday_or_vacation_type_id }));
+                if (result[0].starts_on > today) {
+                    nextStart = result[0].starts_on.split('-');
+                    nextStart = (nextStart[2] + '.' + nextStart[1] + '.' + nextStart[0]);
+                    nextEnd = result[0].ends_on.split('-');
+                    nextEnd = (nextEnd[2] + '.' + nextEnd[1] + '.' + nextEnd[0]);
+
+                    adapter.setState('info.next.start', { val: nextStart, ack: true });
+                    adapter.setState('info.next.end', { val: nextEnd, ack: true });
+                    adapter.setState('info.next.name', { val: currentName[0].colloquial ? currentName[0].colloquial : currentName[0].name, ack: true });
+                } else if (result[0].starts_on <= today && result[0].ends_on >= today) {
+                    if (result[1] && result[1].starts_on !== 'undefined') {
+                        nextStart = result[1].starts_on.split('-');
+                        nextStart = (nextStart[2] + '.' + nextStart[1] + '.' + nextStart[0]);
+                        nextEnd = result[1].ends_on.split('-');
+                        nextEnd = (nextEnd[2] + '.' + nextEnd[1] + '.' + nextEnd[0]);
+
+                        adapter.setState('info.next.start', { val: nextStart, ack: true });
+                        adapter.setState('info.next.end', { val: nextEnd, ack: true });
+                        adapter.setState('info.next.name', { val: nextName[0].colloquial ? nextName[0].colloquial : nextName[0].name, ack: true });
                     } else {
-                        resData = arrNewHoliday.map(({ starts_on, ends_on, holiday_or_vacation_type_id }) => ({ starts_on, ends_on, holiday_or_vacation_type_id }));
+                        adapter.setState('info.next.start', { val: 'No data available', ack: true });
+                        adapter.setState('info.next.end', { val: 'No data available', ack: true });
+                        adapter.setState('info.next.name', { val: 'No data available', ack: true });
                     }
-                    // sort for start holiday
-                    const result = resData.sort((a, b) => (a.starts_on > b.starts_on) ? 1 : -1);
-                    let currentName = holidayNames.filter(d => d.id == result[0].holiday_or_vacation_type_id);
-                    let nextName = holidayNames.filter(d => d.id == result[1].holiday_or_vacation_type_id);
-
-                    if (result[0] && result[0].starts_on !== 'undefined') {
-                        // Set schoolfree today
-                        let currentStart;
-                        let currentEnd;
-
-                        currentStart = result[0].starts_on.split('-');
-                        currentStart = (currentStart[2] + '.' + currentStart[1] + '.' + currentStart[0]);
-                        currentEnd = result[0].ends_on.split('-');
-                        currentEnd = (currentEnd[2] + '.' + currentEnd[1] + '.' + currentEnd[0]);
-
-                        if (result[0].starts_on <= today && result[0].ends_on >= today) {
-                            adapter.log.debug(`school free name: ${currentName[0].colloquial ? currentName[0].colloquial : currentName[0].name}`);
-                            adapter.log.debug('school free today');
-
-                            adapter.setState('info.today', { val: true, ack: true });
-                            adapter.setState('info.current.start', { val: currentStart, ack: true });
-                            adapter.setState('info.current.end', { val: currentEnd, ack: true });
-                            adapter.setState('info.current.name', { val: currentName[0].colloquial ? currentName[0].colloquial : currentName[0].name, ack: true });
-
-                            adapter.log.debug('string: ' + JSON.stringify(result[0]));
-                        } else {
-                            adapter.setState('info.today', { val: false, ack: true });
-                        }
-                        // Set schoolfree tomorrow
-                        if (result[0].starts_on <= Tomorrow && result[0].ends_on >= Tomorrow) {
-                            adapter.log.debug(`school free name: ${currentName[0].colloquial ? currentName[0].colloquial : currentName[0].name}`);
-                            adapter.log.debug('school free tomorrow');
-
-                            adapter.setState('info.tomorrow', { val: true, ack: true });
-                            adapter.setState('info.current.start', { val: currentStart, ack: true });
-                            adapter.setState('info.current.end', { val: currentEnd, ack: true });
-                            adapter.setState('info.current.name', { val: currentName[0].colloquial ? currentName[0].colloquial : currentName[0].name, ack: true });
-
-                            adapter.log.debug('string: ' + JSON.stringify(result[0]));
-                        } else if (result[1].starts_on == Tomorrow) {
-                            adapter.setState('info.tomorrow', { val: true, ack: true });
-                        } else {
-                            adapter.setState('info.tomorrow', { val: false, ack: true });
-                        }
-                        // clear schoolfree after holiday
-                        if (result[0].starts_on > today && result[0].starts_on > Tomorrow) {
-                            adapter.setState('info.current.start', { val: 'none', ack: true });
-                            adapter.setState('info.current.end', { val: 'none', ack: true });
-                            adapter.setState('info.current.name', { val: 'none', ack: true });
-                        }
-
-                        // Set next holiday
-                        let nextStart;
-                        let nextEnd;
-
-                        if (result[0].starts_on > today) {
-                            nextStart = result[0].starts_on.split('-');
-                            nextStart = (nextStart[2] + '.' + nextStart[1] + '.' + nextStart[0]);
-                            nextEnd = result[0].ends_on.split('-');
-                            nextEnd = (nextEnd[2] + '.' + nextEnd[1] + '.' + nextEnd[0]);
-
-                            adapter.setState('info.next.start', { val: nextStart, ack: true });
-                            adapter.setState('info.next.end', { val: nextEnd, ack: true });
-                            adapter.setState('info.next.name', { val: currentName[0].colloquial ? currentName[0].colloquial : currentName[0].name, ack: true });
-                        } else if (result[0].starts_on <= today && result[0].ends_on >= today) {
-                            if (result[1] && result[1].starts_on !== 'undefined') {
-                                nextStart = result[1].starts_on.split('-');
-                                nextStart = (nextStart[2] + '.' + nextStart[1] + '.' + nextStart[0]);
-                                nextEnd = result[1].ends_on.split('-');
-                                nextEnd = (nextEnd[2] + '.' + nextEnd[1] + '.' + nextEnd[0]);
-
-                                adapter.setState('info.next.start', { val: nextStart, ack: true });
-                                adapter.setState('info.next.end', { val: nextEnd, ack: true });
-                                adapter.setState('info.next.name', { val: nextName[0].colloquial ? nextName[0].colloquial : nextName[0].name, ack: true });
-                            } else {
-                                adapter.setState('info.next.start', { val: 'No data available', ack: true });
-                                adapter.setState('info.next.end', { val: 'No data available', ack: true });
-                                adapter.setState('info.next.name', { val: 'No data available', ack: true });
-                            }
-                        }
-
-                        adapter.log.info('schoolfree request done');
-                        stopSchoolfree();
-                    } else {
-                        adapter.log.warn('schoolfree cannot request ...... API not reachable!!');
-                        stopSchoolfree();
-                    }
-                } else {
-                    adapter.log.warn('schoolfree request error ... ... API not reachable!!');
-                    stopSchoolfree();
                 }
-            });
-    } catch (e) {
-        adapter.log.warn('schoolfree request error ... ... API not reachable!!');
-        adapter.log.warn(e);
+
+                adapter.log.info('schoolfree request done');
+                stopSchoolfree();
+            } else {
+                adapter.log.warn('schoolfree cannot request... API not reachable!!');
+                stopSchoolfree();
+            }
+        } else {
+            adapter.log.warn(`schoolfree request error... API not reachable!!`);
+            stopSchoolfree();
+        }
+    }).catch(function (error) {
+        adapter.log.warn(`schoolfree request error... API not reachable: ${error}`);
         stopSchoolfree();
-    }
-
+    })
 }
 function fillLocation() {
-    adapter.getState('data.locations', (err, state) => {
-        if (state) {
-            try {
-                const locations = JSON.parse(state.val);
+    //adapter.getState('data.locations', (err, state) => {
+    //if (state) {
+    try {
+        //const locations = JSON.parse(state.val);
+        const locations = require('./admin/locations.json');
 
-                if (adapter.config.counties !== 'allCounties' || adapter.config.counties !== '') {
-                    const arrCounties = locations.filter(d => d.id == adapter.config.counties);
-                    adapter.log.debug('counties number: ' + adapter.config.counties);
-                    adapter.setState('location.countieName', { val: arrCounties[0].name ? arrCounties[0].name : 'no selection', ack: true });
-                } else {
-                    adapter.setState('location.countieName', { val: 'no selection', ack: true });
-                }
-
-                if (adapter.config.places !== 'allPlaces' || adapter.config.places !== '') {
-                    const arrPlaces = locations.filter(d => d.id == adapter.config.places);
-                    adapter.log.debug('places number: ' + adapter.config.places);
-                    adapter.setState('location.placeName', { val: arrPlaces[0].name ? arrPlaces[0].name : 'no selection', ack: true });
-                } else {
-                    adapter.setState('location.placeName', { val: 'no selection', ack: true });
-                }
-
-                if (adapter.config.schools !== 'allschools' || adapter.config.schools !== '') {
-                    const arrSchools = locations.filter(d => d.id == adapter.config.schools);
-                    adapter.log.debug('schools number: ' + adapter.config.schools);
-                    adapter.setState('location.schoolName', { val: arrSchools[0].name ? arrSchools[0].name : 'no selection', ack: true });
-                } else {
-                    adapter.setState('location.schoolName', { val: 'no selection', ack: true });
-                }
-            } catch (e) {
-                adapter.log.warn('schoolfree set state error: ' + e);
-            }
+        if (adapter.config.counties !== 'allCounties' || adapter.config.counties !== '') {
+            const arrCounties = locations.filter(d => d.id == adapter.config.counties);
+            adapter.log.debug(`counties number: ${adapter.config.counties}`);
+            adapter.setState('location.countieName', { val: arrCounties[0].name ? arrCounties[0].name : 'no selection', ack: true });
+        } else {
+            adapter.setState('location.countieName', { val: 'no selection', ack: true });
         }
-    });
+
+        if (adapter.config.places !== 'allPlaces' || adapter.config.places !== '') {
+            const arrPlaces = locations.filter(d => d.id == adapter.config.places);
+            adapter.log.debug(`places number: ${adapter.config.places}`);
+            adapter.setState('location.placeName', { val: arrPlaces[0].name ? arrPlaces[0].name : 'no selection', ack: true });
+        } else {
+            adapter.setState('location.placeName', { val: 'no selection', ack: true });
+        }
+
+        if (adapter.config.schools !== 'allschools' || adapter.config.schools !== '') {
+            const arrSchools = locations.filter(d => d.id == adapter.config.schools);
+            adapter.log.debug(`schools number: ${adapter.config.schools}`);
+            adapter.setState('location.schoolName', { val: arrSchools[0].name ? arrSchools[0].name : 'no selection', ack: true });
+        } else {
+            adapter.setState('location.schoolName', { val: 'no selection', ack: true });
+        }
+    } catch (e) {
+        adapter.log.warn(`schoolfree set state error: ${e}`);
+    }
+    //}
+    //});
 }
+/*
 function loadLocationsData() {
     adapter.getState('data.locations', (err, state) => {
         if (!state || !state.val) {
             try {
-                const locations = require('./locations.json');
+                const locations = require('./admin/locations.json');
                 adapter.setState('data.locations', { val: JSON.stringify(locations), ack: true });
             } catch (err) {
                 adapter.log.warn('Cannot parse data: ' + err);
@@ -301,9 +307,20 @@ function loadLocationsData() {
         }
     });
 }
+*/
+function delOldObjects() {
+    adapter.getState('data.locations', (err, state) => {
+        if (state) {
+            adapter.delObject('data.locations');
+            adapter.delObject('data');
+        }
+    });
+}
+
 function main() {
     // function for request
-    loadLocationsData();
+    //loadLocationsData();
+    delOldObjects();
     if (adapter.config.federalState !== 'none') {
         fillLocation();
         checkHolidayNames();
