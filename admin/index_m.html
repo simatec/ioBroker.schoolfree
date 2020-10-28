@@ -56,7 +56,6 @@
 
             $('#federalState').on('change', function () {
                 if (locations) {
-                    //const locations = JSON.parse(data);
                     fillCounties(settings['counties'], locations)
                     fillPlaces(settings['places'], locations);
                     fillSchools(settings['schools'], locations);
@@ -64,58 +63,15 @@
             });
             $('#counties').on('change', function () {
                 if (locations) {
-                    //const locations = JSON.parse(data);
                     fillPlaces(settings['places'], locations);
                     fillSchools(settings['schools'], locations)
                 }
             });
             $('#places').on('change', function () {
                 if (locations) {
-                    //const locations = JSON.parse(data);
                     fillSchools(settings['schools'], locations)
                 }
             });
-
-            /*
-            socket.emit('getState', adapter + '.' + instance + '.data.locations', function (err, state) {
-                if (state && state.val) {
-                    const locations = JSON.parse(state.val);
-                    fillCounties(settings['counties'], locations);
-                    fillPlaces(settings['places'], locations);
-                    fillSchools(settings['schools'], locations);
-                }
-            });
-            $('#federalState').on('change', function () {
-                socket.emit('getState', adapter + '.' + instance + '.data.locations', function (err, state) {
-                    if (state && state.val) {
-                        const locations = JSON.parse(state.val);
-                        fillCounties(settings['counties'], locations)
-                        fillPlaces(settings['places'], locations);
-                        fillSchools(settings['schools'], locations);
-                    }
-                });
-
-            });
-            $('#counties').on('change', function () {
-                socket.emit('getState', adapter + '.' + instance + '.data.locations', function (err, state) {
-                    if (state && state.val) {
-                        const locations = JSON.parse(state.val);
-                        fillPlaces(settings['places'], locations);
-                        fillSchools(settings['schools'], locations)
-                    }
-                });
-
-            });
-            $('#places').on('change', function () {
-                socket.emit('getState', adapter + '.' + instance + '.data.locations', function (err, state) {
-                    if (state && state.val) {
-                        const locations = JSON.parse(state.val);
-                        fillSchools(settings['schools'], locations)
-                    }
-                });
-
-            });
-            */
         }
 
         async function loadFileAndPrintToVar(url, settings) {
@@ -177,7 +133,6 @@
             arrSchools = arrSchools.sort((a, b) => (a.name > b.name) ? 1 : -1);
             for (const i in arrSchools) {
                 result.push(arrSchools[i].id + ':' + arrSchools[i].name);
-                console.log(arrSchools[i].name);
             }
             $sel.html('<option value="allschools">' + _('no selection') + '</option>');
 
