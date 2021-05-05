@@ -2,6 +2,8 @@
 
 const utils = require('@iobroker/adapter-core');
 const axios = require('axios').default;
+const fs = require('fs');
+const tools = require('./lib/tools');
 
 const schoolfreeURL = 'https://www.mehr-schulferien.de/api/v2.0/';
 
@@ -83,7 +85,42 @@ function stopSchoolfree() {
     timerRequest = setTimeout(function () {
         adapter.log.debug('schoolfree stopped ...')
         adapter.stop();
-    }, 10000);
+    }, 30000);
+}
+// only for update locations.json
+async function locationsUpdate() {
+
+    await axios({
+        method: 'get',
+        baseURL: schoolfreeURL,
+        url: '/locations/',
+        responseType: 'json'
+    }).then(function (response) {
+        const content = response.data;
+        adapter.log.debug(`schoolfree request locations done`);
+        
+        if (content && content.data !== undefined) {
+            try {
+                const result = Object.values(content.data).map(({ name, id, parent_location_id }) => ({ name, id, parent_location_id }));
+
+                adapter.log.debug(`schoolfree request locations: ${JSON.stringify(result)}`);
+
+                if (fs.existsSync(__dirname + '/admin/locations.json')) {
+                    fs.unlinkSync(__dirname + '/admin/locations.json');
+                }
+                fs.writeFileSync(__dirname + '/admin/locations.json', JSON.stringify(result));
+            } catch (e) {
+                adapter.log.warn(`schoolfree request locations error: ${e}`);
+                stopSchoolfree();
+            }
+        } else {
+            adapter.log.warn('schoolfree request locations error... API not reachable!!');
+            stopSchoolfree();
+        }
+    }).catch(function (error) {
+        adapter.log.warn(`schoolfree request locations error: ${error}`);
+        stopSchoolfree();
+    })
 }
 
 async function checkState(holidayNames) {
@@ -258,6 +295,7 @@ async function checkState(holidayNames) {
         stopSchoolfree();
     })
 }
+
 function fillLocation() {
     try {
         const locations = require('./admin/locations.json');
@@ -289,20 +327,7 @@ function fillLocation() {
         adapter.log.warn(`schoolfree set state error: ${e}`);
     }
 }
-/*
-function loadLocationsData() {
-    adapter.getState('data.locations', (err, state) => {
-        if (!state || !state.val) {
-            try {
-                const locations = require('./admin/locations.json');
-                adapter.setState('data.locations', { val: JSON.stringify(locations), ack: true });
-            } catch (err) {
-                adapter.log.warn('Cannot parse data: ' + err);
-            }
-        }
-    });
-}
-*/
+
 function delOldObjects() {
     adapter.getState('data.locations', (err, state) => {
         if (state) {
@@ -313,8 +338,7 @@ function delOldObjects() {
 }
 
 function main() {
-    // function for request
-    //loadLocationsData();
+    //locationsUpdate(); only for update locations.json
     delOldObjects();
     if (adapter.config.federalState !== 'none') {
         fillLocation();
