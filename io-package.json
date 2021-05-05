@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "schoolfree",
-        "version": "0.7.0",
+        "version": "1.0.0",
         "news": {
+            "1.0.0": {
+                "en": "GUI revised, Added support for admin5, code cleaned, dependencies updated, Github Test and Release added",
+                "de": "GUI überarbeitet, Unterstützung für admin5 hinzugefügt, Code bereinigt, Abhängigkeiten aktualisiert, Github-Test und Release hinzugefügt",
+                "ru": "Переработан графический интерфейс, добавлена поддержка admin5, очищен код, обновлены зависимости, добавлены тесты и выпуск Github.",
+                "pt": "GUI revisada, Adicionado suporte para admin5, código limpo, dependências atualizadas, Github Test e Release adicionado",
+                "nl": "GUI herzien, ondersteuning toegevoegd voor admin5, code opgeschoond, afhankelijkheden bijgewerkt, Github-test en release toegevoegd",
+                "fr": "Interface graphique révisée, prise en charge ajoutée pour admin5, code nettoyé, dépendances mises à jour, test et version de Github ajoutés",
+                "it": "GUI rivista, aggiunto supporto per admin5, codice pulito, dipendenze aggiornate, Github Test e Release aggiunti",
+                "es": "GUI revisada, soporte agregado para admin5, código limpiado, dependencias actualizadas, prueba y lanzamiento de Github agregados",
+                "pl": "Poprawiono GUI, dodano obsługę admin5, wyczyszczono kod, zaktualizowano zależności, dodano test i wydanie Github",
+                "zh-cn": "修订了GUI，添加了对admin5的支持，清除了代码，更新了依赖项，添加了Github测试和发布"
+            },
             "0.7.0": {
                 "en": "Changeover from request to axios for data retrieval; Conversion of the code structure; code cleaned; dependencies updated",
                 "de": "Umstellung von Anfrage auf Axios zum Abrufen von Daten; Konvertierung der Codestruktur; Code gereinigt; Abhängigkeiten aktualisiert",
@@ -74,126 +86,6 @@
                 "es": "nuevas características agregadas; Corrección de errores al día siguiente sin clases; agregado sentry.io; traducciones agregadas; manejo de errores agregado",
                 "pl": "dodano nowe funkcje; Bugfix następnego dnia bez szkoły; dodano sentry.io; dodane tłumaczenia; dodano obsługę błędów",
                 "zh-cn": "增加了新功能；次日免费修正错误；添加了sendry.io;增加翻译；增加了错误处理"
-            },
-            "0.5.0": {
-                "en": "added public holidays; Bugfix next schoolfree for API 2.0; Bugfix schoolfree-name for API 2.0",
-                "de": "Feiertage hinzugefügt; Bugfix next schoolfree für API 2.0; Bugfix schulfreier Name für API 2.0",
-                "ru": "добавлены праздничные дни; Исправлена следующая ошибка для API 2.0; Исправлено школьное имя для API 2.0",
-                "pt": "feriados públicos adicionados; Correção de bugs na próxima escola para API 2.0; Nome da escola do bugfix livre para API 2.0",
-                "nl": "feestdagen toegevoegd; Bugfix volgende schoolvrij voor API 2.0; Bugfix schoolvrije naam voor API 2.0",
-                "fr": "jours fériés ajoutés; Correctif suivant sans école pour API 2.0; Bugfix schoolfree-name pour API 2.0",
-                "it": "aggiunti giorni festivi; Bugfix next schoolfree per API 2.0; Bugfix nome-scuola per API 2.0",
-                "es": "feriados públicos adicionales; Bugfix next schoolfree for API 2.0; Bugfix schoolfree-name para API 2.0",
-                "pl": "dodane święta państwowe; Bugfix next schoolfree for API 2.0; Bugfix schoolfree-name for API 2.0",
-                "zh-cn": "增加公众假期；修正了针对API 2.0的下一学期漏洞； API 2.0的Bugfix Schoolfree名称"
-            },
-            "0.4.1": {
-                "en": "new query as adaptation to API v2.0; Adjustment of the federal state IDs; Code fix for autochecker; update Dependencies",
-                "de": "neue Abfrage als Anpassung an API v2.0; Anpassung der Bundesland ID's; Codefix für Autochecker; Abhängigkeiten aktualisiert",
-                "ru": "новый запрос как адаптация к API v2.0; Корректировка федеральных государственных удостоверений личности; Исправление кода для автоматической проверки; обновить зависимости",
-                "pt": "nova consulta como adaptação à API v2.0; Ajuste dos IDs estaduais federais; Correção de código para o verificador automático; atualizar dependências",
-                "nl": "nieuwe query als aanpassing aan API v2.0; Aanpassing van de federale staat-ID's; Code fix voor autochecker; afhankelijkheden bijwerken",
-                "fr": "nouvelle requête comme adaptation à l'API v2.0; Ajustement des identifiants des États fédéraux; Correction de code pour autochecker; mettre à jour les dépendances",
-                "it": "nuova query come adattamento all'API v2.0; Adeguamento degli ID dello stato federale; Correzione del codice per il controllo automatico; aggiornare le dipendenze",
-                "es": "nueva consulta como adaptación a API v2.0; Ajuste de las identificaciones estatales federales; Corrección de código para autochecker; actualizar dependencias",
-                "pl": "nowe zapytanie jako adaptacja do API v2.0; Dostosowanie federalnych identyfikatorów stanu; Poprawka kodu dla autokontrolera; aktualizacja Zależności",
-                "zh-cn": "新查询适应API v2.0；调整联邦州ID；自动检查程序的代码修复；更新依赖"
-            },
-            "0.4.0": {
-                "en": "added new api v2.0 from www.mehr-schulferien.de",
-                "de": "neue API v2.0 von www.mehr-schulferien.de hinzugefügt",
-                "ru": "добавлен новый API v2.0 от www.mehr-schulferien.de",
-                "pt": "adicionada nova API v2.0 em www.mehr-schulferien.de",
-                "nl": "nieuwe api v2.0 toegevoegd van www.mehr-schulferien.de",
-                "fr": "ajout d'une nouvelle api v2.0 sur www.mehr-schulferien.de",
-                "it": "aggiunto nuovo api v2.0 da www.mehr-schulferien.de",
-                "es": "Se agregó una nueva API v2.0 de www.mehr-schulferien.de",
-                "pl": "dodano nowy interfejs API v2.0 z www.mehr-schulferien.de",
-                "zh-cn": "从www.mehr-schulferien.de添加了新的api v2.0"
-            },
-            "0.3.1": {
-                "en": "Fix start after install",
-                "de": "Fix Start nach der Installation",
-                "ru": "Исправить первый запуск после установки",
-                "pt": "Corrija o primeiro início após a instalação",
-                "nl": "Herstel eerste start na installatie",
-                "fr": "Fixer le premier démarrage après l'installation",
-                "it": "Correggi il primo avvio dopo l'installazione",
-                "es": "Arreglar el primer inicio después de la instalación",
-                "pl": "Napraw pierwszy start po instalacji",
-                "zh-cn": "修复安装后首次启动"
-            },
-            "0.3.0": {
-                "en": "end of node 6 support; changed dateformat",
-                "de": "Ende der Unterstützung von node 6; Datumsformat geändert",
-                "ru": "поддержка конца узла 6; изменил формат даты",
-                "pt": "suporte ao final do nó 6; formato da data alterado",
-                "nl": "einde van knooppunt 6 ondersteuning; gegevensformaat gewijzigd",
-                "fr": "fin du support du noeud 6; dateformat changé",
-                "it": "fine del nodo 6 supporto; formato data modificato",
-                "es": "fin del soporte del nodo 6; formato de fecha cambiado",
-                "pl": "obsługa końca węzła 6; zmieniony format daty",
-                "zh-cn": "节点6的支持结束；更改日期格式"
-            },
-            "0.2.2": {
-                "en": "new object structure",
-                "de": "neue Objektstruktur",
-                "pt": "nova estrutura de objeto",
-                "nl": "nieuwe objectstructuur",
-                "ru": "новая структура объекта",
-                "fr": "nouvelle structure d'objet",
-                "it": "nuova struttura di oggetti",
-                "es": "nueva estructura de objetos",
-                "pl": "nowa struktura obiektu",
-                "zh-cn": "新的对象结构"
-            },
-            "0.2.1": {
-                "en": "fix travis and appveyor",
-                "de": "Fix Travis und Appveyor",
-                "ru": "исправить Трэвис и Аппейвер",
-                "pt": "consertar travis e appveyor",
-                "nl": "repareer travis en appveyor",
-                "fr": "réparer travis et appveyor",
-                "it": "sistemare travis e l'app",
-                "es": "arreglar travis y appveyor",
-                "pl": "napraw travis i appveyor",
-                "zh-cn": "修理travis和appveyor"
-            },
-            "0.2.0": {
-                "en": "Add Objects for next school holiday; cleaned code",
-                "de": "Objekte für die nächsten Schulferien hinzugefügt; Code bereinigt",
-                "ru": "Добавить объекты на следующий школьный праздник; очищенный код",
-                "pt": "Adicione objetos para as próximas férias escolares; código limpo",
-                "nl": "Objecten toevoegen voor de volgende schoolvakantie; gereinigde code",
-                "fr": "Ajouter des objets pour les prochaines vacances scolaires; code nettoyé",
-                "it": "Aggiungi oggetti per le prossime vacanze scolastiche; codice pulito",
-                "es": "Añadir objetos para las próximas vacaciones escolares; código limpio",
-                "pl": "Dodaj obiekty na następne wakacje szkolne; wyczyszczony kod",
-                "zh-cn": "为下一个学校假期添加对象;清理代码"
-            },
-            "0.1.0": {
-                "en": "First Beta",
-                "de": "Erste Beta",
-                "ru": "Первая бета",
-                "pt": "Primeiro beta",
-                "nl": "Eerste bèta",
-                "fr": "Première bêta",
-                "it": "Prima beta",
-                "es": "Primera beta",
-                "pl": "Pierwsza beta",
-                "zh-cn": "第一个Beta"
-            },
-            "0.0.1": {
-                "en": "initial release",
-                "de": "Erstveröffentlichung",
-                "ru": "Начальная версия",
-                "pt": "lançamento inicial",
-                "nl": "Eerste uitgave",
-                "fr": "Première version",
-                "it": "Versione iniziale",
-                "es": "Versión inicial",
-                "pl": "Pierwsze wydanie",
-                "zh-cn": "首次出版"
             }
         },
         "title": "schoolfree",
@@ -245,11 +137,16 @@
         "allowInit": true,
         "type": "date-and-time",
         "compact": true,
+        "connectionType": "cloud",
+        "dataSource": "poll",
         "materialize": true,
         "messagebox": true,
+        "adminUI": {
+            "config": "materialize"
+        },
         "dependencies": [
             {
-                "admin": ">=3.0.0"
+                "js-controller": ">=2.0.0"
             }
         ],
         "plugins": {

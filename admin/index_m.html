@@ -107,6 +107,7 @@
             });
             $sel.select();
         }
+
         function fillPlaces(id, str) {
             var $sel = $('#places');
             let result = [];
@@ -125,6 +126,7 @@
             });
             $sel.select();
         }
+
         function fillSchools(id, str) {
             var $sel = $('#schools');
             let result = [];
@@ -133,6 +135,7 @@
             arrSchools = arrSchools.sort((a, b) => (a.name > b.name) ? 1 : -1);
             for (const i in arrSchools) {
                 result.push(arrSchools[i].id + ':' + arrSchools[i].name);
+                console.log(arrSchools[i].name);
             }
             $sel.html('<option value="allschools">' + _('no selection') + '</option>');
 
@@ -163,10 +166,10 @@
 
 <body>
 
-    <div class="m adapter-container">
+    <div class="m adapter-container" style="height: calc(100% - 30px);">
 
         <div class="row">
-            <div class="col s12 m4 l2">
+            <div class="col s12 m4 l6">
                 <img src="schoolfree.png" class="logo">
             </div>
         </div>
