@@ -1,16 +1,14 @@
-/* jshint -W097 */// jshint strict:false
-/*jslint node: true */
-// check if tmp directory exists
+'use strict';
+
 const fs            = require('fs');
 const path          = require('path');
 const child_process = require('child_process');
 const rootDir       = path.normalize(__dirname + '/../../');
+const adapterName   = path.basename(rootDir);
 const pkg           = require(rootDir + 'package.json');
 const debug         = typeof v8debug === 'object';
 pkg.main = pkg.main || 'main.js';
 
-let adapterName = path.normalize(rootDir).replace(/\\/g, '/').split('/');
-adapterName = adapterName[adapterName.length - 2];
 let adapterStarted = false;
 
 function getAppName() {
@@ -23,7 +21,8 @@ const appName = getAppName().toLowerCase();
 let objects;
 let states;
 
-let pid = null;
+/** @type {undefined | ReturnType<typeof import("child_process")["exec"]>} */
+let pid;
 
 function copyFileSync(source, target) {
 
@@ -142,7 +141,7 @@ function checkIsAdapterInstalled(cb, counter, customName) {
             console.warn('checkIsAdapterInstalled: still not ready');
         }
     } catch (err) {
-
+        // Don't care
     }
 
     if (counter > 20) {
@@ -164,7 +163,7 @@ function checkIsControllerInstalled(cb, counter) {
     try {
         const f = fs.readFileSync(dataDir + 'objects.json');
         const objects = JSON.parse(f.toString());
-        if (objects['system.certificates']) {
+        if (objects['system.adapter.admin.0']) {
             console.log('checkIsControllerInstalled: installed!');
             setTimeout(function () {
                 if (cb) cb();
@@ -172,7 +171,7 @@ function checkIsControllerInstalled(cb, counter) {
             return;
         }
     } catch (err) {
-
+        // Don't care
     }
 
     if (counter > 20) {
@@ -310,8 +309,8 @@ function installJsController(cb) {
             });
         } else {
             // check if port 9000 is free, else admin adapter will be added to running instance
-            const client = new require('net').Socket();
-            client.on('error', () => {});
+            const Socket = require('net').Socket;
+            const client = new Socket();
             client.connect(9000, '127.0.0.1', function() {
                 console.error('Cannot initiate fisrt run of test, because one instance of application is running on this PC. Stop it and repeat.');
                 process.exit(0);
@@ -320,15 +319,14 @@ function installJsController(cb) {
             setTimeout(function () {
                 client.destroy();
                 if (!fs.existsSync(rootDir + 'tmp/node_modules/' + appName + '.js-controller')) {
-                    console.log('installJsController: no js-controller => install dev build from npm');
+                    console.log('installJsController: no js-controller => install from git');
 
-                    child_process.execSync('npm install ' + appName + '.js-controller@dev --prefix ./ --production', {
+                    child_process.execSync('npm install https://github.com/' + appName + '/' + appName + '.js-controller/tarball/master --prefix ./  --production', {
                         cwd:   rootDir + 'tmp/',
                         stdio: [0, 1, 2]
                     });
                 } else {
                     console.log('Setup js-controller...');
-                    let __pid;
                     if (debug) {
                         // start controller
                         child_process.exec('node ' + appName + '.js setup first', {
@@ -458,8 +456,7 @@ function setupController(cb) {
 
         let objs;
         try {
-            objs = fs.readFileSync(dataDir + 'objects.json');
-            objs = JSON.parse(objs);
+            objs = JSON.parse(fs.readFileSync(dataDir + 'objects.json', 'utf8'));
         }
         catch (e) {
             console.log('ERROR reading/parsing system configuration. Ignore');
@@ -471,28 +468,6 @@ function setupController(cb) {
 
         if (cb) cb(objs['system.config']);
     });
-}
-
-function getSecret() {
-    var dataDir = rootDir + 'tmp/' + appName + '-data/';
-
-    try {
-        var objs = fs.readFileSync(dataDir + 'objects.json');
-        objs = JSON.parse(objs);
-
-        return objs['system.config'].native.secret;
-    } catch (e) {
-        console.warn("Could not load secret. Reason: " + e);
-        return null;
-    }
-}
-
-function encrypt (key, value) {
-    var result = '';
-    for (var i = 0; i < value.length; ++i) {
-        result += String.fromCharCode(key[i % key.length].charCodeAt(0) ^ value.charCodeAt(i));
-    }
-    return result;
 }
 
 function startAdapter(objects, states, callback) {
@@ -655,14 +630,14 @@ function stopAdapter(cb) {
             if (pid) {
                 console.log('child process terminated due to receipt of signal ' + signal);
                 if (cb) cb();
-                pid = null;
+                pid = undefined;
             }
         });
 
-        pid.on('close', function (code, signal) {
+        pid.on('close', () => {
             if (pid) {
                 if (cb) cb();
-                pid = null;
+                pid = undefined;
             }
         });
 
@@ -716,7 +691,7 @@ function stopController(cb) {
             cb(false);
             cb = null;
         }
-        pid = null;
+        pid = undefined;
     }, 5000);
 }
 
@@ -748,6 +723,4 @@ if (typeof module !== undefined && module.parent) {
     module.exports.appName          = appName;
     module.exports.adapterName      = adapterName;
     module.exports.adapterStarted   = adapterStarted;
-    module.exports.getSecret        = getSecret;
-    module.exports.encrypt          = encrypt;
 }
