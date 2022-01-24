@@ -1,346 +1,346 @@
 {
-    "common": {
-        "name": "schoolfree",
-        "version": "1.0.0",
-        "news": {
-            "1.0.0": {
-                "en": "GUI revised, Added support for admin5, code cleaned, dependencies updated, Github Test and Release added",
-                "de": "GUI überarbeitet, Unterstützung für admin5 hinzugefügt, Code bereinigt, Abhängigkeiten aktualisiert, Github-Test und Release hinzugefügt",
-                "ru": "Переработан графический интерфейс, добавлена поддержка admin5, очищен код, обновлены зависимости, добавлены тесты и выпуск Github.",
-                "pt": "GUI revisada, Adicionado suporte para admin5, código limpo, dependências atualizadas, Github Test e Release adicionado",
-                "nl": "GUI herzien, ondersteuning toegevoegd voor admin5, code opgeschoond, afhankelijkheden bijgewerkt, Github-test en release toegevoegd",
-                "fr": "Interface graphique révisée, prise en charge ajoutée pour admin5, code nettoyé, dépendances mises à jour, test et version de Github ajoutés",
-                "it": "GUI rivista, aggiunto supporto per admin5, codice pulito, dipendenze aggiornate, Github Test e Release aggiunti",
-                "es": "GUI revisada, soporte agregado para admin5, código limpiado, dependencias actualizadas, prueba y lanzamiento de Github agregados",
-                "pl": "Poprawiono GUI, dodano obsługę admin5, wyczyszczono kod, zaktualizowano zależności, dodano test i wydanie Github",
-                "zh-cn": "修订了GUI，添加了对admin5的支持，清除了代码，更新了依赖项，添加了Github测试和发布"
-            },
-            "0.7.0": {
-                "en": "Changeover from request to axios for data retrieval; Conversion of the code structure; code cleaned; dependencies updated",
-                "de": "Umstellung von Anfrage auf Axios zum Abrufen von Daten; Konvertierung der Codestruktur; Code gereinigt; Abhängigkeiten aktualisiert",
-                "ru": "Переход от запроса к axios для поиска данных; Преобразование структуры кода; код очищен; зависимости обновлены",
-                "pt": "Mudança de pedido para axios para recuperação de dados; Conversão da estrutura do código; código limpo; dependências atualizadas",
-                "nl": "Omschakeling van verzoek naar axios voor het opvragen van gegevens; Conversie van de codestructuur; code opgeschoond; afhankelijkheden bijgewerkt",
-                "fr": "Passage de la demande à axios pour la récupération des données; Conversion de la structure du code; code nettoyé; dépendances mises à jour",
-                "it": "Passaggio dalla richiesta agli assi per il recupero dei dati; Conversione della struttura del codice; codice pulito; dipendenze aggiornate",
-                "es": "Cambio de solicitud a axios para la recuperación de datos; Conversión de la estructura del código; código limpiado; dependencias actualizadas",
-                "pl": "Przejście od żądania do axios w celu pobrania danych; Konwersja struktury kodu; kod wyczyszczony; zaktualizowane zależności",
-                "zh-cn": "从请求转换为axios以进行数据检索；代码结构的转换；代码已清除；依赖关系已更新"
-            },
-            "0.6.4": {
-                "en": "small Bugfixes",
-                "de": "kleine Bugfixes",
-                "ru": "небольшие исправления",
-                "pt": "pequenas correções de bugs",
-                "nl": "kleine bugfixes",
-                "fr": "petites corrections de bugs",
-                "it": "piccole correzioni",
-                "es": "pequeñas correcciones de errores",
-                "pl": "małe poprawki",
-                "zh-cn": "小错误修正"
-            },
-            "0.6.3": {
-                "en": "Bugfix API Request error",
-                "de": "Bugfix API Request Fehler",
-                "ru": "Bugfix API Ошибка запроса",
-                "pt": "Bugfix API Request error",
-                "nl": "Bugfix API Request-fout",
-                "fr": "Erreur de demande d'API Bugfix",
-                "it": "Errore richiesta API bugfix",
-                "es": "Error de solicitud de API de corrección de errores",
-                "pl": "Błąd żądania API API",
-                "zh-cn": "错误修正API请求错误"
-            },
-            "0.6.2": {
-                "en": "small Bugfixes at locations settings",
-                "de": "kleine Bugfixes an Standorteinstellungen",
-                "ru": "небольшие исправления в настройках локаций",
-                "pt": "pequenas correções de bugs nas configurações de locais",
-                "nl": "kleine bugfixes bij locatie-instellingen",
-                "fr": "petites corrections de bugs aux paramètres de localisation",
-                "it": "piccole correzioni alle impostazioni delle posizioni",
-                "es": "pequeñas correcciones de errores en la configuración de ubicaciones",
-                "pl": "małe poprawki w ustawieniach lokalizacji",
-                "zh-cn": "位置设置的小错误修正"
-            },
-            "0.6.1": {
-                "en": "added errorhandling for sentry.io; added node 14 support",
-                "de": "Fehlerbehandlung für sentry.io hinzugefügt; Unterstützung für node 14 hinzugefügt",
-                "ru": "добавлена обработка ошибок для sentry.io; добавлена поддержка узла 14",
-                "pt": "adicionado tratamento de erros para sentry.io; adicionado suporte ao node 14",
-                "nl": "foutafhandeling toegevoegd voor sentry.io; ondersteuning voor node 14 toegevoegd",
-                "fr": "gestion des erreurs ajoutée pour sentry.io; ajout de la prise en charge du node 14",
-                "it": "aggiunta gestione degli errori per sentry.io; aggiunto il supporto del node 14",
-                "es": "manejo de errores agregado para sentry.io; Soporte de node 14 agregado",
-                "pl": "dodano obsługę błędów dla sentry.io; dodano obsługę node 14",
-                "zh-cn": "为sendry.io添加了错误处理；添加了节点14支持"
-            },
-            "0.6.0": {
-                "en": "added new features; Bugfix next day schoolfree; added sentry.io; added translations; added error handling",
-                "de": "neue Funktionen hinzugefügt; Bugfix am nächsten Tag schulfrei; sentry.io hinzugefügt; Übersetzungen hinzugefügt; Fehlerbehandlung hinzugefügt",
-                "ru": "добавлены новые функции; Ошибка на следующий день без школы; добавлено sentry.io; добавлены переводы; добавлена обработка ошибок",
-                "pt": "adicionado novos recursos; Correção de erros no dia seguinte, sem aulas; adicionado sentry.io; traduções adicionadas; tratamento de erros adicionado",
-                "nl": "nieuwe functies toegevoegd; Bugfix de volgende dag schoolvrij; sentry.io toegevoegd; vertalingen toegevoegd; foutafhandeling toegevoegd",
-                "fr": "ajouté de nouvelles fonctionnalités; Bugfix le lendemain sans école; ajouté sentry.io; traductions ajoutées; gestion des erreurs ajoutée",
-                "it": "aggiunte nuove funzionalità; Bugfix il giorno successivo senza scuola; aggiunto sentry.io; traduzioni aggiunte; aggiunta gestione degli errori",
-                "es": "nuevas características agregadas; Corrección de errores al día siguiente sin clases; agregado sentry.io; traducciones agregadas; manejo de errores agregado",
-                "pl": "dodano nowe funkcje; Bugfix następnego dnia bez szkoły; dodano sentry.io; dodane tłumaczenia; dodano obsługę błędów",
-                "zh-cn": "增加了新功能；次日免费修正错误；添加了sendry.io;增加翻译；增加了错误处理"
-            }
-        },
-        "title": "schoolfree",
-        "titleLang": {
-            "en": "schoolfree",
-            "de": "Schulferien",
-            "ru": "затвор",
-            "pt": "obturador",
-            "nl": "Luik",
-            "fr": "obturateur",
-            "it": "otturatore",
-            "es": "obturador",
-            "pl": "migawka",
-            "zh-cn": "快门"
-        },
-        "desc": {
-            "en": "Automatic control for school free",
-            "de": "Automatische Steuerung für die Schulferien",
-            "ru": "Автоматическое управление для школы бесплатно",
-            "pt": "Controle automático para a escola livre",
-            "nl": "Automatische besturing voor school gratis",
-            "fr": "Contrôle automatique pour l'école libre",
-            "it": "Controllo automatico per la scuola gratis",
-            "es": "Control automático para la escuela libre.",
-            "pl": "Automatyczna kontrola za darmo w szkole",
-            "zh-cn": "免费学校自动控制"
-        },
-        "authors": [
-            "simatec <nais@gmx.net>"
-        ],
-        "keywords": [
-            "ioBroker",
-            "Smart Home",
-            "home automation",
-            "Ferien",
-            "School free",
-            "School holidays"
-        ],
-        "license": "MIT",
-        "platform": "Javascript/Node.js",
-        "main": "main.js",
-        "icon": "schoolfree.png",
-        "enabled": true,
-        "extIcon": "https://raw.githubusercontent.com/simatec/ioBroker.schoolfree/master/admin/schoolfree.png",
-        "readme": "https://github.com/simatec/ioBroker.schoolfree/blob/master/README.md",
-        "loglevel": "info",
-        "mode": "schedule",
-        "schedule": "1 0 * * *",
-        "allowInit": true,
-        "type": "date-and-time",
-        "compact": true,
-        "connectionType": "cloud",
-        "dataSource": "poll",
-        "materialize": true,
-        "messagebox": true,
-        "adminUI": {
-            "config": "materialize"
-        },
-        "dependencies": [
-            {
-                "js-controller": ">=2.0.0"
-            }
-        ],
-        "plugins": {
-            "sentry": {
-              "dsn": "https://b222b874f4bd4a0fa8d0e6b4ad0d554d@sentry.iobroker.net/63"
-            }
-          }
+  "common": {
+    "name": "schoolfree",
+    "version": "1.0.1",
+    "news": {
+      "1.0.1": {
+        "en": "(simatec) Dependencies updated\n(simatec) test and release updated",
+        "de": "(simatec) Abhängigkeiten aktualisiert\n(simatec) Test und Release aktualisiert",
+        "ru": "(simatec) Зависимости обновлены\n(simatec) тест и выпуск обновлены",
+        "pt": "(simatec) Dependências atualizadas\n(simatec) teste e lançamento atualizados",
+        "nl": "(simatec) Afhankelijkheden bijgewerkt\n(simatec) test en release bijgewerkt",
+        "fr": "(simatec) Dépendances mises à jour\n(simatec) test et version mis à jour",
+        "it": "(simatec) Dipendenze aggiornate\n(simatec) test e rilascio aggiornati",
+        "es": "(simatec) Dependencias actualizadas\n(simatec) prueba y lanzamiento actualizado",
+        "pl": "(simatec) Zaktualizowano zależności\n(simatec) test i wydanie zaktualizowane",
+        "zh-cn": "(simatec) 更新了依赖项\n(simatec) 测试和发布更新"
+      },
+      "1.0.0": {
+        "en": "GUI revised, Added support for admin5, code cleaned, dependencies updated, Github Test and Release added",
+        "de": "GUI überarbeitet, Unterstützung für admin5 hinzugefügt, Code bereinigt, Abhängigkeiten aktualisiert, Github-Test und Release hinzugefügt",
+        "ru": "Переработан графический интерфейс, добавлена поддержка admin5, очищен код, обновлены зависимости, добавлены тесты и выпуск Github.",
+        "pt": "GUI revisada, Adicionado suporte para admin5, código limpo, dependências atualizadas, Github Test e Release adicionado",
+        "nl": "GUI herzien, ondersteuning toegevoegd voor admin5, code opgeschoond, afhankelijkheden bijgewerkt, Github-test en release toegevoegd",
+        "fr": "Interface graphique révisée, prise en charge ajoutée pour admin5, code nettoyé, dépendances mises à jour, test et version de Github ajoutés",
+        "it": "GUI rivista, aggiunto supporto per admin5, codice pulito, dipendenze aggiornate, Github Test e Release aggiunti",
+        "es": "GUI revisada, soporte agregado para admin5, código limpiado, dependencias actualizadas, prueba y lanzamiento de Github agregados",
+        "pl": "Poprawiono GUI, dodano obsługę admin5, wyczyszczono kod, zaktualizowano zależności, dodano test i wydanie Github",
+        "zh-cn": "修订了GUI，添加了对admin5的支持，清除了代码，更新了依赖项，添加了Github测试和发布"
+      },
+      "0.7.0": {
+        "en": "Changeover from request to axios for data retrieval; Conversion of the code structure; code cleaned; dependencies updated",
+        "de": "Umstellung von Anfrage auf Axios zum Abrufen von Daten; Konvertierung der Codestruktur; Code gereinigt; Abhängigkeiten aktualisiert",
+        "ru": "Переход от запроса к axios для поиска данных; Преобразование структуры кода; код очищен; зависимости обновлены",
+        "pt": "Mudança de pedido para axios para recuperação de dados; Conversão da estrutura do código; código limpo; dependências atualizadas",
+        "nl": "Omschakeling van verzoek naar axios voor het opvragen van gegevens; Conversie van de codestructuur; code opgeschoond; afhankelijkheden bijgewerkt",
+        "fr": "Passage de la demande à axios pour la récupération des données; Conversion de la structure du code; code nettoyé; dépendances mises à jour",
+        "it": "Passaggio dalla richiesta agli assi per il recupero dei dati; Conversione della struttura del codice; codice pulito; dipendenze aggiornate",
+        "es": "Cambio de solicitud a axios para la recuperación de datos; Conversión de la estructura del código; código limpiado; dependencias actualizadas",
+        "pl": "Przejście od żądania do axios w celu pobrania danych; Konwersja struktury kodu; kod wyczyszczony; zaktualizowane zależności",
+        "zh-cn": "从请求转换为axios以进行数据检索；代码结构的转换；代码已清除；依赖关系已更新"
+      },
+      "0.6.4": {
+        "en": "small Bugfixes",
+        "de": "kleine Bugfixes",
+        "ru": "небольшие исправления",
+        "pt": "pequenas correções de bugs",
+        "nl": "kleine bugfixes",
+        "fr": "petites corrections de bugs",
+        "it": "piccole correzioni",
+        "es": "pequeñas correcciones de errores",
+        "pl": "małe poprawki",
+        "zh-cn": "小错误修正"
+      },
+      "0.6.3": {
+        "en": "Bugfix API Request error",
+        "de": "Bugfix API Request Fehler",
+        "ru": "Bugfix API Ошибка запроса",
+        "pt": "Bugfix API Request error",
+        "nl": "Bugfix API Request-fout",
+        "fr": "Erreur de demande d'API Bugfix",
+        "it": "Errore richiesta API bugfix",
+        "es": "Error de solicitud de API de corrección de errores",
+        "pl": "Błąd żądania API API",
+        "zh-cn": "错误修正API请求错误"
+      },
+      "0.6.2": {
+        "en": "small Bugfixes at locations settings",
+        "de": "kleine Bugfixes an Standorteinstellungen",
+        "ru": "небольшие исправления в настройках локаций",
+        "pt": "pequenas correções de bugs nas configurações de locais",
+        "nl": "kleine bugfixes bij locatie-instellingen",
+        "fr": "petites corrections de bugs aux paramètres de localisation",
+        "it": "piccole correzioni alle impostazioni delle posizioni",
+        "es": "pequeñas correcciones de errores en la configuración de ubicaciones",
+        "pl": "małe poprawki w ustawieniach lokalizacji",
+        "zh-cn": "位置设置的小错误修正"
+      },
+      "0.6.1": {
+        "en": "added errorhandling for sentry.io; added node 14 support",
+        "de": "Fehlerbehandlung für sentry.io hinzugefügt; Unterstützung für node 14 hinzugefügt",
+        "ru": "добавлена обработка ошибок для sentry.io; добавлена поддержка узла 14",
+        "pt": "adicionado tratamento de erros para sentry.io; adicionado suporte ao node 14",
+        "nl": "foutafhandeling toegevoegd voor sentry.io; ondersteuning voor node 14 toegevoegd",
+        "fr": "gestion des erreurs ajoutée pour sentry.io; ajout de la prise en charge du node 14",
+        "it": "aggiunta gestione degli errori per sentry.io; aggiunto il supporto del node 14",
+        "es": "manejo de errores agregado para sentry.io; Soporte de node 14 agregado",
+        "pl": "dodano obsługę błędów dla sentry.io; dodano obsługę node 14",
+        "zh-cn": "为sendry.io添加了错误处理；添加了节点14支持"
+      }
     },
-    "native": {
-        "federalState": "none",
-        "ignorePublicHoliday": true,
-        "counties": "",
-        "places": "",
-        "schools": "",
-        "countieName": "",
-        "placeName": "",
-        "schoolName": ""
+    "title": "schoolfree",
+    "titleLang": {
+      "en": "schoolfree",
+      "de": "Schulferien",
+      "ru": "затвор",
+      "pt": "obturador",
+      "nl": "Luik",
+      "fr": "obturateur",
+      "it": "otturatore",
+      "es": "obturador",
+      "pl": "migawka",
+      "zh-cn": "快门"
     },
-    "objects": [],
-    "instanceObjects": [
-        {
-            "_id": "location",
-            "type": "channel",
-            "common": {
-                "name": "location info"
-            },
-            "native": {}
-        },
-        {
-            "_id": "info",
-            "type": "channel",
-            "common": {
-                "name": "Info Logs"
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.current",
-            "type": "channel",
-            "common": {
-                "name": "current Info"
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.next",
-            "type": "channel",
-            "common": {
-                "name": "next Info"
-            },
-            "native": {}
-        },
-        {
-            "_id": "location.countieName",
-            "type": "state",
-            "common": {
-                "name": "Countie Name",
-                "role": "indicator",
-                "type": "string",
-                "read": true,
-                "write": false,
-                "def": ""
-            },
-            "native": {}
-        },
-        {
-            "_id": "location.placeName",
-            "type": "state",
-            "common": {
-                "name": "Place Name",
-                "role": "indicator",
-                "type": "string",
-                "read": true,
-                "write": false,
-                "def": ""
-            },
-            "native": {}
-        },
-        {
-            "_id": "location.schoolName",
-            "type": "state",
-            "common": {
-                "name": "school Name",
-                "role": "indicator",
-                "type": "string",
-                "read": true,
-                "write": false,
-                "def": ""
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.today",
-            "type": "state",
-            "common": {
-                "role": "switch",
-                "name": "school free today",
-                "type": "boolean",
-                "read": true,
-                "write": true,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.tomorrow",
-            "type": "state",
-            "common": {
-                "role": "switch",
-                "name": "school free tomorrow",
-                "type": "boolean",
-                "read": true,
-                "write": true,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.current.start",
-            "type": "state",
-            "common": {
-                "role": "indicator",
-                "name": "start for current schoolfree",
-                "type": "string",
-                "read": true,
-                "write": false,
-                "def": ""
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.current.end",
-            "type": "state",
-            "common": {
-                "role": "indicator",
-                "name": "end for current schoolfree",
-                "type": "string",
-                "read": true,
-                "write": false,
-                "def": ""
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.current.name",
-            "type": "state",
-            "common": {
-                "role": "indicator",
-                "name": "name of current schoolfree",
-                "type": "string",
-                "read": true,
-                "write": false,
-                "def": ""
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.next.start",
-            "type": "state",
-            "common": {
-                "role": "indicator",
-                "name": "start for next schoolfree",
-                "type": "string",
-                "read": true,
-                "write": false,
-                "def": ""
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.next.end",
-            "type": "state",
-            "common": {
-                "role": "indicator",
-                "name": "end for next schoolfree",
-                "type": "string",
-                "read": true,
-                "write": false,
-                "def": ""
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.next.name",
-            "type": "state",
-            "common": {
-                "role": "indicator",
-                "name": "name of next schoolfree",
-                "type": "string",
-                "read": true,
-                "write": false,
-                "def": ""
-            },
-            "native": {}
-        }
-    ]
+    "desc": {
+      "en": "Automatic control for school free",
+      "de": "Automatische Steuerung für die Schulferien",
+      "ru": "Автоматическое управление для школы бесплатно",
+      "pt": "Controle automático para a escola livre",
+      "nl": "Automatische besturing voor school gratis",
+      "fr": "Contrôle automatique pour l'école libre",
+      "it": "Controllo automatico per la scuola gratis",
+      "es": "Control automático para la escuela libre.",
+      "pl": "Automatyczna kontrola za darmo w szkole",
+      "zh-cn": "免费学校自动控制"
+    },
+    "authors": [
+      "simatec <nais@gmx.net>"
+    ],
+    "keywords": [
+      "ioBroker",
+      "Smart Home",
+      "home automation",
+      "Ferien",
+      "School free",
+      "School holidays"
+    ],
+    "license": "MIT",
+    "platform": "Javascript/Node.js",
+    "main": "main.js",
+    "icon": "schoolfree.png",
+    "enabled": true,
+    "extIcon": "https://raw.githubusercontent.com/simatec/ioBroker.schoolfree/master/admin/schoolfree.png",
+    "readme": "https://github.com/simatec/ioBroker.schoolfree/blob/master/README.md",
+    "loglevel": "info",
+    "mode": "schedule",
+    "schedule": "1 0 * * *",
+    "allowInit": true,
+    "type": "date-and-time",
+    "compact": true,
+    "connectionType": "cloud",
+    "dataSource": "poll",
+    "materialize": true,
+    "messagebox": true,
+    "adminUI": {
+      "config": "materialize"
+    },
+    "dependencies": [
+      {
+        "js-controller": ">=2.0.0"
+      }
+    ],
+    "plugins": {
+      "sentry": {
+        "dsn": "https://b222b874f4bd4a0fa8d0e6b4ad0d554d@sentry.iobroker.net/63"
+      }
+    }
+  },
+  "native": {
+    "federalState": "none",
+    "ignorePublicHoliday": true,
+    "counties": "",
+    "places": "",
+    "schools": "",
+    "countieName": "",
+    "placeName": "",
+    "schoolName": ""
+  },
+  "objects": [],
+  "instanceObjects": [
+    {
+      "_id": "location",
+      "type": "channel",
+      "common": {
+        "name": "location info"
+      },
+      "native": {}
+    },
+    {
+      "_id": "info",
+      "type": "channel",
+      "common": {
+        "name": "Info Logs"
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.current",
+      "type": "channel",
+      "common": {
+        "name": "current Info"
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.next",
+      "type": "channel",
+      "common": {
+        "name": "next Info"
+      },
+      "native": {}
+    },
+    {
+      "_id": "location.countieName",
+      "type": "state",
+      "common": {
+        "name": "Countie Name",
+        "role": "indicator",
+        "type": "string",
+        "read": true,
+        "write": false,
+        "def": ""
+      },
+      "native": {}
+    },
+    {
+      "_id": "location.placeName",
+      "type": "state",
+      "common": {
+        "name": "Place Name",
+        "role": "indicator",
+        "type": "string",
+        "read": true,
+        "write": false,
+        "def": ""
+      },
+      "native": {}
+    },
+    {
+      "_id": "location.schoolName",
+      "type": "state",
+      "common": {
+        "name": "school Name",
+        "role": "indicator",
+        "type": "string",
+        "read": true,
+        "write": false,
+        "def": ""
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.today",
+      "type": "state",
+      "common": {
+        "role": "switch",
+        "name": "school free today",
+        "type": "boolean",
+        "read": true,
+        "write": true,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.tomorrow",
+      "type": "state",
+      "common": {
+        "role": "switch",
+        "name": "school free tomorrow",
+        "type": "boolean",
+        "read": true,
+        "write": true,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.current.start",
+      "type": "state",
+      "common": {
+        "role": "indicator",
+        "name": "start for current schoolfree",
+        "type": "string",
+        "read": true,
+        "write": false,
+        "def": ""
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.current.end",
+      "type": "state",
+      "common": {
+        "role": "indicator",
+        "name": "end for current schoolfree",
+        "type": "string",
+        "read": true,
+        "write": false,
+        "def": ""
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.current.name",
+      "type": "state",
+      "common": {
+        "role": "indicator",
+        "name": "name of current schoolfree",
+        "type": "string",
+        "read": true,
+        "write": false,
+        "def": ""
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.next.start",
+      "type": "state",
+      "common": {
+        "role": "indicator",
+        "name": "start for next schoolfree",
+        "type": "string",
+        "read": true,
+        "write": false,
+        "def": ""
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.next.end",
+      "type": "state",
+      "common": {
+        "role": "indicator",
+        "name": "end for next schoolfree",
+        "type": "string",
+        "read": true,
+        "write": false,
+        "def": ""
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.next.name",
+      "type": "state",
+      "common": {
+        "role": "indicator",
+        "name": "name of next schoolfree",
+        "type": "string",
+        "read": true,
+        "write": false,
+        "def": ""
+      },
+      "native": {}
+    }
+  ]
 }
