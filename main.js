@@ -1,7 +1,7 @@
 'use strict';
 
 const utils = require('@iobroker/adapter-core');
-const axios = require('axios').default;
+const axios = require('axios');
 const fs = require('fs');
 const tools = require('./lib/tools');
 
@@ -55,18 +55,20 @@ function startAdapter(options) {
 }
 
 async function checkHolidayNames() {
-    await axios({
-        method: 'get',
-        baseURL: schoolfreeURL,
-        url: '/holiday_or_vacation_types/',
-        responseType: 'json'
-    }).then(function (response) {
-        const content = response.data;
-        adapter.log.debug(`schoolfree request holiday_or_vacation_types done`);
-        adapter.log.debug(`schoolfree request holiday_or_vacation_types: ${JSON.stringify(content.data)}`);
-        if (content && content.data !== undefined) {
+    try {
+        const _holidayNames = await axios({
+            method: 'get',
+            url: schoolfreeURL + 'holiday_or_vacation_types/',
+            responseType: 'json'
+        });
+
+        if (_holidayNames && _holidayNames.data) {
+            const holidayNames = _holidayNames.data
+            adapter.log.debug(`schoolfree request holiday_or_vacation_types done`);
+            //adapter.log.debug(`schoolfree request holiday_or_vacation_types: ${JSON.stringify(holidayNames.data)}`);
+
             try {
-                checkState(content.data);
+                checkState(holidayNames.data);
             } catch (e) {
                 adapter.log.warn(`schoolfree request holiday_or_vacation_types error: ${e}`);
                 stopSchoolfree();
@@ -75,10 +77,10 @@ async function checkHolidayNames() {
             adapter.log.warn('schoolfree request holiday_or_vacation_types error... API not reachable!!');
             stopSchoolfree();
         }
-    }).catch(function (error) {
-        adapter.log.warn(`schoolfree request holiday_or_vacation_types error: ${error}`);
+    } catch (e) {
+        adapter.log.warn(`schoolfree request holiday_or_vacation_types error: ${e}`);
         stopSchoolfree();
-    })
+    }
 }
 
 function stopSchoolfree() {
@@ -89,22 +91,23 @@ function stopSchoolfree() {
 }
 // only for update locations.json
 async function locationsUpdate() {
+    try {
+        const _locationsUpdate = await axios({
+            method: 'get',
+            url: schoolfreeURL + 'locations/',
+            responseType: 'json'
+        });
 
-    await axios({
-        method: 'get',
-        baseURL: schoolfreeURL,
-        url: '/locations/',
-        responseType: 'json'
-    }).then(function (response) {
-        const content = response.data;
         adapter.log.debug(`schoolfree request locations done`);
-        
-        if (content && content.data !== undefined) {
+
+        if (_locationsUpdate && _locationsUpdate.data) {
             try {
-                const result = Object.values(content.data).map(({ name, id, parent_location_id }) => ({ name, id, parent_location_id }));
+                // @ts-ignore
+                const result = Object.values(_locationsUpdate.data).map(({ name, id, parent_location_id }) => ({ name, id, parent_location_id }));
 
                 adapter.log.debug(`schoolfree request locations: ${JSON.stringify(result)}`);
 
+                // @ts-ignore
                 if (fs.existsSync(__dirname + '/admin/locations.json')) {
                     fs.unlinkSync(__dirname + '/admin/locations.json');
                 }
@@ -117,10 +120,10 @@ async function locationsUpdate() {
             adapter.log.warn('schoolfree request locations error... API not reachable!!');
             stopSchoolfree();
         }
-    }).catch(function (error) {
-        adapter.log.warn(`schoolfree request locations error: ${error}`);
+    } catch (e) {
+        adapter.log.warn(`schoolfree request locations error: ${e}`);
         stopSchoolfree();
-    })
+    }
 }
 
 async function checkState(holidayNames) {
@@ -140,34 +143,36 @@ async function checkState(holidayNames) {
     let Tomorrow = (yearTomorrow + '-' + ('0' + monthIndexTomorrow).slice(-2) + '-' + ('0' + dayTomorrow).slice(-2));
 
     // request API from www.mehr-schulferien.de
-    await axios({
-        method: 'get',
-        baseURL: schoolfreeURL,
-        url: '/periods/',
-        responseType: 'json'
-    }).then(function (response) {
-        const content = response.data;
+    try {
+        const _content = await axios({
+            method: 'get',
+            url: schoolfreeURL + 'periods/',
+            responseType: 'json'
+        });
+        const content = _content.data;
         adapter.log.debug(`schoolfree request periods done`);
-        adapter.log.debug(`schoolfree request periods: ${JSON.stringify(content.data)}`);
+        //adapter.log.debug(`schoolfree request periods: ${JSON.stringify(content.data)}`);
 
         let federalStateStr = 0;
-        /** @type {never[]} */
         let searchLocation = [];
 
         if (content && content.data !== undefined) {
             if (adapter.config.schools !== 'allschools') {
+                // @ts-ignore
                 searchLocation = Object.values(content.data).filter(d => d.location_id == adapter.config.schools);
             }
             if (JSON.stringify(searchLocation) !== '[]') {
                 federalStateStr = adapter.config.schools;
             } else {
                 if (adapter.config.places !== 'allPlaces') {
+                    // @ts-ignore
                     searchLocation = Object.values(content.data).filter(d => d.location_id == adapter.config.places);
                 }
                 if (JSON.stringify(searchLocation) !== '[]') {
                     federalStateStr = adapter.config.places;
                 } else {
                     if (adapter.config.counties !== 'allCounties') {
+                        // @ts-ignore
                         searchLocation = Object.values(content.data).filter(d => d.location_id == adapter.config.counties);
                     }
                     if (JSON.stringify(searchLocation) !== '[]') {
@@ -184,8 +189,10 @@ async function checkState(holidayNames) {
 
         // Filter current federal State
         if (content && content.data !== undefined) {
+            // @ts-ignore
             const arrFederalState = content.data.filter(d => d.location_id == federalStateStr);
             // Filter old holidays
+            // @ts-ignore
             const arrNewHoliday = arrFederalState.filter(d => d.ends_on >= today);
 
             let arrOnlyholiday;
@@ -195,8 +202,10 @@ async function checkState(holidayNames) {
                 // Filter Long weekends
                 arrOnlyholiday = arrNewHoliday.filter(d => d.starts_on != d.ends_on);
                 // Filter Data
+                // @ts-ignore
                 resData = arrOnlyholiday.map(({ starts_on, ends_on, holiday_or_vacation_type_id }) => ({ starts_on, ends_on, holiday_or_vacation_type_id }));
             } else {
+                // @ts-ignore
                 resData = arrNewHoliday.map(({ starts_on, ends_on, holiday_or_vacation_type_id }) => ({ starts_on, ends_on, holiday_or_vacation_type_id }));
             }
             // sort for start holiday
@@ -290,10 +299,10 @@ async function checkState(holidayNames) {
             adapter.log.warn(`schoolfree request error... API not reachable!!`);
             stopSchoolfree();
         }
-    }).catch(function (error) {
-        adapter.log.warn(`schoolfree request error... API not reachable: ${error}`);
+    } catch (e) {
+        adapter.log.warn(`schoolfree request error... API not reachable: ${e}`);
         stopSchoolfree();
-    })
+    }
 }
 
 function fillLocation() {
