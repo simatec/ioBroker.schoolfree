@@ -101,6 +101,7 @@
       "it": "otturatore",
       "es": "obturador",
       "pl": "migawka",
+      "uk": "Шкільні канікули",
       "zh-cn": "快门"
     },
     "desc": {
@@ -113,10 +114,11 @@
       "it": "Controllo automatico per la scuola gratis",
       "es": "Control automático para la escuela libre.",
       "pl": "Automatyczna kontrola za darmo w szkole",
+      "uk": "Автоматичне керування під час шкільних канікул",
       "zh-cn": "免费学校自动控制"
     },
     "authors": [
-      "simatec <nais@gmx.net>"
+      "simatec <schoolfree@simateccloud.de>"
     ],
     "keywords": [
       "ioBroker",
