@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "schoolfree",
-    "version": "1.1.1",
+    "version": "1.1.2",
     "news": {
+      "1.1.2": {
+        "en": "Dependencies updated\ntest and release updated\nTranslation updated",
+        "de": "Ausgaben aktualisiert\ntest und release aktualisiert\nÜbersetzung aktualisiert",
+        "ru": "Обновленные зависимости\nтест и релиз обновлен\nПеревод обновлен",
+        "pt": "Dependências atualizadas\nteste e lançamento atualizado\nTradução atualizada",
+        "nl": "Afhankelijkheid geüpdateerd\ntest en laat updaten\nVertaling:",
+        "fr": "Dépendances mises à jour\ntest and release updated\nTraduction mise à jour",
+        "it": "Dipendenze aggiornate\ntest e rilascio aggiornato\nTraduzione aggiornata",
+        "es": "Actualización de las dependencias\ntest and release updated\nTraducción actualizada",
+        "pl": "Zależności\ntest i aktualizacja\nUaktualniać",
+        "uk": "Залежність оновлено\nтест і реліз оновлений\nПереклад оновлений",
+        "zh-cn": "B. 更新的属地\n试验和释放\n笔译更新"
+      },
       "1.1.1": {
         "en": "Dependencies updated\ntest and release updated",
         "de": "Ausgaben aktualisiert\ntest und release aktualisiert",
@@ -76,18 +89,6 @@
         "es": "pequeñas correcciones de errores",
         "pl": "małe poprawki",
         "zh-cn": "小错误修正"
-      },
-      "0.6.3": {
-        "en": "Bugfix API Request error",
-        "de": "Bugfix API Request Fehler",
-        "ru": "Bugfix API Ошибка запроса",
-        "pt": "Bugfix API Request error",
-        "nl": "Bugfix API Request-fout",
-        "fr": "Erreur de demande d'API Bugfix",
-        "it": "Errore richiesta API bugfix",
-        "es": "Error de solicitud de API de corrección de errores",
-        "pl": "Błąd żądania API API",
-        "zh-cn": "错误修正API请求错误"
       }
     },
     "title": "schoolfree",
