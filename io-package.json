@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "schoolfree",
-    "version": "1.1.2",
+    "version": "1.1.3",
     "news": {
+      "1.1.3": {
+        "en": "Dependencies updated\ntest and release updated",
+        "de": "Ausgaben aktualisiert\ntest und release aktualisiert",
+        "ru": "Обновленные зависимости\nтест и релиз обновлен",
+        "pt": "Dependências atualizadas\nteste e lançamento atualizado",
+        "nl": "Afhankelijkheid geüpdateerd\ntest en laat updaten",
+        "fr": "Dépendances mises à jour\ntest and release updated",
+        "it": "Dipendenze aggiornate\ntest e rilascio aggiornato",
+        "es": "Actualización de las dependencias\ntest and release updated",
+        "pl": "Zależności\ntest i aktualizacja",
+        "uk": "Залежність оновлено\nтест і реліз оновлений",
+        "zh-cn": "B. 更新的属地\n试验和释放"
+      },
       "1.1.2": {
         "en": "Dependencies updated\ntest and release updated\nTranslation updated",
         "de": "Ausgaben aktualisiert\ntest und release aktualisiert\nÜbersetzung aktualisiert",
@@ -77,18 +90,6 @@
         "es": "Cambio de solicitud a axios para la recuperación de datos; Conversión de la estructura del código; código limpiado; dependencias actualizadas",
         "pl": "Przejście od żądania do axios w celu pobrania danych; Konwersja struktury kodu; kod wyczyszczony; zaktualizowane zależności",
         "zh-cn": "从请求转换为axios以进行数据检索；代码结构的转换；代码已清除；依赖关系已更新"
-      },
-      "0.6.4": {
-        "en": "small Bugfixes",
-        "de": "kleine Bugfixes",
-        "ru": "небольшие исправления",
-        "pt": "pequenas correções de bugs",
-        "nl": "kleine bugfixes",
-        "fr": "petites corrections de bugs",
-        "it": "piccole correzioni",
-        "es": "pequeñas correcciones de errores",
-        "pl": "małe poprawki",
-        "zh-cn": "小错误修正"
       }
     },
     "title": "schoolfree",
