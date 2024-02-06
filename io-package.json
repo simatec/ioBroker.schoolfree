@@ -65,6 +65,7 @@
         "it": "(simatec) Dipendenze aggiornate\n(simatec) test e rilascio aggiornati",
         "es": "(simatec) Dependencias actualizadas\n(simatec) prueba y lanzamiento actualizado",
         "pl": "(simatec) Zaktualizowano zależności\n(simatec) test i wydanie zaktualizowane",
+        "uk": "(simatec) Dependencies updated\n(simatec) test and release updated",
         "zh-cn": "(simatec) 更新了依赖项\n(simatec) 测试和发布更新"
       },
       "1.0.0": {
@@ -77,6 +78,7 @@
         "it": "GUI rivista, aggiunto supporto per admin5, codice pulito, dipendenze aggiornate, Github Test e Release aggiunti",
         "es": "GUI revisada, soporte agregado para admin5, código limpiado, dependencias actualizadas, prueba y lanzamiento de Github agregados",
         "pl": "Poprawiono GUI, dodano obsługę admin5, wyczyszczono kod, zaktualizowano zależności, dodano test i wydanie Github",
+        "uk": "GUI revised, Added support for admin5, code cleaned, dependencies updated, Github Test and Release added",
         "zh-cn": "修订了GUI，添加了对admin5的支持，清除了代码，更新了依赖项，添加了Github测试和发布"
       },
       "0.7.0": {
@@ -89,10 +91,10 @@
         "it": "Passaggio dalla richiesta agli assi per il recupero dei dati; Conversione della struttura del codice; codice pulito; dipendenze aggiornate",
         "es": "Cambio de solicitud a axios para la recuperación de datos; Conversión de la estructura del código; código limpiado; dependencias actualizadas",
         "pl": "Przejście od żądania do axios w celu pobrania danych; Konwersja struktury kodu; kod wyczyszczony; zaktualizowane zależności",
+        "uk": "Changeover from request to axios for data retrieval; Conversion of the code structure; code cleaned; dependencies updated",
         "zh-cn": "从请求转换为axios以进行数据检索；代码结构的转换；代码已清除；依赖关系已更新"
       }
     },
-    "title": "schoolfree",
     "titleLang": {
       "en": "schoolfree",
       "de": "Schulferien",
@@ -123,8 +125,6 @@
       "simatec <schoolfree@simateccloud.de>"
     ],
     "keywords": [
-      "ioBroker",
-      "Smart Home",
       "home automation",
       "Ferien",
       "School free",
@@ -153,7 +153,7 @@
     },
     "dependencies": [
       {
-        "js-controller": ">=4.0.0"
+        "js-controller": ">=5.0.0"
       }
     ],
     "plugins": {
