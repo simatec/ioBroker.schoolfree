@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "schoolfree",
-    "version": "1.1.3",
+    "version": "1.1.4",
     "news": {
+      "1.1.4": {
+        "en": "Dependencies updated\nDesign Fix\nGulp deleted\nadapter-dev added\nTranslation updated",
+        "de": "Ausgaben aktualisiert\nDesign Fix\nGulp gelöscht\nadapter-dev hinzugefügt\nÜbersetzung aktualisiert",
+        "ru": "Обновленные данные о зависимостях\nДизайн Fix\nУдалить\nадаптер-dev добавлен\nОбновленный перевод",
+        "pt": "Dependências atualizadas\nCorreção de Design\nGulp excluído\nadaptador-dev adicionado\nTradução atualizada",
+        "nl": "Afhankelijkheden bijgewerkt\nOntwerpfix\nGulp verwijderd\nadapter-dev toegevoegd\nVertaling bijgewerkt",
+        "fr": "Dépendances actualisées\nCorrection de conception\nGulp supprimé\nadaptateur-dev ajouté\nTraduction mise à jour",
+        "it": "Dipendenze aggiornate\nDesign Fix\nGulp cancellato\nadattatore-dev aggiunto\nTraduzione aggiornata",
+        "es": "Actualización de las dependencias\nDiseño fijo\nGulp eliminado\nadaptador-dev añadido\nTraducción actualizada",
+        "pl": "Aktualizacja zależności\nPopraw projekt\nGulp usunięty\nadapter -dev dodany\nAktualizacja tłumaczeń",
+        "uk": "Залежність оновлено\nФіксація дизайну\nВідхилити\nадаптер-dev додано\nПереклад оновлений",
+        "zh-cn": "更新的依赖关系\n设计\nGulp 已删除\n添加适配器- dev\n翻译更新"
+      },
       "1.1.3": {
         "en": "Dependencies updated\ntest and release updated",
         "de": "Ausgaben aktualisiert\ntest und release aktualisiert",
@@ -65,6 +78,7 @@
         "it": "(simatec) Dipendenze aggiornate\n(simatec) test e rilascio aggiornati",
         "es": "(simatec) Dependencias actualizadas\n(simatec) prueba y lanzamiento actualizado",
         "pl": "(simatec) Zaktualizowano zależności\n(simatec) test i wydanie zaktualizowane",
+        "uk": "(simatec) Dependencies updated\n(simatec) test and release updated",
         "zh-cn": "(simatec) 更新了依赖项\n(simatec) 测试和发布更新"
       },
       "1.0.0": {
@@ -77,22 +91,10 @@
         "it": "GUI rivista, aggiunto supporto per admin5, codice pulito, dipendenze aggiornate, Github Test e Release aggiunti",
         "es": "GUI revisada, soporte agregado para admin5, código limpiado, dependencias actualizadas, prueba y lanzamiento de Github agregados",
         "pl": "Poprawiono GUI, dodano obsługę admin5, wyczyszczono kod, zaktualizowano zależności, dodano test i wydanie Github",
+        "uk": "GUI revised, Added support for admin5, code cleaned, dependencies updated, Github Test and Release added",
         "zh-cn": "修订了GUI，添加了对admin5的支持，清除了代码，更新了依赖项，添加了Github测试和发布"
-      },
-      "0.7.0": {
-        "en": "Changeover from request to axios for data retrieval; Conversion of the code structure; code cleaned; dependencies updated",
-        "de": "Umstellung von Anfrage auf Axios zum Abrufen von Daten; Konvertierung der Codestruktur; Code gereinigt; Abhängigkeiten aktualisiert",
-        "ru": "Переход от запроса к axios для поиска данных; Преобразование структуры кода; код очищен; зависимости обновлены",
-        "pt": "Mudança de pedido para axios para recuperação de dados; Conversão da estrutura do código; código limpo; dependências atualizadas",
-        "nl": "Omschakeling van verzoek naar axios voor het opvragen van gegevens; Conversie van de codestructuur; code opgeschoond; afhankelijkheden bijgewerkt",
-        "fr": "Passage de la demande à axios pour la récupération des données; Conversion de la structure du code; code nettoyé; dépendances mises à jour",
-        "it": "Passaggio dalla richiesta agli assi per il recupero dei dati; Conversione della struttura del codice; codice pulito; dipendenze aggiornate",
-        "es": "Cambio de solicitud a axios para la recuperación de datos; Conversión de la estructura del código; código limpiado; dependencias actualizadas",
-        "pl": "Przejście od żądania do axios w celu pobrania danych; Konwersja struktury kodu; kod wyczyszczony; zaktualizowane zależności",
-        "zh-cn": "从请求转换为axios以进行数据检索；代码结构的转换；代码已清除；依赖关系已更新"
       }
     },
-    "title": "schoolfree",
     "titleLang": {
       "en": "schoolfree",
       "de": "Schulferien",
@@ -123,8 +125,6 @@
       "simatec <schoolfree@simateccloud.de>"
     ],
     "keywords": [
-      "ioBroker",
-      "Smart Home",
       "home automation",
       "Ferien",
       "School free",
@@ -153,7 +153,7 @@
     },
     "dependencies": [
       {
-        "js-controller": ">=4.0.0"
+        "js-controller": ">=5.0.0"
       }
     ],
     "plugins": {
