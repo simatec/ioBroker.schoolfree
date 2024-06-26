@@ -31,3 +31,6 @@ test
 .vscode
 /package-lock.json
 .DS_Store
+
+# ioBroker dev-server
+.dev-server/
