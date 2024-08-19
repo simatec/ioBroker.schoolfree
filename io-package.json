@@ -130,9 +130,11 @@
       "School free",
       "School holidays"
     ],
-    "license": "MIT",
+    "licenseInformation": {
+      "license": "MIT",
+      "type": "free"
+    },
     "platform": "Javascript/Node.js",
-    "main": "main.js",
     "icon": "schoolfree.png",
     "enabled": true,
     "extIcon": "https://raw.githubusercontent.com/simatec/ioBroker.schoolfree/master/admin/schoolfree.png",
@@ -146,14 +148,13 @@
     "connectionType": "cloud",
     "dataSource": "poll",
     "tier": 2,
-    "materialize": true,
     "messagebox": true,
     "adminUI": {
       "config": "materialize"
     },
     "dependencies": [
       {
-        "js-controller": ">=5.0.0"
+        "js-controller": ">=5.0.19"
       }
     ],
     "plugins": {
