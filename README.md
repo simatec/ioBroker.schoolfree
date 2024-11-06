@@ -81,6 +81,7 @@ When the adapter crashes or an other Code error happens, this error message that
 <!--### __WORK IN PROGRESS__-->
 ### __WORK IN PROGRESS__
 * (simatec) Dependencies updated
+* (simatec) Issue Action added
 
 ### 1.1.5 (2024-09-21)
 * (simatec) Dependencies updated
