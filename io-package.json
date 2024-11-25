@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "schoolfree",
-    "version": "1.1.5",
+    "version": "1.1.6",
     "news": {
+      "1.1.6": {
+        "en": "Dependencies updated\nIssue Action added\neslint-config added",
+        "de": "Ausgaben aktualisiert\nAusgabe Aktion hinzugefügt\neslint-config hinzugefügt",
+        "ru": "Обновленные данные о зависимостях\nДополнительные меры\nдобавлена eslint-config",
+        "pt": "Dependências atualizadas\nAção de problemas adicionada\neslint-config adicionado",
+        "nl": "Afhankelijkheden bijgewerkt\nOnderwerpactie toegevoegd\neslint-config toegevoegd",
+        "fr": "Dépendances actualisées\nMesure à prendre\neslint-config ajouté",
+        "it": "Dipendenze aggiornate\nAzione di problema aggiunto\neslint-config aggiunto",
+        "es": "Actualización de las dependencias\nTema Acción añadido\neslint-config añadido",
+        "pl": "Aktualizacja zależności\nDodano działanie\neslint- config dodany",
+        "uk": "Залежність оновлено\nДодана емісія\neslint-config додано",
+        "zh-cn": "更新的依赖关系\n添加的问题行动\n添加埃斯林特配置"
+      },
       "1.1.5": {
         "en": "Dependencies updated\nsmall fix\nResponsive Design added",
         "de": "Ausgaben aktualisiert\nkleine fix\nResponsive Design hinzugefügt",
@@ -80,19 +93,6 @@
         "pl": "zależność\n(simatec) test i wydanie aktualizowane",
         "uk": "(simatec) Залежність оновлено\n(simatec) тест і реліз оновлений",
         "zh-cn": "(模拟) 更新的属地\n(模拟) 试验和释放更新"
-      },
-      "1.0.1": {
-        "en": "(simatec) Dependencies updated\n(simatec) test and release updated",
-        "de": "(simatec) Abhängigkeiten aktualisiert\n(simatec) Test und Release aktualisiert",
-        "ru": "(simatec) Зависимости обновлены\n(simatec) тест и выпуск обновлены",
-        "pt": "(simatec) Dependências atualizadas\n(simatec) teste e lançamento atualizados",
-        "nl": "(simatec) Afhankelijkheden bijgewerkt\n(simatec) test en release bijgewerkt",
-        "fr": "(simatec) Dépendances mises à jour\n(simatec) test et version mis à jour",
-        "it": "(simatec) Dipendenze aggiornate\n(simatec) test e rilascio aggiornati",
-        "es": "(simatec) Dependencias actualizadas\n(simatec) prueba y lanzamiento actualizado",
-        "pl": "(simatec) Zaktualizowano zależności\n(simatec) test i wydanie zaktualizowane",
-        "uk": "(simatec) Dependencies updated\n(simatec) test and release updated",
-        "zh-cn": "(simatec) 更新了依赖项\n(simatec) 测试和发布更新"
       }
     },
     "titleLang": {
