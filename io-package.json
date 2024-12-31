@@ -250,11 +250,11 @@
       "_id": "info.today",
       "type": "state",
       "common": {
-        "role": "switch",
+        "role": "state",
         "name": "school free today",
         "type": "boolean",
         "read": true,
-        "write": true,
+        "write": false,
         "def": false
       },
       "native": {}
@@ -263,11 +263,11 @@
       "_id": "info.tomorrow",
       "type": "state",
       "common": {
-        "role": "switch",
+        "role": "state",
         "name": "school free tomorrow",
         "type": "boolean",
         "read": true,
-        "write": true,
+        "write": false,
         "def": false
       },
       "native": {}
