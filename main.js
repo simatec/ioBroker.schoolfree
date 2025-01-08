@@ -7,19 +7,19 @@ const tools = require('./lib/tools');
 
 const schoolfreeURL = 'https://www.mehr-schulferien.de/api/v2.0/';
 
-/** @type {number | undefined} */
 let timerRequest;
 
 /**
  * The adapter instance
- * @type {ioBroker.Adapter}
+ *
  */
 let adapter;
 const adapterName = require('./package.json').name.split('.').pop();
 
 /**
  * Starts the adapter instance
- * @param {Partial<ioBroker.AdapterOptions>} [options]
+ *
+ * @param [options]
  */
 function startAdapter(options) {
 
@@ -58,7 +58,7 @@ async function checkHolidayNames() {
     try {
         const _holidayNames = await axios({
             method: 'get',
-            url: schoolfreeURL + 'holiday_or_vacation_types/',
+            url: `${schoolfreeURL  }holiday_or_vacation_types/`,
             responseType: 'json'
         });
 
@@ -94,7 +94,7 @@ async function locationsUpdate() {
     try {
         const _locationsUpdate = await axios({
             method: 'get',
-            url: schoolfreeURL + 'locations/',
+            url: `${schoolfreeURL  }locations/`,
             responseType: 'json'
         });
 
@@ -108,10 +108,10 @@ async function locationsUpdate() {
                 adapter.log.debug(`schoolfree request locations: ${JSON.stringify(result)}`);
 
                 // @ts-ignore
-                if (fs.existsSync(__dirname + '/admin/locations.json')) {
-                    fs.unlinkSync(__dirname + '/admin/locations.json');
+                if (fs.existsSync(`${__dirname  }/admin/locations.json`)) {
+                    fs.unlinkSync(`${__dirname  }/admin/locations.json`);
                 }
-                fs.writeFileSync(__dirname + '/admin/locations.json', JSON.stringify(result));
+                fs.writeFileSync(`${__dirname  }/admin/locations.json`, JSON.stringify(result));
             } catch (e) {
                 adapter.log.warn(`schoolfree request locations error: ${e}`);
                 stopSchoolfree();
@@ -133,20 +133,20 @@ async function checkState(holidayNames) {
     let monthIndex = (date.getMonth() + 1);
     let year = date.getFullYear();
     let day = date.getDate();
-    let today = (year + '-' + ('0' + monthIndex).slice(-2) + '-' + ('0' + day).slice(-2));
+    let today = (`${year  }-${  (`0${  monthIndex}`).slice(-2)  }-${  (`0${  day}`).slice(-2)}`);
 
     // calc Tomorrow date
     let dateTomorrow = new Date(date.getTime() + (1000 * 60 * 60 * 24 * 1));
     let monthIndexTomorrow = (dateTomorrow.getMonth() + 1);
     let yearTomorrow = dateTomorrow.getFullYear();
     let dayTomorrow = dateTomorrow.getDate();
-    let Tomorrow = (yearTomorrow + '-' + ('0' + monthIndexTomorrow).slice(-2) + '-' + ('0' + dayTomorrow).slice(-2));
+    let Tomorrow = (`${yearTomorrow  }-${  (`0${  monthIndexTomorrow}`).slice(-2)  }-${  (`0${  dayTomorrow}`).slice(-2)}`);
 
     // request API from www.mehr-schulferien.de
     try {
         const _content = await axios({
             method: 'get',
-            url: schoolfreeURL + 'periods/',
+            url: `${schoolfreeURL  }periods/`,
             responseType: 'json'
         });
         const content = _content.data;
@@ -219,9 +219,9 @@ async function checkState(holidayNames) {
                 let currentEnd;
 
                 currentStart = result[0].starts_on.split('-');
-                currentStart = (currentStart[2] + '.' + currentStart[1] + '.' + currentStart[0]);
+                currentStart = (`${currentStart[2]  }.${  currentStart[1]  }.${  currentStart[0]}`);
                 currentEnd = result[0].ends_on.split('-');
-                currentEnd = (currentEnd[2] + '.' + currentEnd[1] + '.' + currentEnd[0]);
+                currentEnd = (`${currentEnd[2]  }.${  currentEnd[1]  }.${  currentEnd[0]}`);
 
                 if (result[0].starts_on <= today && result[0].ends_on >= today) {
                     adapter.log.debug(`school free name: ${currentName[0].colloquial ? currentName[0].colloquial : currentName[0].name}`);
@@ -265,9 +265,9 @@ async function checkState(holidayNames) {
 
                 if (result[0].starts_on > today) {
                     nextStart = result[0].starts_on.split('-');
-                    nextStart = (nextStart[2] + '.' + nextStart[1] + '.' + nextStart[0]);
+                    nextStart = (`${nextStart[2]  }.${  nextStart[1]  }.${  nextStart[0]}`);
                     nextEnd = result[0].ends_on.split('-');
-                    nextEnd = (nextEnd[2] + '.' + nextEnd[1] + '.' + nextEnd[0]);
+                    nextEnd = (`${nextEnd[2]  }.${  nextEnd[1]  }.${  nextEnd[0]}`);
 
                     adapter.setState('info.next.start', { val: nextStart, ack: true });
                     adapter.setState('info.next.end', { val: nextEnd, ack: true });
@@ -275,9 +275,9 @@ async function checkState(holidayNames) {
                 } else if (result[0].starts_on <= today && result[0].ends_on >= today) {
                     if (result[1] && result[1].starts_on !== 'undefined') {
                         nextStart = result[1].starts_on.split('-');
-                        nextStart = (nextStart[2] + '.' + nextStart[1] + '.' + nextStart[0]);
+                        nextStart = (`${nextStart[2]  }.${  nextStart[1]  }.${  nextStart[0]}`);
                         nextEnd = result[1].ends_on.split('-');
-                        nextEnd = (nextEnd[2] + '.' + nextEnd[1] + '.' + nextEnd[0]);
+                        nextEnd = (`${nextEnd[2]  }.${  nextEnd[1]  }.${  nextEnd[0]}`);
 
                         adapter.setState('info.next.start', { val: nextStart, ack: true });
                         adapter.setState('info.next.end', { val: nextEnd, ack: true });
