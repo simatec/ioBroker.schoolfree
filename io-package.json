@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "schoolfree",
-    "version": "1.1.7",
+    "version": "1.1.8",
     "news": {
+      "1.1.8": {
+        "en": "eslint-config fix\nDependencies updated\nsmall Fix",
+        "de": "eslint-config fix\nAusgaben aktualisiert\nkleiner Fix",
+        "ru": "исправление эслинта-конфигура\nОбновленные зависимости\nмаленький фикс",
+        "pt": "eslint-config fix\nDependências atualizadas\npequena fixação",
+        "nl": "eslint-config fix\nAfhankelijkheden bijgewerkt\nkleine Fix",
+        "fr": "fixateur eslint-config\nDépendances actualisées\npetite Fix",
+        "it": "eslint-config fix\nDipendenze aggiornate\npiccolo fissaggio",
+        "es": "eslint-config fix\nActualización de las dependencias\npequeño",
+        "pl": "fix eslint- config\nAktualizacja zależności\nmały Fix",
+        "uk": "eslint-config виправити\nЗалежність оновлено\nмали",
+        "zh-cn": "埃斯林特配置修复\n更新的依赖关系\n小修补"
+      },
       "1.1.7": {
         "en": "eslint-config fix\nDependencies updated\nFix States",
         "de": "eslint-config fix\nAusgaben aktualisiert\nFixstaaten",
@@ -80,19 +93,6 @@
         "pl": "Zależności\ntest i aktualizacja\nUaktualniać",
         "uk": "Залежність оновлено\nтест і реліз оновлений\nПереклад оновлений",
         "zh-cn": "B. 更新的属地\n试验和释放\n笔译更新"
-      },
-      "1.1.1": {
-        "en": "Dependencies updated\ntest and release updated",
-        "de": "Ausgaben aktualisiert\ntest und release aktualisiert",
-        "ru": "Обновленные зависимости\nтест и релиз обновлен",
-        "pt": "Dependências atualizadas\nteste e lançamento atualizado",
-        "nl": "Afhankelijkheid geüpdateerd\ntest en laat updaten",
-        "fr": "Dépendances mises à jour\ntest and release updated",
-        "it": "Dipendenze aggiornate\ntest e rilascio aggiornato",
-        "es": "Actualización de las dependencias\ntest and release updated",
-        "pl": "Zależności\ntest i aktualizacja",
-        "uk": "Залежність оновлено\nтест і реліз оновлений",
-        "zh-cn": "B. 更新的属地\n试验和释放"
       }
     },
     "titleLang": {
