@@ -157,6 +157,11 @@
         "js-controller": ">=5.0.19"
       }
     ],
+    "globalDependencies": [
+      {
+        "admin": ">=7.4.10"
+      }
+    ],
     "plugins": {
       "sentry": {
         "dsn": "https://b222b874f4bd4a0fa8d0e6b4ad0d554d@sentry.iobroker.net/63"
