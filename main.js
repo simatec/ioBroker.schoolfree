@@ -326,7 +326,6 @@ function fillLocation() {
         }
 
         if (adapter.config.schools !== 'allschools' || adapter.config.schools !== '') {
-            adapter.log.warn(adapter.config.schools);
             const arrSchools = locations.filter(d => d.id == adapter.config.schools);
             adapter.log.debug(`schools number: ${adapter.config.schools}`);
             adapter.setState('location.schoolName', { val: arrSchools[0].name ? arrSchools[0].name : 'no selection', ack: true });
