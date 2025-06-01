@@ -82,6 +82,7 @@ When the adapter crashes or an other Code error happens, this error message that
 
 ### __WORK IN PROGRESS__
 * (simatec) dependencies updated
+* (simatec) Ready for NodeJS 24.x
 
 ### 1.1.9 (2025-03-14)
 * (simatec) Fix warning
