@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "schoolfree",
-    "version": "1.1.9",
+    "version": "1.1.10",
     "news": {
+      "1.1.10": {
+        "en": "dependencies updated\nReady for NodeJS 24.x",
+        "de": "aktualisierte abhängigkeiten\nBereit für NodeJS 24.x",
+        "ru": "обновленные зависимости\nГотовность к NodeJS 24.x",
+        "pt": "dependências atualizadas\nPronto para NodeJS 24.x",
+        "nl": "afhankelijkheden bijgewerkt\nKlaar voor NodeJS 24.x",
+        "fr": "dépendances mises à jour\nPrêt pour NodeJS 24.x",
+        "it": "dipendenze aggiornate\nPronti per NodeJS 24.x",
+        "es": "dependencias actualizadas\nListo para NodeJS 24.x",
+        "pl": "zaktualizowane zależności\nGotowy do NodeJS 24.x",
+        "uk": "оновлені залежності\nГотовий для NodeJS 24.x",
+        "zh-cn": "更新依赖关系\n准备进入节点JS 24.x"
+      },
       "1.1.9": {
         "en": "Fix warning\nDependencies updated",
         "de": "Warnhinweise\nAusgaben aktualisiert",
@@ -80,19 +93,6 @@
         "pl": "Aktualizacja zależności\nPopraw projekt\nGulp usunięty\nadapter -dev dodany\nAktualizacja tłumaczeń",
         "uk": "Залежність оновлено\nФіксація дизайну\nВідхилити\nадаптер-dev додано\nПереклад оновлений",
         "zh-cn": "更新的依赖关系\n设计\nGulp 已删除\n添加适配器- dev\n翻译更新"
-      },
-      "1.1.3": {
-        "en": "Dependencies updated\ntest and release updated",
-        "de": "Ausgaben aktualisiert\ntest und release aktualisiert",
-        "ru": "Обновленные зависимости\nтест и релиз обновлен",
-        "pt": "Dependências atualizadas\nteste e lançamento atualizado",
-        "nl": "Afhankelijkheid geüpdateerd\ntest en laat updaten",
-        "fr": "Dépendances mises à jour\ntest and release updated",
-        "it": "Dipendenze aggiornate\ntest e rilascio aggiornato",
-        "es": "Actualización de las dependencias\ntest and release updated",
-        "pl": "Zależności\ntest i aktualizacja",
-        "uk": "Залежність оновлено\nтест і реліз оновлений",
-        "zh-cn": "B. 更新的属地\n试验和释放"
       }
     },
     "titleLang": {
