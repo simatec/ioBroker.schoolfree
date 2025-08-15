@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "schoolfree",
-    "version": "1.1.10",
+    "version": "1.1.11",
     "news": {
+      "1.1.11": {
+        "en": "dependencies updated",
+        "de": "aktualisierte abhängigkeiten",
+        "ru": "обновленные зависимости",
+        "pt": "dependências atualizadas",
+        "nl": "afhankelijkheden bijgewerkt",
+        "fr": "dépendances mises à jour",
+        "it": "dipendenze aggiornate",
+        "es": "dependencias actualizadas",
+        "pl": "zaktualizowane zależności",
+        "uk": "оновлені залежності",
+        "zh-cn": "更新依赖关系"
+      },
       "1.1.10": {
         "en": "dependencies updated\nReady for NodeJS 24.x",
         "de": "aktualisierte abhängigkeiten\nBereit für NodeJS 24.x",
@@ -80,19 +93,6 @@
         "pl": "Aktualizacja zależności\nmały fix\nDodano projekt odpowiedzialny",
         "uk": "Залежність оновлено\nневелика фіксація\nДодано адаптивний дизайн",
         "zh-cn": "更新的依赖关系\n小修补\n添加响应设计"
-      },
-      "1.1.4": {
-        "en": "Dependencies updated\nDesign Fix\nGulp deleted\nadapter-dev added\nTranslation updated",
-        "de": "Ausgaben aktualisiert\nDesign Fix\nGulp gelöscht\nadapter-dev hinzugefügt\nÜbersetzung aktualisiert",
-        "ru": "Обновленные данные о зависимостях\nДизайн Fix\nУдалить\nадаптер-dev добавлен\nОбновленный перевод",
-        "pt": "Dependências atualizadas\nCorreção de Design\nGulp excluído\nadaptador-dev adicionado\nTradução atualizada",
-        "nl": "Afhankelijkheden bijgewerkt\nOntwerpfix\nGulp verwijderd\nadapter-dev toegevoegd\nVertaling bijgewerkt",
-        "fr": "Dépendances actualisées\nCorrection de conception\nGulp supprimé\nadaptateur-dev ajouté\nTraduction mise à jour",
-        "it": "Dipendenze aggiornate\nDesign Fix\nGulp cancellato\nadattatore-dev aggiunto\nTraduzione aggiornata",
-        "es": "Actualización de las dependencias\nDiseño fijo\nGulp eliminado\nadaptador-dev añadido\nTraducción actualizada",
-        "pl": "Aktualizacja zależności\nPopraw projekt\nGulp usunięty\nadapter -dev dodany\nAktualizacja tłumaczeń",
-        "uk": "Залежність оновлено\nФіксація дизайну\nВідхилити\nадаптер-dev додано\nПереклад оновлений",
-        "zh-cn": "更新的依赖关系\n设计\nGulp 已删除\n添加适配器- dev\n翻译更新"
       }
     },
     "titleLang": {
