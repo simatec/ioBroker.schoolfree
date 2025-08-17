@@ -99,11 +99,12 @@ async function locationsUpdate() {
         });
 
         adapter.log.debug(`schoolfree request locations done`);
+        //adapter.log.debug(JSON.stringify(_locationsUpdate.data.data));
 
         if (_locationsUpdate && _locationsUpdate.data) {
             try {
                 // @ts-ignore
-                const result = Object.values(_locationsUpdate.data).map(({ name, id, parent_location_id }) => ({ name, id, parent_location_id }));
+                const result = Object.values(_locationsUpdate.data.data).map(({ name, id, parent_location_id }) => ({ name, id, parent_location_id }));
 
                 adapter.log.debug(`schoolfree request locations: ${JSON.stringify(result)}`);
 
@@ -347,7 +348,7 @@ function delOldObjects() {
 }
 
 function main() {
-    //locationsUpdate(); only for update locations.json
+    //locationsUpdate(); // only for update locations.json
     delOldObjects();
     if (adapter.config.federalState !== 'none') {
         fillLocation();
