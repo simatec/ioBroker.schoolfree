@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "schoolfree",
-    "version": "1.1.11",
+    "version": "1.1.12",
     "news": {
+      "1.1.12": {
+        "en": "small fix\ndependencies updated",
+        "de": "kleine fix\naktualisierte abhängigkeiten",
+        "ru": "небольшой ремонт\nобновленные зависимости",
+        "pt": "pequena correção\ndependências atualizadas",
+        "nl": "kleine fix\nafhankelijkheden bijgewerkt",
+        "fr": "petite fixation\ndépendances mises à jour",
+        "it": "piccola correzione\ndipendenze aggiornate",
+        "es": "pequeño\ndependencias actualizadas",
+        "pl": "mały fix\nzaktualizowane zależności",
+        "uk": "невелика фіксація\nоновлені залежності",
+        "zh-cn": "小修补\n更新依赖关系"
+      },
       "1.1.11": {
         "en": "dependencies updated",
         "de": "aktualisierte abhängigkeiten",
@@ -80,19 +93,6 @@
         "pl": "Aktualizacja zależności\nDodano działanie\neslint- config dodany",
         "uk": "Залежність оновлено\nДодана емісія\neslint-config додано",
         "zh-cn": "更新的依赖关系\n添加的问题行动\n添加埃斯林特配置"
-      },
-      "1.1.5": {
-        "en": "Dependencies updated\nsmall fix\nResponsive Design added",
-        "de": "Ausgaben aktualisiert\nkleine fix\nResponsive Design hinzugefügt",
-        "ru": "Обновленные данные о зависимостях\nнебольшое исправление\nResponsive Design",
-        "pt": "Dependências atualizadas\npequena correção\nDesign responsivo adicionado",
-        "nl": "Afhankelijkheden bijgewerkt\nkleine fix\nResponsive Design toegevoegd",
-        "fr": "Dépendances actualisées\npetite fixation\nDesign sensible ajouté",
-        "it": "Dipendenze aggiornate\npiccola correzione\nResponsive Design aggiunto",
-        "es": "Actualización de las dependencias\npequeño\nDiseño responsable añadido",
-        "pl": "Aktualizacja zależności\nmały fix\nDodano projekt odpowiedzialny",
-        "uk": "Залежність оновлено\nневелика фіксація\nДодано адаптивний дизайн",
-        "zh-cn": "更新的依赖关系\n小修补\n添加响应设计"
       }
     },
     "titleLang": {
