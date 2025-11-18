@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "schoolfree",
-    "version": "1.1.12",
+    "version": "1.1.13",
     "news": {
+      "1.1.13": {
+        "en": "dependencies updated\nupdate npm publish",
+        "de": "aktualisierte abhängigkeiten\naktualisierung npm veröffentlichen",
+        "ru": "обновленные зависимости\nобновление npm",
+        "pt": "dependências atualizadas\natualizar npm publica",
+        "nl": "afhankelijkheden bijgewerkt\nnpm publiceren bijwerken",
+        "fr": "dépendances mises à jour\nmise à jour npm publication",
+        "it": "dipendenze aggiornate\naggiornamento npm pubblicare",
+        "es": "dependencias actualizadas\nactualización npm publicar",
+        "pl": "zaktualizowane zależności\naktualizacja npm publikacja",
+        "uk": "оновлені залежності\nоновлення npm",
+        "zh-cn": "更新依赖关系\n更新 npm 发布"
+      },
       "1.1.12": {
         "en": "small fix\ndependencies updated",
         "de": "kleine fix\naktualisierte abhängigkeiten",
@@ -80,19 +93,6 @@
         "pl": "fix eslint- config\nAktualizacja zależności\nNapraw stany",
         "uk": "eslint-config виправити\nЗалежність оновлено\nФіксація",
         "zh-cn": "埃斯林特配置修复\n更新的依赖关系\n固定国家"
-      },
-      "1.1.6": {
-        "en": "Dependencies updated\nIssue Action added\neslint-config added",
-        "de": "Ausgaben aktualisiert\nAusgabe Aktion hinzugefügt\neslint-config hinzugefügt",
-        "ru": "Обновленные данные о зависимостях\nДополнительные меры\nдобавлена eslint-config",
-        "pt": "Dependências atualizadas\nAção de problemas adicionada\neslint-config adicionado",
-        "nl": "Afhankelijkheden bijgewerkt\nOnderwerpactie toegevoegd\neslint-config toegevoegd",
-        "fr": "Dépendances actualisées\nMesure à prendre\neslint-config ajouté",
-        "it": "Dipendenze aggiornate\nAzione di problema aggiunto\neslint-config aggiunto",
-        "es": "Actualización de las dependencias\nTema Acción añadido\neslint-config añadido",
-        "pl": "Aktualizacja zależności\nDodano działanie\neslint- config dodany",
-        "uk": "Залежність оновлено\nДодана емісія\neslint-config додано",
-        "zh-cn": "更新的依赖关系\n添加的问题行动\n添加埃斯林特配置"
       }
     },
     "titleLang": {
