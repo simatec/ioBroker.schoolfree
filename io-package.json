@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "schoolfree",
-    "version": "1.1.13",
+    "version": "1.1.14",
     "news": {
+      "1.1.14": {
+        "en": "Readme updated\nFix License\ndependencies updated",
+        "de": "Reader aktualisiert\nLizenzierung aktivieren\naktualisierte abhängigkeiten",
+        "ru": "Readme обновлено\nЛицензия Fix\nобновленные зависимости",
+        "pt": "Readme atualizado\nLicença de correção\ndependências atualizadas",
+        "nl": "Readme bijgewerkt\nFix Licentie\nafhankelijkheden bijgewerkt",
+        "fr": "Lire mise à jour\nCorrection de la licence\ndépendances mises à jour",
+        "it": "Readme aggiornato\nFissare la licenza\ndipendenze aggiornate",
+        "es": "Readme updated\nFijar licencia\ndependencias actualizadas",
+        "pl": "Readme zaktualizowany\nNapraw licencję\nzaktualizowane zależności",
+        "uk": "Читати далі\nДокументація\nоновлені залежності",
+        "zh-cn": "更新我\n修补许可证\n更新依赖关系"
+      },
       "1.1.13": {
         "en": "dependencies updated\nupdate npm publish",
         "de": "aktualisierte abhängigkeiten\naktualisierung npm veröffentlichen",
@@ -80,19 +93,6 @@
         "pl": "fix eslint- config\nAktualizacja zależności\nmały Fix",
         "uk": "eslint-config виправити\nЗалежність оновлено\nмали",
         "zh-cn": "埃斯林特配置修复\n更新的依赖关系\n小修补"
-      },
-      "1.1.7": {
-        "en": "eslint-config fix\nDependencies updated\nFix States",
-        "de": "eslint-config fix\nAusgaben aktualisiert\nFixstaaten",
-        "ru": "eslint-конфигурация\nОбновленные данные о зависимостях\nГосударства",
-        "pt": "eslint-config fix\nDependências atualizadas\nEstados Unidos",
-        "nl": "eslint-config fix\nAfhankelijkheden bijgewerkt\nFix-staten",
-        "fr": "fixateur eslint-config\nDépendances actualisées\nFixer les États",
-        "it": "eslint-config fix\nDipendenze aggiornate\nStati",
-        "es": "eslint-config fix\nActualización de las dependencias\nEstados fijos",
-        "pl": "fix eslint- config\nAktualizacja zależności\nNapraw stany",
-        "uk": "eslint-config виправити\nЗалежність оновлено\nФіксація",
-        "zh-cn": "埃斯林特配置修复\n更新的依赖关系\n固定国家"
       }
     },
     "titleLang": {
