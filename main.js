@@ -2,7 +2,7 @@
 
 const utils = require('@iobroker/adapter-core');
 const axios = require('axios');
-const fs = require('fs');
+const fs = require('node:fs');
 const tools = require('./lib/tools');
 
 const schoolfreeURL = 'https://www.mehr-schulferien.de/api/v2.0/';
