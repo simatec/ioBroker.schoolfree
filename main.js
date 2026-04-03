@@ -5,7 +5,29 @@ const axios = require('axios');
 const fs = require('node:fs');
 const tools = require('./lib/tools');
 
-const schoolfreeURL = 'https://www.mehr-schulferien.de/api/v2.0/';
+// ── API v2.1 ─────────────────────────────────────────────────────────────────
+const schoolfreeURL = 'https://www.mehr-schulferien.de/api/v2.1/';
+
+// Fixed ID→slug mapping for federal states (Level 1, parent_location_id = 1).
+// In API v2.1, the slug is required for the endpoint, e.g., /federal-states/bayern
+const FEDERAL_STATE_SLUGS = {
+    2:  'baden-wuerttemberg',
+    3:  'bayern',
+    4:  'berlin',
+    5:  'brandenburg',
+    6:  'bremen',
+    7:  'hamburg',
+    8:  'hessen',
+    9:  'mecklenburg-vorpommern',
+    10: 'niedersachsen',
+    11: 'nordrhein-westfalen',
+    12: 'rheinland-pfalz',
+    13: 'saarland',
+    14: 'sachsen',
+    15: 'sachsen-anhalt',
+    16: 'schleswig-holstein',
+    17: 'thueringen',
+};
 
 let timerRequest;
 
@@ -54,80 +76,141 @@ function startAdapter(options) {
     });
 }
 
-async function checkHolidayNames() {
-    try {
-        const _holidayNames = await axios({
-            method: 'get',
-            url: `${schoolfreeURL  }holiday_or_vacation_types/`,
-            responseType: 'json'
-        });
-
-        if (_holidayNames && _holidayNames.data) {
-            const holidayNames = _holidayNames.data
-            adapter.log.debug(`schoolfree request holiday_or_vacation_types done`);
-            //adapter.log.debug(`schoolfree request holiday_or_vacation_types: ${JSON.stringify(holidayNames.data)}`);
-
-            try {
-                checkState(holidayNames.data);
-            } catch (e) {
-                adapter.log.warn(`schoolfree request holiday_or_vacation_types error: ${e}`);
-                stopSchoolfree();
-            }
-        } else {
-            adapter.log.warn('schoolfree request holiday_or_vacation_types error... API not reachable!!');
-            stopSchoolfree();
-        }
-    } catch (e) {
-        adapter.log.warn(`schoolfree request holiday_or_vacation_types error: ${e}`);
-        stopSchoolfree();
-    }
-}
-
 function stopSchoolfree() {
     timerRequest = setTimeout(function () {
         adapter.log.debug('schoolfree stopped ...')
         adapter.stop();
     }, 30000);
 }
-// only for update locations.json
-async function locationsUpdate() {
+
+/**
+ * Returns the API v2.1 slug for a configured location value.
+ *
+ * The configuration values (federalState, counties, places, schools) contain
+ * numeric IDs from locations.json. API v2.1 expects slugs.
+ *
+ * For federal states (IDs 2–17), the hard-coded table is used.
+ * For all other levels (counties, cities, schools), the locations.json
+ * must contain a `slug` field – this is populated by locationsUpdate().
+ *
+ * @param {string|number} configValue 
+ * @param {'federal-states'|'counties'|'cities'|'schools'} locationPath
+ * @returns {string|null} Slug or null
+ */
+function getSlugForConfigValue(configValue, locationPath) {
+    if (!configValue || configValue === 'none' ||
+        configValue === 'allschools' || configValue === 'allPlaces' || configValue === 'allCounties') {
+        return null;
+    }
+
+    const id = parseInt(configValue, 10);
+    if (isNaN(id)) {
+        // If a slug string has already been passed
+        return String(configValue);
+    }
+
+    // Federal states: fixed table
+    if (locationPath === 'federal-states') {
+        return FEDERAL_STATE_SLUGS[id] || null;
+    }
+
+    // Counties / Cities / Schools: Slug from locations.json
     try {
-        const _locationsUpdate = await axios({
-            method: 'get',
-            url: `${schoolfreeURL  }locations/`,
-            responseType: 'json'
-        });
-
-        adapter.log.debug(`schoolfree request locations done`);
-        //adapter.log.debug(JSON.stringify(_locationsUpdate.data.data));
-
-        if (_locationsUpdate && _locationsUpdate.data) {
-            try {
-                // @ts-ignore
-                const result = Object.values(_locationsUpdate.data.data).map(({ name, id, parent_location_id }) => ({ name, id, parent_location_id }));
-
-                adapter.log.debug(`schoolfree request locations: ${JSON.stringify(result)}`);
-
-                // @ts-ignore
-                if (fs.existsSync(`${__dirname  }/admin/locations.json`)) {
-                    fs.unlinkSync(`${__dirname  }/admin/locations.json`);
-                }
-                fs.writeFileSync(`${__dirname  }/admin/locations.json`, JSON.stringify(result));
-            } catch (e) {
-                adapter.log.warn(`schoolfree request locations error: ${e}`);
-                stopSchoolfree();
-            }
-        } else {
-            adapter.log.warn('schoolfree request locations error... API not reachable!!');
-            stopSchoolfree();
+        const locations = require('./admin/locations.json');
+        const entry = locations.find(d => d.id === id);
+        if (entry && entry.slug) {
+            return entry.slug;
         }
+        adapter.log.warn(`schoolfree: No slug found for ID ${id} in locations.json. Please run locationsUpdate().`);
     } catch (e) {
-        adapter.log.warn(`schoolfree request locations error: ${e}`);
-        stopSchoolfree();
+        adapter.log.warn(`schoolfree: Could not read locations.json: ${e}`);
+    }
+    return null;
+}
+
+/**
+ * Generates the URL for the /periods endpoint of API v2.1.
+ * Priority: School > City > County > State
+ *
+ * @param {string} startDate  YYYY-MM-DD
+ * @param {string} endDate    YYYY-MM-DD
+ * @returns {string|null} URL path or null if no valid location config is found
+ */
+function buildPeriodsUrl(startDate, endDate) {
+    // school
+    if (adapter.config.schools !== 'allschools') {
+        const slug = getSlugForConfigValue(adapter.config.schools, 'schools');
+        if (slug) return `schools/${slug}/periods?start_date=${startDate}&end_date=${endDate}`;
+    }
+    // city
+    if (adapter.config.places !== 'allPlaces') {
+        const slug = getSlugForConfigValue(adapter.config.places, 'cities');
+        if (slug) return `cities/${slug}/periods?start_date=${startDate}&end_date=${endDate}`;
+    }
+    // county
+    if (adapter.config.counties !== 'allCounties') {
+        const slug = getSlugForConfigValue(adapter.config.counties, 'counties');
+        if (slug) return `counties/${slug}/periods?start_date=${startDate}&end_date=${endDate}`;
+    }
+    // federal state
+    const slug = getSlugForConfigValue(adapter.config.federalState, 'federal-states');
+    if (slug) return `federal-states/${slug}/periods?start_date=${startDate}&end_date=${endDate}`;
+
+    return null;
+}
+
+// ── locationsUpdate: fetches all locations from API v2.1 and writes to locations.json ──
+// For maintenance purposes only (commented out in main()).
+// In API v2.1, there are separate endpoints for each location type.
+// The format of locations.json is extended to include a `slug` field,
+// so that getSlugForConfigValue() works for counties/cities/schools.
+async function locationsUpdate() {
+    const endpoints = [
+        { path: 'federal-states' },
+        { path: 'counties' },
+        { path: 'cities' },
+        { path: 'schools' },
+    ];
+
+    let allLocations = [];
+
+    for (const ep of endpoints) {
+        try {
+            const response = await axios({
+                method: 'get',
+                url: `${schoolfreeURL}${ep.path}`,
+                responseType: 'json'
+            });
+            if (response.data && response.data.data) {
+                const entries = response.data.data.map(({ id, name, slug, parent_location_id }) => ({
+                    id,
+                    name,
+                    slug,
+                    parent_location_id,
+                }));
+                allLocations = allLocations.concat(entries);
+                adapter.log.debug(`schoolfree locationsUpdate: ${entries.length} Entries from /${ep.path}`);
+            }
+        } catch (e) {
+            adapter.log.warn(`schoolfree locationsUpdate error (${ep.path}): ${e}`);
+        }
+    }
+
+    if (allLocations.length > 0) {
+        try {
+            if (fs.existsSync(`${__dirname}/admin/locations.json`)) {
+                fs.unlinkSync(`${__dirname}/admin/locations.json`);
+            }
+            fs.writeFileSync(`${__dirname}/admin/locations.json`, JSON.stringify(allLocations));
+            adapter.log.info(`schoolfree locationsUpdate: ${allLocations.length} Locations listed.`);
+        } catch (e) {
+            adapter.log.warn(`schoolfree locationsUpdate write error: ${e}`);
+        }
     }
 }
 
-async function checkState(holidayNames) {
+// ── checkState: Main function to check current/next holiday status and set states accordingly ──
+async function checkState() {
 
     // calc current date
     let date = new Date();
@@ -143,76 +226,55 @@ async function checkState(holidayNames) {
     let dayTomorrow = dateTomorrow.getDate();
     let Tomorrow = (`${yearTomorrow  }-${  (`0${  monthIndexTomorrow}`).slice(-2)  }-${  (`0${  dayTomorrow}`).slice(-2)}`);
 
-    // request API from www.mehr-schulferien.de
+    // Anfragehorizont: heute bis in 2 Jahre (damit "next holiday" immer befüllt ist)
+    const endYear = year + 2;
+    const endDate = `${endYear}-${(`0${monthIndex}`).slice(-2)}-${(`0${day}`).slice(-2)}`;
+
+    const periodsUrl = buildPeriodsUrl(today, endDate);
+    if (!periodsUrl) {
+        adapter.log.warn('schoolfree: No valid location configured (no slug can be determined). Please check the configuration and run locationsUpdate() if necessary.');
+        stopSchoolfree();
+        return;
+    }
+
+    adapter.log.debug(`schoolfree requesting: ${schoolfreeURL}${periodsUrl}`);
+
+    // request API v2.1 from www.mehr-schulferien.de
     try {
         const _content = await axios({
             method: 'get',
-            url: `${schoolfreeURL  }periods/`,
+            url: `${schoolfreeURL  }${periodsUrl}`,
             responseType: 'json'
         });
         const content = _content.data;
         adapter.log.debug(`schoolfree request periods done`);
         //adapter.log.debug(`schoolfree request periods: ${JSON.stringify(content.data)}`);
 
-        let federalStateStr = 0;
-        let searchLocation = [];
-
         if (content && content.data !== undefined) {
-            if (adapter.config.schools !== 'allschools') {
-                // @ts-ignore
-                searchLocation = Object.values(content.data).filter(d => d.location_id == adapter.config.schools);
-            }
-            if (JSON.stringify(searchLocation) !== '[]') {
-                federalStateStr = adapter.config.schools;
-            } else {
-                if (adapter.config.places !== 'allPlaces') {
-                    // @ts-ignore
-                    searchLocation = Object.values(content.data).filter(d => d.location_id == adapter.config.places);
-                }
-                if (JSON.stringify(searchLocation) !== '[]') {
-                    federalStateStr = adapter.config.places;
-                } else {
-                    if (adapter.config.counties !== 'allCounties') {
-                        // @ts-ignore
-                        searchLocation = Object.values(content.data).filter(d => d.location_id == adapter.config.counties);
-                    }
-                    if (JSON.stringify(searchLocation) !== '[]') {
-                        federalStateStr = adapter.config.counties;
-                    } else {
-                        federalStateStr = adapter.config.federalState;
-                    }
-                }
-            }
-        } else {
-            adapter.log.warn('schoolfree request periods error... API not reachable!!');
-            stopSchoolfree();
-        }
+            // In API v2.1, the response for /periods is an array of period objects with all necessary info (kein separater Aufruf von /holiday-or-vacation-types mehr nötig).
+            let periods = content.data;
 
-        // Filter current federal State
-        if (content && content.data !== undefined) {
-            // @ts-ignore
-            const arrFederalState = content.data.filter(d => d.location_id == federalStateStr);
-            // Filter old holidays
-            // @ts-ignore
-            const arrNewHoliday = arrFederalState.filter(d => d.ends_on >= today);
-
-            let arrOnlyholiday;
-            let resData;
             if (adapter.config.ignorePublicHoliday) {
                 adapter.log.debug('ignore public holiday');
-                // Filter Long weekends
-                arrOnlyholiday = arrNewHoliday.filter(d => d.starts_on != d.ends_on);
-                // Filter Data
-                // @ts-ignore
-                resData = arrOnlyholiday.map(({ starts_on, ends_on, holiday_or_vacation_type_id }) => ({ starts_on, ends_on, holiday_or_vacation_type_id }));
-            } else {
-                // @ts-ignore
-                resData = arrNewHoliday.map(({ starts_on, ends_on, holiday_or_vacation_type_id }) => ({ starts_on, ends_on, holiday_or_vacation_type_id }));
+                // Only school holidays (not public holidays), and only entries spanning multiple days
+                periods = periods.filter(d => d.is_school_vacation === true && d.starts_on !== d.ends_on);
             }
-            // sort for start holiday
+
+            // Remove past entries
+            const arrNewHoliday = periods.filter(d => d.ends_on >= today);
+
+            // Reduce to required fields
+            // API v2.1: “name” is available directly (no separate “holiday_or_vacation_type_id” lookup)
+            const resData = arrNewHoliday.map(({ starts_on, ends_on, name }) => ({ starts_on, ends_on, name }));
+
+            // Sort by start date ascending
             const result = resData.sort((a, b) => (a.starts_on > b.starts_on) ? 1 : -1);
-            let currentName = Object.values(holidayNames).filter(d => d.id == result[0].holiday_or_vacation_type_id);
-            let nextName = Object.values(holidayNames).filter(d => d.id == result[1].holiday_or_vacation_type_id);
+
+            if (!result || result.length === 0) {
+                adapter.log.warn('schoolfree: No vacation or holiday dates found for the configured location. Please check the configuration and the API response.');
+                stopSchoolfree();
+                return;
+            }
 
             if (result[0] && result[0].starts_on !== 'undefined') {
                 // Set schoolfree today
@@ -225,34 +287,37 @@ async function checkState(holidayNames) {
                 currentEnd = (`${currentEnd[2]  }.${  currentEnd[1]  }.${  currentEnd[0]}`);
 
                 if (result[0].starts_on <= today && result[0].ends_on >= today) {
-                    adapter.log.debug(`school free name: ${currentName[0].colloquial ? currentName[0].colloquial : currentName[0].name}`);
+                    // API v2.1: name directly from the Period object
+                    adapter.log.debug(`school free name: ${result[0].name}`);
                     adapter.log.debug('school free today');
 
                     adapter.setState('info.today', { val: true, ack: true });
                     adapter.setState('info.current.start', { val: currentStart, ack: true });
                     adapter.setState('info.current.end', { val: currentEnd, ack: true });
-                    adapter.setState('info.current.name', { val: currentName[0].colloquial ? currentName[0].colloquial : currentName[0].name, ack: true });
+                    adapter.setState('info.current.name', { val: result[0].name, ack: true });
 
                     adapter.log.debug(`string: ${JSON.stringify(result[0])}`);
                 } else {
                     adapter.setState('info.today', { val: false, ack: true });
                 }
+
                 // Set schoolfree tomorrow
                 if (result[0].starts_on <= Tomorrow && result[0].ends_on >= Tomorrow) {
-                    adapter.log.debug(`school free name: ${currentName[0].colloquial ? currentName[0].colloquial : currentName[0].name}`);
+                    adapter.log.debug(`school free name: ${result[0].name}`);
                     adapter.log.debug('school free tomorrow');
 
                     adapter.setState('info.tomorrow', { val: true, ack: true });
                     adapter.setState('info.current.start', { val: currentStart, ack: true });
                     adapter.setState('info.current.end', { val: currentEnd, ack: true });
-                    adapter.setState('info.current.name', { val: currentName[0].colloquial ? currentName[0].colloquial : currentName[0].name, ack: true });
+                    adapter.setState('info.current.name', { val: result[0].name, ack: true });
 
                     adapter.log.debug(`string: ${JSON.stringify(result[0])}`);
-                } else if (result[1].starts_on == Tomorrow) {
+                } else if (result[1] && result[1].starts_on == Tomorrow) {
                     adapter.setState('info.tomorrow', { val: true, ack: true });
                 } else {
                     adapter.setState('info.tomorrow', { val: false, ack: true });
                 }
+
                 // clear schoolfree after holiday
                 if (result[0].starts_on > today && result[0].starts_on > Tomorrow) {
                     adapter.setState('info.current.start', { val: 'none', ack: true });
@@ -272,7 +337,7 @@ async function checkState(holidayNames) {
 
                     adapter.setState('info.next.start', { val: nextStart, ack: true });
                     adapter.setState('info.next.end', { val: nextEnd, ack: true });
-                    adapter.setState('info.next.name', { val: currentName[0].colloquial ? currentName[0].colloquial : currentName[0].name, ack: true });
+                    adapter.setState('info.next.name', { val: result[0].name, ack: true });
                 } else if (result[0].starts_on <= today && result[0].ends_on >= today) {
                     if (result[1] && result[1].starts_on !== 'undefined') {
                         nextStart = result[1].starts_on.split('-');
@@ -282,7 +347,7 @@ async function checkState(holidayNames) {
 
                         adapter.setState('info.next.start', { val: nextStart, ack: true });
                         adapter.setState('info.next.end', { val: nextEnd, ack: true });
-                        adapter.setState('info.next.name', { val: nextName[0].colloquial ? nextName[0].colloquial : nextName[0].name, ack: true });
+                        adapter.setState('info.next.name', { val: result[1].name, ack: true });
                     } else {
                         adapter.setState('info.next.start', { val: 'No data available', ack: true });
                         adapter.setState('info.next.end', { val: 'No data available', ack: true });
@@ -348,15 +413,18 @@ function delOldObjects() {
 }
 
 function main() {
-    //locationsUpdate(); // only for update locations.json
+    locationsUpdate(); // only for update locations.json (API v2.1: multi-endpoint fetch)
     delOldObjects();
     if (adapter.config.federalState !== 'none') {
         fillLocation();
-        checkHolidayNames();
+        // API v2.1: The name is now included directly in the Period object –
+        // a separate call to checkHolidayNames() is no longer necessary.
+        checkState();
     } else {
         stopSchoolfree();
     }
 }
+
 // If started as allInOne/compact mode => return function to create instance
 if (module && module.parent) {
     module.exports = startAdapter;
