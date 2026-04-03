@@ -5,11 +5,8 @@ const axios = require('axios');
 const fs = require('node:fs');
 const tools = require('./lib/tools');
 
-// ── API v2.1 ─────────────────────────────────────────────────────────────────
 const schoolfreeURL = 'https://www.mehr-schulferien.de/api/v2.1/';
 
-// Fixed ID→slug mapping for federal states (Level 1, parent_location_id = 1).
-// In API v2.1, the slug is required for the endpoint, e.g., /federal-states/bayern
 const FEDERAL_STATE_SLUGS = {
     2:  'baden-wuerttemberg',
     3:  'bayern',
@@ -31,15 +28,10 @@ const FEDERAL_STATE_SLUGS = {
 
 let timerRequest;
 
-/**
- * The adapter instance
- *
- */
 let adapter;
 const adapterName = require('./package.json').name.split('.').pop();
 
 /**
- * Starts the adapter instance
  *
  * @param [options]
  */
@@ -50,10 +42,8 @@ function startAdapter(options) {
 
     adapter = new utils.Adapter(options);
 
-    // start here!
-    adapter.on('ready', main); // Main method defined below for readability
+    adapter.on('ready', main);
 
-    // is called when adapter shuts down - callback has to be called under any circumstances!
     adapter.on('unload', (callback) => {
         try {
             adapter.log.debug('cleaned everything up...');
@@ -84,14 +74,6 @@ function stopSchoolfree() {
 }
 
 /**
- * Returns the API v2.1 slug for a configured location value.
- *
- * The configuration values (federalState, counties, places, schools) contain
- * numeric IDs from locations.json. API v2.1 expects slugs.
- *
- * For federal states (IDs 2–17), the hard-coded table is used.
- * For all other levels (counties, cities, schools), the locations.json
- * must contain a `slug` field – this is populated by locationsUpdate().
  *
  * @param {string|number} configValue 
  * @param {'federal-states'|'counties'|'cities'|'schools'} locationPath
@@ -129,8 +111,6 @@ function getSlugForConfigValue(configValue, locationPath) {
 }
 
 /**
- * Generates the URL for the /periods endpoint of API v2.1.
- * Priority: School > City > County > State
  *
  * @param {string} startDate  YYYY-MM-DD
  * @param {string} endDate    YYYY-MM-DD
@@ -159,40 +139,80 @@ function buildPeriodsUrl(startDate, endDate) {
     return null;
 }
 
-// ── locationsUpdate: fetches all locations from API v2.1 and writes to locations.json ──
-// For maintenance purposes only (commented out in main()).
-// In API v2.1, there are separate endpoints for each location type.
-// The format of locations.json is extended to include a `slug` field,
-// so that getSlugForConfigValue() works for counties/cities/schools.
 async function locationsUpdate() {
-    const endpoints = [
-        { path: 'federal-states' },
-        { path: 'counties' },
-        { path: 'cities' },
-        { path: 'schools' },
-    ];
+    const federalStateId = parseInt(adapter.config.federalState, 10);
+    const federalStateSlug = FEDERAL_STATE_SLUGS[federalStateId] || null;
 
-    let allLocations = [];
+    if (!federalStateSlug) {
+        adapter.log.warn('schoolfree locationsUpdate: No valid federal state configured – skipping.');
+        return;
+    }
 
-    for (const ep of endpoints) {
+    /**
+     *
+     * @param {string} path
+     * @param {object} [params]
+     * @returns {Array}
+     */
+    async function fetchEndpoint(path, params = {}) {
         try {
             const response = await axios({
                 method: 'get',
-                url: `${schoolfreeURL}${ep.path}`,
+                url: `${schoolfreeURL}${path}`,
+                params,
                 responseType: 'json'
             });
-            if (response.data && response.data.data) {
-                const entries = response.data.data.map(({ id, name, slug, parent_location_id }) => ({
-                    id,
-                    name,
-                    slug,
-                    parent_location_id,
-                }));
-                allLocations = allLocations.concat(entries);
-                adapter.log.debug(`schoolfree locationsUpdate: ${entries.length} Entries from /${ep.path}`);
+            if (response.data && Array.isArray(response.data.data)) {
+                return response.data.data;
             }
         } catch (e) {
-            adapter.log.warn(`schoolfree locationsUpdate error (${ep.path}): ${e}`);
+            adapter.log.warn(`schoolfree locationsUpdate error (${path}): ${e}`);
+        }
+        return [];
+    }
+
+    /**
+     * Picks only the fields needed for locations.json
+     *
+     * @param root0
+     * @param root0.id
+     * @param root0.name
+     * @param root0.slug
+     * @param root0.parent_location_id
+     */
+    const pick = ({ id, name, slug, parent_location_id }) => ({ id, name, slug, parent_location_id });
+
+    let allLocations = [];
+
+    const federalStates = await fetchEndpoint('federal-states');
+    allLocations = allLocations.concat(federalStates.map(pick));
+    adapter.log.debug(`schoolfree locationsUpdate: ${federalStates.length} federal states loaded`);
+
+    const counties = await fetchEndpoint('counties', { federal_state: federalStateSlug });
+    allLocations = allLocations.concat(counties.map(pick));
+    adapter.log.debug(`schoolfree locationsUpdate: ${counties.length} counties loaded for ${federalStateSlug}`);
+
+    const countyId = parseInt(adapter.config.counties, 10);
+    if (!isNaN(countyId) && adapter.config.counties !== 'allCounties') {
+        const countyEntry = counties.find(c => c.id === countyId);
+        if (countyEntry && countyEntry.slug) {
+            const cities = await fetchEndpoint('cities', { county: countyEntry.slug });
+            allLocations = allLocations.concat(cities.map(pick));
+            adapter.log.debug(`schoolfree locationsUpdate: ${cities.length} cities loaded for county ${countyEntry.slug}`);
+
+            const cityId = parseInt(adapter.config.places, 10);
+            if (!isNaN(cityId) && adapter.config.places !== 'allPlaces') {
+                const cityEntry = cities.find(c => c.id === cityId);
+                if (cityEntry && cityEntry.slug) {
+                    const schools = await fetchEndpoint('schools', { city: cityEntry.slug });
+                    allLocations = allLocations.concat(schools.map(pick));
+                    adapter.log.debug(`schoolfree locationsUpdate: ${schools.length} schools loaded for city ${cityEntry.slug}`);
+                } else {
+                    adapter.log.debug(`schoolfree locationsUpdate: configured city ID ${cityId} not found in loaded cities – skipping schools`);
+                }
+            }
+        } else {
+            adapter.log.debug(`schoolfree locationsUpdate: configured county ID ${countyId} not found in loaded counties – skipping cities/schools`);
         }
     }
 
@@ -202,10 +222,12 @@ async function locationsUpdate() {
                 fs.unlinkSync(`${__dirname}/admin/locations.json`);
             }
             fs.writeFileSync(`${__dirname}/admin/locations.json`, JSON.stringify(allLocations));
-            adapter.log.info(`schoolfree locationsUpdate: ${allLocations.length} Locations listed.`);
+            adapter.log.info(`schoolfree locationsUpdate: ${allLocations.length} locations written to locations.json`);
         } catch (e) {
             adapter.log.warn(`schoolfree locationsUpdate write error: ${e}`);
         }
+    } else {
+        adapter.log.warn('schoolfree locationsUpdate: No locations received from API – locations.json not updated.');
     }
 }
 
@@ -226,7 +248,6 @@ async function checkState() {
     let dayTomorrow = dateTomorrow.getDate();
     let Tomorrow = (`${yearTomorrow  }-${  (`0${  monthIndexTomorrow}`).slice(-2)  }-${  (`0${  dayTomorrow}`).slice(-2)}`);
 
-    // Anfragehorizont: heute bis in 2 Jahre (damit "next holiday" immer befüllt ist)
     const endYear = year + 2;
     const endDate = `${endYear}-${(`0${monthIndex}`).slice(-2)}-${(`0${day}`).slice(-2)}`;
 
@@ -251,23 +272,17 @@ async function checkState() {
         //adapter.log.debug(`schoolfree request periods: ${JSON.stringify(content.data)}`);
 
         if (content && content.data !== undefined) {
-            // In API v2.1, the response for /periods is an array of period objects with all necessary info (kein separater Aufruf von /holiday-or-vacation-types mehr nötig).
             let periods = content.data;
 
             if (adapter.config.ignorePublicHoliday) {
                 adapter.log.debug('ignore public holiday');
-                // Only school holidays (not public holidays), and only entries spanning multiple days
                 periods = periods.filter(d => d.is_school_vacation === true && d.starts_on !== d.ends_on);
             }
 
-            // Remove past entries
             const arrNewHoliday = periods.filter(d => d.ends_on >= today);
 
-            // Reduce to required fields
-            // API v2.1: “name” is available directly (no separate “holiday_or_vacation_type_id” lookup)
             const resData = arrNewHoliday.map(({ starts_on, ends_on, name }) => ({ starts_on, ends_on, name }));
 
-            // Sort by start date ascending
             const result = resData.sort((a, b) => (a.starts_on > b.starts_on) ? 1 : -1);
 
             if (!result || result.length === 0) {
@@ -378,7 +393,7 @@ function fillLocation() {
         if (adapter.config.counties !== 'allCounties' || adapter.config.counties !== '') {
             const arrCounties = locations.filter(d => d.id == adapter.config.counties);
             adapter.log.debug(`counties number: ${adapter.config.counties}`);
-            adapter.setState('location.countieName', { val: arrCounties[0].name ? arrCounties[0].name : 'no selection', ack: true });
+            adapter.setState('location.countieName', { val: arrCounties[0] && arrCounties[0].name ? arrCounties[0].name : 'no selection', ack: true });
         } else {
             adapter.setState('location.countieName', { val: 'no selection', ack: true });
         }
@@ -386,7 +401,7 @@ function fillLocation() {
         if (adapter.config.places !== 'allPlaces' || adapter.config.places !== '') {
             const arrPlaces = locations.filter(d => d.id == adapter.config.places);
             adapter.log.debug(`places number: ${adapter.config.places}`);
-            adapter.setState('location.placeName', { val: arrPlaces[0].name ? arrPlaces[0].name : 'no selection', ack: true });
+            adapter.setState('location.placeName', { val: arrPlaces[0] && arrPlaces[0].name ? arrPlaces[0].name : 'no selection', ack: true });
         } else {
             adapter.setState('location.placeName', { val: 'no selection', ack: true });
         }
@@ -394,7 +409,7 @@ function fillLocation() {
         if (adapter.config.schools !== 'allschools' || adapter.config.schools !== '') {
             const arrSchools = locations.filter(d => d.id == adapter.config.schools);
             adapter.log.debug(`schools number: ${adapter.config.schools}`);
-            adapter.setState('location.schoolName', { val: arrSchools[0].name ? arrSchools[0].name : 'no selection', ack: true });
+            adapter.setState('location.schoolName', { val: arrSchools[0] && arrSchools[0].name ? arrSchools[0].name : 'no selection', ack: true });
         } else {
             adapter.setState('location.schoolName', { val: 'no selection', ack: true });
         }
@@ -412,13 +427,11 @@ function delOldObjects() {
     });
 }
 
-function main() {
-    locationsUpdate(); // only for update locations.json (API v2.1: multi-endpoint fetch)
+async function main() {
     delOldObjects();
     if (adapter.config.federalState !== 'none') {
+        await locationsUpdate();
         fillLocation();
-        // API v2.1: The name is now included directly in the Period object –
-        // a separate call to checkHolidayNames() is no longer necessary.
         checkState();
     } else {
         stopSchoolfree();
