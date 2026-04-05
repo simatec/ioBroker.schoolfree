@@ -5,17 +5,17 @@ const axios = require('axios');
 const fs = require('node:fs');
 const tools = require('./lib/tools');
 
-const schoolfreeURL = 'https://www.mehr-schulferien.de/api/v2.1/';
+const schoolfreeURL = 'https://www.mehr-schulferien.de/api/v2.1';
 
 const FEDERAL_STATE_SLUGS = {
-    2:  'baden-wuerttemberg',
-    3:  'bayern',
-    4:  'berlin',
-    5:  'brandenburg',
-    6:  'bremen',
-    7:  'hamburg',
-    8:  'hessen',
-    9:  'mecklenburg-vorpommern',
+    2: 'baden-wuerttemberg',
+    3: 'bayern',
+    4: 'berlin',
+    5: 'brandenburg',
+    6: 'bremen',
+    7: 'hamburg',
+    8: 'hessen',
+    9: 'mecklenburg-vorpommern',
     10: 'niedersachsen',
     11: 'nordrhein-westfalen',
     12: 'rheinland-pfalz',
@@ -28,10 +28,15 @@ const FEDERAL_STATE_SLUGS = {
 
 let timerRequest;
 
+/**
+ * The adapter instance
+ *
+ */
 let adapter;
 const adapterName = require('./package.json').name.split('.').pop();
 
 /**
+ * Starts the adapter instance
  *
  * @param [options]
  */
@@ -42,8 +47,9 @@ function startAdapter(options) {
 
     adapter = new utils.Adapter(options);
 
-    adapter.on('ready', main);
+    adapter.on('ready', main); // Main method defined below for readability
 
+    // is called when adapter shuts down - callback has to be called under any circumstances!
     adapter.on('unload', (callback) => {
         try {
             adapter.log.debug('cleaned everything up...');
@@ -73,165 +79,89 @@ function stopSchoolfree() {
     }, 30000);
 }
 
-/**
+/** 
+ * Resolves the location type path and slug for a given location ID by checking federal states, counties, cities, and schools in that order.
  *
- * @param {string|number} configValue 
- * @param {'federal-states'|'counties'|'cities'|'schools'} locationPath
- * @returns {string|null} Slug or null
+ * @param {string|number} locationId
+ * @returns {{ locationTypePath: string, slug: string }|null}
  */
-function getSlugForConfigValue(configValue, locationPath) {
-    if (!configValue || configValue === 'none' ||
-        configValue === 'allschools' || configValue === 'allPlaces' || configValue === 'allCounties') {
-        return null;
+async function resolveLocationPath(locationId) {
+    const id = parseInt(locationId);
+
+    if (FEDERAL_STATE_SLUGS[id]) {
+        return { locationTypePath: 'federal-states', slug: FEDERAL_STATE_SLUGS[id] };
     }
 
-    const id = parseInt(configValue, 10);
-    if (isNaN(id)) {
-        // If a slug string has already been passed
-        return String(configValue);
-    }
-
-    // Federal states: fixed table
-    if (locationPath === 'federal-states') {
-        return FEDERAL_STATE_SLUGS[id] || null;
-    }
-
-    // Counties / Cities / Schools: Slug from locations.json
-    try {
-        const locations = require('./admin/locations.json');
-        const entry = locations.find(d => d.id === id);
-        if (entry && entry.slug) {
-            return entry.slug;
+    const locationTypes = ['counties', 'cities', 'schools'];
+    for (const locType of locationTypes) {
+        try {
+            const response = await axios({
+                method: 'get',
+                url: `${schoolfreeURL}/${locType}`,
+                responseType: 'json',
+            });
+            if (response && response.data && response.data.data) {
+                const found = response.data.data.find(d => d.id == id);
+                if (found) {
+                    return { locationTypePath: locType, slug: found.slug };
+                }
+            }
+        } catch (e) {
+            adapter.log.debug(`resolveLocationPath: error querying ${locType}: ${e}`);
         }
-        adapter.log.warn(`schoolfree: No slug found for ID ${id} in locations.json. Please run locationsUpdate().`);
-    } catch (e) {
-        adapter.log.warn(`schoolfree: Could not read locations.json: ${e}`);
     }
-    return null;
-}
-
-/**
- *
- * @param {string} startDate  YYYY-MM-DD
- * @param {string} endDate    YYYY-MM-DD
- * @returns {string|null} URL path or null if no valid location config is found
- */
-function buildPeriodsUrl(startDate, endDate) {
-    // school
-    if (adapter.config.schools !== 'allschools') {
-        const slug = getSlugForConfigValue(adapter.config.schools, 'schools');
-        if (slug) return `schools/${slug}/periods?start_date=${startDate}&end_date=${endDate}`;
-    }
-    // city
-    if (adapter.config.places !== 'allPlaces') {
-        const slug = getSlugForConfigValue(adapter.config.places, 'cities');
-        if (slug) return `cities/${slug}/periods?start_date=${startDate}&end_date=${endDate}`;
-    }
-    // county
-    if (adapter.config.counties !== 'allCounties') {
-        const slug = getSlugForConfigValue(adapter.config.counties, 'counties');
-        if (slug) return `counties/${slug}/periods?start_date=${startDate}&end_date=${endDate}`;
-    }
-    // federal state
-    const slug = getSlugForConfigValue(adapter.config.federalState, 'federal-states');
-    if (slug) return `federal-states/${slug}/periods?start_date=${startDate}&end_date=${endDate}`;
-
     return null;
 }
 
 async function locationsUpdate() {
-    const federalStateId = parseInt(adapter.config.federalState, 10);
-    const federalStateSlug = FEDERAL_STATE_SLUGS[federalStateId] || null;
+    try {
+        const locationTypes = [
+            { path: 'federal-states', parentId: 1 },
+            { path: 'counties', parentId: null },
+            { path: 'cities', parentId: null },
+            { path: 'schools', parentId: null },
+        ];
 
-    if (!federalStateSlug) {
-        adapter.log.warn('schoolfree locationsUpdate: No valid federal state configured – skipping.');
-        return;
-    }
+        let allLocations = [];
 
-    /**
-     *
-     * @param {string} path
-     * @param {object} [params]
-     * @returns {Array}
-     */
-    async function fetchEndpoint(path, params = {}) {
-        try {
-            const response = await axios({
-                method: 'get',
-                url: `${schoolfreeURL}${path}`,
-                params,
-                responseType: 'json'
-            });
-            if (response.data && Array.isArray(response.data.data)) {
-                return response.data.data;
-            }
-        } catch (e) {
-            adapter.log.warn(`schoolfree locationsUpdate error (${path}): ${e}`);
-        }
-        return [];
-    }
+        allLocations.push({ name: 'Deutschland', id: 1, parent_location_id: null });
 
-    /**
-     * Picks only the fields needed for locations.json
-     *
-     * @param root0
-     * @param root0.id
-     * @param root0.name
-     * @param root0.slug
-     * @param root0.parent_location_id
-     */
-    const pick = ({ id, name, slug, parent_location_id }) => ({ id, name, slug, parent_location_id });
+        for (const locType of locationTypes) {
+            try {
+                const response = await axios({
+                    method: 'get',
+                    url: `${schoolfreeURL}/${locType.path}`,
+                    responseType: 'json',
+                });
 
-    let allLocations = [];
+                adapter.log.debug(`schoolfree request ${locType.path} done`);
 
-    const federalStates = await fetchEndpoint('federal-states');
-    allLocations = allLocations.concat(federalStates.map(pick));
-    adapter.log.debug(`schoolfree locationsUpdate: ${federalStates.length} federal states loaded`);
-
-    const counties = await fetchEndpoint('counties', { federal_state: federalStateSlug });
-    allLocations = allLocations.concat(counties.map(pick));
-    adapter.log.debug(`schoolfree locationsUpdate: ${counties.length} counties loaded for ${federalStateSlug}`);
-
-    const countyId = parseInt(adapter.config.counties, 10);
-    if (!isNaN(countyId) && adapter.config.counties !== 'allCounties') {
-        const countyEntry = counties.find(c => c.id === countyId);
-        if (countyEntry && countyEntry.slug) {
-            const cities = await fetchEndpoint('cities', { county: countyEntry.slug });
-            allLocations = allLocations.concat(cities.map(pick));
-            adapter.log.debug(`schoolfree locationsUpdate: ${cities.length} cities loaded for county ${countyEntry.slug}`);
-
-            const cityId = parseInt(adapter.config.places, 10);
-            if (!isNaN(cityId) && adapter.config.places !== 'allPlaces') {
-                const cityEntry = cities.find(c => c.id === cityId);
-                if (cityEntry && cityEntry.slug) {
-                    const schools = await fetchEndpoint('schools', { city: cityEntry.slug });
-                    allLocations = allLocations.concat(schools.map(pick));
-                    adapter.log.debug(`schoolfree locationsUpdate: ${schools.length} schools loaded for city ${cityEntry.slug}`);
+                if (response && response.data && response.data.data) {
+                    const mapped = Object.values(response.data.data).map(
+                        ({ name, id, parent_location_id }) => ({ name, id, parent_location_id })
+                    );
+                    allLocations = allLocations.concat(mapped);
                 } else {
-                    adapter.log.debug(`schoolfree locationsUpdate: configured city ID ${cityId} not found in loaded cities – skipping schools`);
+                    adapter.log.warn(`schoolfree request ${locType.path} error... API not reachable!!`);
                 }
+            } catch (e) {
+                adapter.log.warn(`schoolfree request ${locType.path} error: ${e}`);
             }
-        } else {
-            adapter.log.debug(`schoolfree locationsUpdate: configured county ID ${countyId} not found in loaded counties – skipping cities/schools`);
         }
-    }
 
-    if (allLocations.length > 0) {
-        try {
-            if (fs.existsSync(`${__dirname}/admin/locations.json`)) {
-                fs.unlinkSync(`${__dirname}/admin/locations.json`);
-            }
-            fs.writeFileSync(`${__dirname}/admin/locations.json`, JSON.stringify(allLocations));
-            adapter.log.info(`schoolfree locationsUpdate: ${allLocations.length} locations written to locations.json`);
-        } catch (e) {
-            adapter.log.warn(`schoolfree locationsUpdate write error: ${e}`);
+        adapter.log.debug(`schoolfree locationsUpdate: ${allLocations.length} locations collected`);
+
+        if (fs.existsSync(`${__dirname}/admin/locations.json`)) {
+            fs.unlinkSync(`${__dirname}/admin/locations.json`);
         }
-    } else {
-        adapter.log.warn('schoolfree locationsUpdate: No locations received from API – locations.json not updated.');
+        fs.writeFileSync(`${__dirname}/admin/locations.json`, JSON.stringify(allLocations));
+
+    } catch (e) {
+        adapter.log.warn(`schoolfree locationsUpdate error: ${e}`);
+        stopSchoolfree();
     }
 }
 
-// ── checkState: Main function to check current/next holiday status and set states accordingly ──
 async function checkState() {
 
     // calc current date
@@ -239,54 +169,76 @@ async function checkState() {
     let monthIndex = (date.getMonth() + 1);
     let year = date.getFullYear();
     let day = date.getDate();
-    let today = (`${year  }-${  (`0${  monthIndex}`).slice(-2)  }-${  (`0${  day}`).slice(-2)}`);
+    let today = (`${year}-${(`0${monthIndex}`).slice(-2)}-${(`0${day}`).slice(-2)}`);
 
     // calc Tomorrow date
     let dateTomorrow = new Date(date.getTime() + (1000 * 60 * 60 * 24 * 1));
     let monthIndexTomorrow = (dateTomorrow.getMonth() + 1);
     let yearTomorrow = dateTomorrow.getFullYear();
     let dayTomorrow = dateTomorrow.getDate();
-    let Tomorrow = (`${yearTomorrow  }-${  (`0${  monthIndexTomorrow}`).slice(-2)  }-${  (`0${  dayTomorrow}`).slice(-2)}`);
+    let Tomorrow = (`${yearTomorrow}-${(`0${monthIndexTomorrow}`).slice(-2)}-${(`0${dayTomorrow}`).slice(-2)}`);
+    let federalStateId = adapter.config.federalState;
+    let effectiveLocationId = federalStateId;
+    let searchLocation = [];
 
-    const endYear = year + 2;
-    const endDate = `${endYear}-${(`0${monthIndex}`).slice(-2)}-${(`0${day}`).slice(-2)}`;
+    try {
+        const locations = require('./admin/locations.json');
 
-    const periodsUrl = buildPeriodsUrl(today, endDate);
-    if (!periodsUrl) {
-        adapter.log.warn('schoolfree: No valid location configured (no slug can be determined). Please check the configuration and run locationsUpdate() if necessary.');
+        if (adapter.config.schools && adapter.config.schools !== 'allschools' && adapter.config.schools !== '') {
+            const found = locations.filter(d => d.id == adapter.config.schools);
+            if (found.length > 0) {
+                effectiveLocationId = adapter.config.schools;
+            }
+        } else if (adapter.config.places && adapter.config.places !== 'allPlaces' && adapter.config.places !== '') {
+            const found = locations.filter(d => d.id == adapter.config.places);
+            if (found.length > 0) {
+                effectiveLocationId = adapter.config.places;
+            }
+        } else if (adapter.config.counties && adapter.config.counties !== 'allCounties' && adapter.config.counties !== '') {
+            const found = locations.filter(d => d.id == adapter.config.counties);
+            if (found.length > 0) {
+                effectiveLocationId = adapter.config.counties;
+            }
+        }
+    } catch (e) {
+        adapter.log.debug(`schoolfree: locations.json not readable, using federalState only: ${e}`);
+    }
+
+    const locationPath = await resolveLocationPath(effectiveLocationId);
+    if (!locationPath) {
+        adapter.log.warn(`schoolfree: could not resolve slug for location id ${effectiveLocationId}`);
         stopSchoolfree();
         return;
     }
-
-    adapter.log.debug(`schoolfree requesting: ${schoolfreeURL}${periodsUrl}`);
 
     // request API v2.1 from www.mehr-schulferien.de
     try {
         const _content = await axios({
             method: 'get',
-            url: `${schoolfreeURL  }${periodsUrl}`,
-            responseType: 'json'
+            url: `${schoolfreeURL}/${locationPath.locationTypePath}/${locationPath.slug}/periods`,
+            params: {
+                start_date: today,
+            },
+            responseType: 'json',
         });
         const content = _content.data;
         adapter.log.debug(`schoolfree request periods done`);
-        //adapter.log.debug(`schoolfree request periods: ${JSON.stringify(content.data)}`);
 
         if (content && content.data !== undefined) {
-            let periods = content.data;
-
+            let resData;
             if (adapter.config.ignorePublicHoliday) {
                 adapter.log.debug('ignore public holiday');
-                periods = periods.filter(d => d.is_school_vacation === true && d.starts_on !== d.ends_on);
+                resData = content.data.filter(d => !d.is_public_holiday && d.starts_on !== d.ends_on);
+            } else {
+                resData = content.data;
             }
 
-            const arrNewHoliday = periods.filter(d => d.ends_on >= today);
-
-            const resData = arrNewHoliday.map(({ starts_on, ends_on, name }) => ({ starts_on, ends_on, name }));
+            resData = resData.filter(d => d.ends_on >= today);
 
             const result = resData.sort((a, b) => (a.starts_on > b.starts_on) ? 1 : -1);
 
             if (!result || result.length === 0) {
-                adapter.log.warn('schoolfree: No vacation or holiday dates found for the configured location. Please check the configuration and the API response.');
+                adapter.log.warn('schoolfree: no upcoming holiday data found');
                 stopSchoolfree();
                 return;
             }
@@ -297,19 +249,20 @@ async function checkState() {
                 let currentEnd;
 
                 currentStart = result[0].starts_on.split('-');
-                currentStart = (`${currentStart[2]  }.${  currentStart[1]  }.${  currentStart[0]}`);
+                currentStart = (`${currentStart[2]}.${currentStart[1]}.${currentStart[0]}`);
                 currentEnd = result[0].ends_on.split('-');
-                currentEnd = (`${currentEnd[2]  }.${  currentEnd[1]  }.${  currentEnd[0]}`);
+                currentEnd = (`${currentEnd[2]}.${currentEnd[1]}.${currentEnd[0]}`);
+
+                const currentName = result[0].name || '';
 
                 if (result[0].starts_on <= today && result[0].ends_on >= today) {
-                    // API v2.1: name directly from the Period object
-                    adapter.log.debug(`school free name: ${result[0].name}`);
+                    adapter.log.debug(`school free name: ${currentName}`);
                     adapter.log.debug('school free today');
 
                     adapter.setState('info.today', { val: true, ack: true });
                     adapter.setState('info.current.start', { val: currentStart, ack: true });
                     adapter.setState('info.current.end', { val: currentEnd, ack: true });
-                    adapter.setState('info.current.name', { val: result[0].name, ack: true });
+                    adapter.setState('info.current.name', { val: currentName, ack: true });
 
                     adapter.log.debug(`string: ${JSON.stringify(result[0])}`);
                 } else {
@@ -318,13 +271,13 @@ async function checkState() {
 
                 // Set schoolfree tomorrow
                 if (result[0].starts_on <= Tomorrow && result[0].ends_on >= Tomorrow) {
-                    adapter.log.debug(`school free name: ${result[0].name}`);
+                    adapter.log.debug(`school free name: ${currentName}`);
                     adapter.log.debug('school free tomorrow');
 
                     adapter.setState('info.tomorrow', { val: true, ack: true });
                     adapter.setState('info.current.start', { val: currentStart, ack: true });
                     adapter.setState('info.current.end', { val: currentEnd, ack: true });
-                    adapter.setState('info.current.name', { val: result[0].name, ack: true });
+                    adapter.setState('info.current.name', { val: currentName, ack: true });
 
                     adapter.log.debug(`string: ${JSON.stringify(result[0])}`);
                 } else if (result[1] && result[1].starts_on == Tomorrow) {
@@ -346,23 +299,24 @@ async function checkState() {
 
                 if (result[0].starts_on > today) {
                     nextStart = result[0].starts_on.split('-');
-                    nextStart = (`${nextStart[2]  }.${  nextStart[1]  }.${  nextStart[0]}`);
+                    nextStart = (`${nextStart[2]}.${nextStart[1]}.${nextStart[0]}`);
                     nextEnd = result[0].ends_on.split('-');
-                    nextEnd = (`${nextEnd[2]  }.${  nextEnd[1]  }.${  nextEnd[0]}`);
+                    nextEnd = (`${nextEnd[2]}.${nextEnd[1]}.${nextEnd[0]}`);
 
                     adapter.setState('info.next.start', { val: nextStart, ack: true });
                     adapter.setState('info.next.end', { val: nextEnd, ack: true });
-                    adapter.setState('info.next.name', { val: result[0].name, ack: true });
+                    adapter.setState('info.next.name', { val: currentName, ack: true });
                 } else if (result[0].starts_on <= today && result[0].ends_on >= today) {
                     if (result[1] && result[1].starts_on !== 'undefined') {
+                        const nextName = result[1].name || '';
                         nextStart = result[1].starts_on.split('-');
-                        nextStart = (`${nextStart[2]  }.${  nextStart[1]  }.${  nextStart[0]}`);
+                        nextStart = (`${nextStart[2]}.${nextStart[1]}.${nextStart[0]}`);
                         nextEnd = result[1].ends_on.split('-');
-                        nextEnd = (`${nextEnd[2]  }.${  nextEnd[1]  }.${  nextEnd[0]}`);
+                        nextEnd = (`${nextEnd[2]}.${nextEnd[1]}.${nextEnd[0]}`);
 
                         adapter.setState('info.next.start', { val: nextStart, ack: true });
                         adapter.setState('info.next.end', { val: nextEnd, ack: true });
-                        adapter.setState('info.next.name', { val: result[1].name, ack: true });
+                        adapter.setState('info.next.name', { val: nextName, ack: true });
                     } else {
                         adapter.setState('info.next.start', { val: 'No data available', ack: true });
                         adapter.setState('info.next.end', { val: 'No data available', ack: true });
@@ -393,7 +347,7 @@ function fillLocation() {
         if (adapter.config.counties !== 'allCounties' || adapter.config.counties !== '') {
             const arrCounties = locations.filter(d => d.id == adapter.config.counties);
             adapter.log.debug(`counties number: ${adapter.config.counties}`);
-            adapter.setState('location.countieName', { val: arrCounties[0] && arrCounties[0].name ? arrCounties[0].name : 'no selection', ack: true });
+            adapter.setState('location.countieName', { val: arrCounties[0].name ? arrCounties[0].name : 'no selection', ack: true });
         } else {
             adapter.setState('location.countieName', { val: 'no selection', ack: true });
         }
@@ -401,7 +355,7 @@ function fillLocation() {
         if (adapter.config.places !== 'allPlaces' || adapter.config.places !== '') {
             const arrPlaces = locations.filter(d => d.id == adapter.config.places);
             adapter.log.debug(`places number: ${adapter.config.places}`);
-            adapter.setState('location.placeName', { val: arrPlaces[0] && arrPlaces[0].name ? arrPlaces[0].name : 'no selection', ack: true });
+            adapter.setState('location.placeName', { val: arrPlaces[0].name ? arrPlaces[0].name : 'no selection', ack: true });
         } else {
             adapter.setState('location.placeName', { val: 'no selection', ack: true });
         }
@@ -409,7 +363,7 @@ function fillLocation() {
         if (adapter.config.schools !== 'allschools' || adapter.config.schools !== '') {
             const arrSchools = locations.filter(d => d.id == adapter.config.schools);
             adapter.log.debug(`schools number: ${adapter.config.schools}`);
-            adapter.setState('location.schoolName', { val: arrSchools[0] && arrSchools[0].name ? arrSchools[0].name : 'no selection', ack: true });
+            adapter.setState('location.schoolName', { val: arrSchools[0].name ? arrSchools[0].name : 'no selection', ack: true });
         } else {
             adapter.setState('location.schoolName', { val: 'no selection', ack: true });
         }
@@ -427,17 +381,16 @@ function delOldObjects() {
     });
 }
 
-async function main() {
+function main() {
+    //locationsUpdate(); // only for update locations.json
     delOldObjects();
     if (adapter.config.federalState !== 'none') {
-        await locationsUpdate();
         fillLocation();
         checkState();
     } else {
         stopSchoolfree();
     }
 }
-
 // If started as allInOne/compact mode => return function to create instance
 if (module && module.parent) {
     module.exports = startAdapter;
