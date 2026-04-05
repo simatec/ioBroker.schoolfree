@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "schoolfree",
-    "version": "1.1.14",
+    "version": "2.0.0",
     "news": {
+      "2.0.0": {
+        "en": "Breaking Changes - API Update to v2.1\nUpdate locations",
+        "de": "Änderungen aufbrechen - API Update auf v2.1\nStandorte aktualisieren",
+        "ru": "Обновление API для v2.1\nОбновление мест",
+        "pt": "Quebrar as Alterações - Atualização da API para v2.1\nActualizar as localizações",
+        "nl": "Wijzigingen breken - API bijwerken naar v2.1\nLocaties bijwerken",
+        "fr": "Briser les changements - Mise à jour de l'API vers v2.1\nEmplacements des mises à jour",
+        "it": "Breaking Changes - Aggiornamento API a v2.1\nAggiornare le posizioni",
+        "es": "Cambios de ruptura - Actualización de API a v2.1\nLugares de actualización",
+        "pl": "Łamanie zmian - API Aktualizacja do v2.1\nAktualizacja lokalizacji",
+        "uk": "Змінення переходів - API Update to v2.1\nОновлення сайтів",
+        "zh-cn": "中断更改 - API 更新到 v2.1\n更新地点"
+      },
       "1.1.14": {
         "en": "Readme updated\nFix License\ndependencies updated",
         "de": "Reader aktualisiert\nLizenzierung aktivieren\naktualisierte abhängigkeiten",
@@ -80,19 +93,6 @@
         "pl": "Napraw ostrzeżenie\nAktualizacja zależności",
         "uk": "Повідомлення\nЗалежність оновлено",
         "zh-cn": "修复警告\n更新的依赖关系"
-      },
-      "1.1.8": {
-        "en": "eslint-config fix\nDependencies updated\nsmall Fix",
-        "de": "eslint-config fix\nAusgaben aktualisiert\nkleiner Fix",
-        "ru": "исправление эслинта-конфигура\nОбновленные зависимости\nмаленький фикс",
-        "pt": "eslint-config fix\nDependências atualizadas\npequena fixação",
-        "nl": "eslint-config fix\nAfhankelijkheden bijgewerkt\nkleine Fix",
-        "fr": "fixateur eslint-config\nDépendances actualisées\npetite Fix",
-        "it": "eslint-config fix\nDipendenze aggiornate\npiccolo fissaggio",
-        "es": "eslint-config fix\nActualización de las dependencias\npequeño",
-        "pl": "fix eslint- config\nAktualizacja zależności\nmały Fix",
-        "uk": "eslint-config виправити\nЗалежність оновлено\nмали",
-        "zh-cn": "埃斯林特配置修复\n更新的依赖关系\n小修补"
       }
     },
     "titleLang": {
