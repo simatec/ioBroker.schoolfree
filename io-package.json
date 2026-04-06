@@ -1,34 +1,8 @@
 {
   "common": {
     "name": "schoolfree",
-    "version": "2.0.1",
+    "version": "1.1.14",
     "news": {
-      "2.0.1": {
-        "en": "Breaking Changes - API Update to v2.1\nUpdate locations",
-        "de": "Änderungen aufbrechen - API Update auf v2.1\nStandorte aktualisieren",
-        "ru": "Обновление API для v2.1\nОбновление мест",
-        "pt": "Quebrar as Alterações - Atualização da API para v2.1\nActualizar as localizações",
-        "nl": "Wijzigingen breken - API bijwerken naar v2.1\nLocaties bijwerken",
-        "fr": "Briser les changements - Mise à jour de l'API vers v2.1\nEmplacements des mises à jour",
-        "it": "Breaking Changes - Aggiornamento API a v2.1\nAggiornare le posizioni",
-        "es": "Cambios de ruptura - Actualización de API a v2.1\nLugares de actualización",
-        "pl": "Łamanie zmian - API Aktualizacja do v2.1\nAktualizacja lokalizacji",
-        "uk": "Змінення переходів - API Update to v2.1\nОновлення сайтів",
-        "zh-cn": "中断更改 - API 更新到 v2.1\n更新地点"
-      },
-      "2.0.0": {
-        "en": "Breaking Changes - API Update to v2.1\nUpdate locations",
-        "de": "Änderungen aufbrechen - API Update auf v2.1\nStandorte aktualisieren",
-        "ru": "Обновление API для v2.1\nОбновление мест",
-        "pt": "Quebrar as Alterações - Atualização da API para v2.1\nActualizar as localizações",
-        "nl": "Wijzigingen breken - API bijwerken naar v2.1\nLocaties bijwerken",
-        "fr": "Briser les changements - Mise à jour de l'API vers v2.1\nEmplacements des mises à jour",
-        "it": "Breaking Changes - Aggiornamento API a v2.1\nAggiornare le posizioni",
-        "es": "Cambios de ruptura - Actualización de API a v2.1\nLugares de actualización",
-        "pl": "Łamanie zmian - API Aktualizacja do v2.1\nAktualizacja lokalizacji",
-        "uk": "Змінення переходів - API Update to v2.1\nОновлення сайтів",
-        "zh-cn": "中断更改 - API 更新到 v2.1\n更新地点"
-      },
       "1.1.14": {
         "en": "Readme updated\nFix License\ndependencies updated",
         "de": "Reader aktualisiert\nLizenzierung aktivieren\naktualisierte abhängigkeiten",
