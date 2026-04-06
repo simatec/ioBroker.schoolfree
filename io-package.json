@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "schoolfree",
-    "version": "1.1.14",
+    "version": "2.0.0",
     "news": {
+      "2.0.0": {
+        "en": "Breaking Changes - API Update to v2.1\nUpdate locations\nFix Test & Release",
+        "de": "Änderungen aufbrechen - API Update auf v2.1\nStandorte aktualisieren\nTest und Release",
+        "ru": "Обновление API для v2.1\nОбновление мест\nСкачать Test & Release",
+        "pt": "Quebrar as Alterações - Atualização da API para v2.1\nActualizar as localizações\nCorrigir teste e liberação",
+        "nl": "Wijzigingen breken - API bijwerken naar v2.1\nLocaties bijwerken\nRepareren Test & Release",
+        "fr": "Briser les changements - Mise à jour de l'API vers v2.1\nEmplacements des mises à jour\nCorrection du test et de la libération",
+        "it": "Breaking Changes - Aggiornamento API a v2.1\nAggiornare le posizioni\nProva di correzione e rilascio",
+        "es": "Cambios de ruptura - Actualización de API a v2.1\nLugares de actualización\nReparación de pruebas",
+        "pl": "Łamanie zmian - API Aktualizacja do v2.1\nAktualizacja lokalizacji\nNapraw test i wydaj",
+        "uk": "Змінення переходів - API Update to v2.1\nОновлення сайтів\nТестування та реліз",
+        "zh-cn": "中断更改 - API 更新到 v2.1\n更新地点\n修正测试和释放"
+      },
       "1.1.14": {
         "en": "Readme updated\nFix License\ndependencies updated",
         "de": "Reader aktualisiert\nLizenzierung aktivieren\naktualisierte abhängigkeiten",
