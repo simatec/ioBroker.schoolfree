@@ -57,6 +57,9 @@ When the adapter crashes or an other Code error happens, this error message that
 
 ## Changelog
 <!--### __WORK IN PROGRESS__-->
+### **WORK IN PROGRESS**
+- (copilot) Adapter requires node.js >= 22 now
+
 ### 2.0.0 (2026-04-06)
 * (simatec) Breaking Changes - API Update to v2.1
 * (simatec) Update locations
