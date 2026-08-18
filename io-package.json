@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "schoolfree",
-    "version": "2.0.0",
+    "version": "2.1.0",
     "news": {
+      "2.1.0": {
+        "en": "Adapter requires node.js >= 22 now\ndependencies updated",
+        "de": "Der Adapter benötigt jetzt Node.js >= 22.\nAbhängigkeiten aktualisiert",
+        "ru": "Для работы адаптера требуется Node.js версии >= 22.\nЗависимости обновлены",
+        "pt": "O adaptador agora requer Node.js >= 22.\ndependências atualizadas",
+        "nl": "De adapter vereist nu Node.js versie 22 of hoger.\nafhankelijkheden bijgewerkt",
+        "fr": "L'adaptateur nécessite désormais Node.js >= 22.\ndépendances mises à jour",
+        "it": "L'adattatore ora richiede Node.js >= 22\ndipendenze aggiornate",
+        "es": "El adaptador ahora requiere node.js >= 22.\ndependencias actualizadas",
+        "pl": "Adapter wymaga teraz node.js >= 22\nzależności zaktualizowane",
+        "uk": "Адаптер тепер вимагає node.js >= 22\nзалежності оновлено",
+        "zh-cn": "适配器现在需要 node.js 版本 >= 22。\n依赖项已更新"
+      },
       "2.0.0": {
         "en": "Breaking Changes - API Update to v2.1\nUpdate locations\nFix Test & Release",
         "de": "Änderungen aufbrechen - API Update auf v2.1\nStandorte aktualisieren\nTest und Release",
